@@ -1,4 +1,5 @@
 import machine
+import time
 
 class voltage_sensor:
 
@@ -13,8 +14,17 @@ class voltage_sensor:
         tr = self.__analog_to_volts__(value)
         return tr
 
+    # takes a series of measurements and returns the average
+    def measure_set(self, count:int = 5, delay_seconds:float = 0.25) -> float:
+        vals = []
+        for x in range(0, count):
+            val = self.measure()
+            vals.append(val)
+            time.sleep(delay_seconds)
+        avg_val = self.__avg__(vals)
+        return self.__analog_to_volts__(avg_val)
         
-    def __analog_to_volts__(self, analog:int) -> float:
+    def __analog_to_volts__(self, analog:float) -> float:
 
         # assumed values - adjust if necessary to get a more accurate calculated voltage value
         max_adc = 65535
@@ -23,6 +33,13 @@ class voltage_sensor:
         min_voltage = 0.25
 
         tr = ((analog - min_adc) / (max_adc - min_adc)) * (max_voltage - min_voltage)
+        return tr
+
+    def __avg__(self, data) -> float:
+        sum = 0
+        for v in data:
+            sum = sum + v
+        tr = sum / len(list)
         return tr
 
 vs = voltage_sensor(0)
