@@ -39,7 +39,7 @@ class voltage_sensor:
         sum = 0
         for v in data:
             sum = sum + v
-        tr = sum / len(list)
+        tr = sum / len(data)
         return tr
 
 vs = voltage_sensor(0)
