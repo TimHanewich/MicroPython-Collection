@@ -20,11 +20,9 @@ class voltage_sensor:
         for x in range(0, count):
             val = self.measure()
             vals.append(val)
-            print("Vals so far: " + str(vals))
             time.sleep(delay_seconds)
         avg_val = self.__avg__(vals)
-        print("Avg val: " + avg_val)
-        return self.__analog_to_volts__(avg_val)
+        return avg_val
         
     def __analog_to_volts__(self, analog:float) -> float:
 
