@@ -1,0 +1,1 @@
+This is a helper module for connecting to a WLAN (wifi) in MicroPython using the *network* module.
