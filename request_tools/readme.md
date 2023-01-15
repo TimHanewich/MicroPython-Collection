@@ -1,0 +1,2 @@
+# request_tools
+When using a Raspberry Pi Pico W (or any MicroPython board) as a web server, you'll injest incoming traffic as an array of bytes. After converting these bytes to a string value (decoding), you can pass this request string into this class and this class will parse the request into it's various compontns (verb, headers, body).
