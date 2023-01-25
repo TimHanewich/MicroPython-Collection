@@ -1,4 +1,4 @@
-# Version: 2
+# Version: 3
 # Written by Tim Hanewich
 # This is from https://github.com/TimHanewich/MicroPython-Collection/tree/master/request_tools
 
