@@ -4,13 +4,13 @@
 
 import socket
 
-def read_all(s:socket.socket) -> bytearray:
+def read_all(s:socket.socket, buffer:int) -> bytearray:
     full_data:bytearray = bytearray()
     while True:
-        data = s.recv(4096)
+        data = s.recv(buffer)
         for b in data:
             full_data.append(b)
-        if len(data) < 4096:
+        if len(data) < buffer:
             break
     return full_data
 
