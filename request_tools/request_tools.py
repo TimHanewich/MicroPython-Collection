@@ -1,6 +1,18 @@
 # Version: 1
 # Written by Tim Hanewich
 
+import socket
+
+def read_all(s:socket.socket) -> bytearray:
+    full_data:bytearray = bytearray()
+    while True:
+        data = s.recv(4096)
+        for b in data:
+            full_data.append(b)
+        if len(data) < 4096:
+            break
+    return full_data
+
 class request:
 
     method:str = None
