@@ -1,16 +1,18 @@
-# Version: 3
+# Version: 4
 # Written by Tim Hanewich
 # This is from https://github.com/TimHanewich/MicroPython-Collection/tree/master/request_tools
 
 import socket
 
-def read_all(s:socket.socket, buffer:int) -> bytearray:
+def read_all(s:socket.socket, timeout_seconds:float = 0.25) -> bytearray:
+    s.settimeout(timeout_seconds)
     full_data:bytearray = bytearray()
     while True:
-        data = s.recv(buffer)
-        for b in data:
-            full_data.append(b)
-        if len(data) < buffer:
+        try:
+            data = s.recv(1024)
+            for b in data:
+                full_data.append(b)
+        except:
             break
     return full_data
 
