@@ -25,18 +25,18 @@ class AHT21:
         
     def initialize(self) -> None:
         """Initializes (calibrates) the AHT21 sensor"""
-        i2c.writeto(self.address, bytes([0xbe, 0x08, 0x00]))
+        self.i2c.writeto(self.address, bytes([0xbe, 0x08, 0x00]))
         time.sleep(0.1)
-        i2c.writeto(self.address, bytes([0x71]))
-        init_check = i2c.readfrom(self.address, 1)
+        self.i2c.writeto(self.address, bytes([0x71]))
+        init_check = self.i2c.readfrom(self.address, 1)
         if not init_check[0] & 0x68 == 0x08:
             raise Exception ("Initialization of AHT21 failed!")
     
     def read(self) -> tuple[float, float]:
         """Reads the relative humidity (as a percentage) and temperature (in degrees celsius) as a tuple, in that order."""
-        i2c.writeto(self.address, bytes([0xac, 0x33, 0x00]))
+        self.i2c.writeto(self.address, bytes([0xac, 0x33, 0x00]))
         time.sleep(0.2)
-        res = i2c.readfrom(self.address, 6)
+        res = self.i2c.readfrom(self.address, 6)
         
         # Relative humidity, as a percentage
         rh = ((res[1] << 16) | (res[2] << 8) | res[3]) >> 4;
