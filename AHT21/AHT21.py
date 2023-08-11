@@ -22,11 +22,7 @@ import machine
 import time
 
 class AHT21:
-    """
-    Lightweight class for communicating with an AHT21 temperature and humidity sensor via I2C.
-    
-    
-    """
+    """Lightweight class for communicating with an AHT21 temperature and humidity sensor via I2C."""
     
     def __init__(self, i2c:machine.I2C, address = 0x38):
         """
