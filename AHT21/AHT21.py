@@ -4,6 +4,13 @@ Author Tim Hanewich, github.com/TimHanewich
 Version 1.1, August 11, 2023
 Find updates to this code: https://github.com/TimHanewich/MicroPython-Collection/blob/master/AHT21/AHT21.py
 
+AHT21 Datasheet:
+http://www.aosong.com/userfiles/files/media/AHT21%20%E8%8B%B1%E6%96%87%E7%89%88%E8%AF%B4%E6%98%8E%E4%B9%A6%20A0%202020-12-8.pdf
+
+Code inspired by:
+https://github.com/any-sliv/aht21_python_pigpio/blob/main/aht21.py
+https://github.com/Thinary/AHT_Sensor/blob/main/AHT_Sensor/src/Thinary_AHT_Sensor.cpp
+
 MIT License
 Copyright 2023 Tim Hanewich
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -18,12 +25,7 @@ class AHT21:
     """
     Lightweight class for communicating with an AHT21 temperature and humidity sensor via I2C.
     
-    AHT21 Datasheet:
-    http://www.aosong.com/userfiles/files/media/AHT21%20%E8%8B%B1%E6%96%87%E7%89%88%E8%AF%B4%E6%98%8E%E4%B9%A6%20A0%202020-12-8.pdf
     
-    Code inspired by:
-    https://github.com/any-sliv/aht21_python_pigpio/blob/main/aht21.py
-    https://github.com/Thinary/AHT_Sensor/blob/main/AHT_Sensor/src/Thinary_AHT_Sensor.cpp
     """
     
     def __init__(self, i2c:machine.I2C, address = 0x38):
