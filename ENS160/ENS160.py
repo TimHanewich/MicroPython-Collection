@@ -81,7 +81,7 @@ class ENS160:
         """Resets and returns to standard operating mode (2)"""
 
         # write reset bytes
-        self.i2c.writeto_mem(self.address, 0x10, 0xF0)
+        self.i2c.writeto_mem(self.address, 0x10, bytes([0xF0]))
         time.sleep(2.0)
 
         # go to deep sleep mode (off)
