@@ -49,7 +49,7 @@ class ENS160:
         1 = Idle mode (low-power)
         2 = Standard Gas Sensing Mode
         """
-        if value not in [0, 1, 2]:
+        if value not in [0, 1, 2, 0xF0]:
             raise Exception("Operating value you're setting must be 0, 1, or 2")
         self.i2c.writeto_mem(self.address, 0x10, bytes([value]))
         
@@ -80,17 +80,18 @@ class ENS160:
     def reset(self) -> None:
         """Resets and returns to standard operating mode (2)"""
 
-        # write reset bytes
-        self.i2c.writeto_mem(self.address, 0x10, bytes([0xF0]))
-        time.sleep(2.0)
-
-        # go to deep sleep mode (off)
-        self.operating_mode = 0
-        time.sleep(2.0)
-
-        # go to sensing mode
+        self.operating_mode = 0xF0 # reset
+        time.sleep(1.0)
+        self.operating_mode = 1
+        time.sleep(0.25)
+        self.i2c.writeto_mem(self.address, 0x12, bytes([0x00]))
+        time.sleep(0.15)
+        self.i2c.writeto_mem(self.address, 0x12, bytes([0xCC]))
+        time.sleep(0.15)
         self.operating_mode = 2
-        time.sleep(2.0)
+        time.sleep(0.50)
+
+
 
     
         
