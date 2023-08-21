@@ -13,11 +13,13 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 
 import machine
+import time
 
 class ENS160:
     """
     Lightweight class for communicating with an ENS160 air quality sensor via I2C.
     Follows the specifications defined in the official ENS160 data sheet: https://www.mouser.com/datasheet/2/1081/SC_001224_DS_1_ENS160_Datasheet_Rev_0_95-2258311.pdf
+    Newer version of ENS160 data sheet: https://www.sciosense.com/wp-content/uploads/documents/SC-001224-DS-9-ENS160-Datasheet.pdf
     """
     
     def __init__(self, i2c:machine.I2C, address:int = 0x53):
@@ -74,6 +76,22 @@ class ENS160:
         5 = Unhealthy
         """
         return self.i2c.readfrom_mem(self.address, 0x21, 1)[0]
+    
+    def reset(self) -> None:
+        """Resets and returns to standard operating mode (2)"""
+
+        # write reset bytes
+        self.i2c.writeto_mem(self.address, 0x10, 0xF0)
+        time.sleep(2.0)
+
+        # go to deep sleep mode (off)
+        self.operating_mode = 0
+        time.sleep(2.0)
+
+        # go to sensing mode
+        self.operating_mode = 2
+        time.sleep(2.0)
+
     
         
     def _translate_pair(self, high:int, low:int) -> int:
