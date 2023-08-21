@@ -86,8 +86,8 @@ class ENS160:
         time.sleep(0.25)
         self.i2c.writeto_mem(self.address, 0x12, bytes([0x00]))
         time.sleep(0.15)
-        self.i2c.writeto_mem(self.address, 0x12, bytes([0xCC]))
-        time.sleep(0.15)
+        self.i2c.writeto_mem(self.address, 0x12, bytes([0xCC])) # reset command register
+        time.sleep(0.35)
         self.operating_mode = 2
         time.sleep(0.50)
 
