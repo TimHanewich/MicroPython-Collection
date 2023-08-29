@@ -2,6 +2,7 @@
 A lightweight MicroPython implementation for interfacing with an MPU-6050 via I2C. 
 Author: Tim Hanewich - https://github.com/TimHanewich
 Version: 1.0
+Get updates to this code file here: https://github.com/TimHanewich/MicroPython-Collection/blob/master/MPU6050/MPU6050.py
 
 License: MIT License
 Copyright 2023 Tim Hanewich
