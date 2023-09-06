@@ -1,4 +1,5 @@
 import time
+import json
 
 class NMEAParser:
 
@@ -24,7 +25,6 @@ class NMEAParser:
     @property
     def speed_mph(self) -> float:
         return self.speed_knots * 1.15078
-
 
     def feed(self, data:str) -> None:
         if data != None:
@@ -92,6 +92,22 @@ class NMEAParser:
 
                             # update last received time
                             self.speed_last_updated_ticks_ms = time.ticks_ms()
+
+    def to_json(self) -> str:
+        ToReturn = {}
+        ToReturn["utc_hours"] = self.utc_hours
+        ToReturn["utc_minutes"] = self.utc_minutes
+        ToReturn["utc_seconds"] = self.utc_seconds
+        ToReturn["position_last_updated_ticks_ms"] = self.position_last_updated_ticks_ms
+        ToReturn["latitude"] = self.latitude
+        ToReturn["longitude"] = self.longitude
+        ToReturn["satellites"] = self.satellites
+        ToReturn["altitude"] = self.altitude
+        ToReturn["HDOP"] = self.HDOP
+        ToReturn["speed_last_updated_ticks_ms"] = self.speed_last_updated_ticks_ms
+        ToReturn["speed_knots"] = self.speed_knots
+        ToReturn["speed_mph"] = self.speed_mph
+        return json.dumps(ToReturn)
 
     def _validate_checksum(self, line:str) -> bool:
 
