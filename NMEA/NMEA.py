@@ -79,6 +79,9 @@ class NMEAParser:
                     # speed, knots
                     self.speed_knots = float(parts[7])
 
+                    # update last received time
+                    self.speed_last_updated_ticks_ms = time.ticks_ms()
+
     def _validate_checksum(self, line:str) -> bool:
 
         loc1 = line.find("$")
