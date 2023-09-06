@@ -23,8 +23,7 @@ class NMEAParser:
         if GPGGA != None:
             if self._validate_checksum(GPGGA):
                 parts:list[str] = GPGGA.split(",")
-                print(parts)
-                
+                                
                 # UTC time
                 if len(parts) >= 2:
                     self.utc_hours = int(parts[1][0:2])
