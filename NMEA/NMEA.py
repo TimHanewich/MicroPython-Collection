@@ -15,6 +15,16 @@ class NMEAParser:
         self.longitude:float = 0.0
         self.satellites:int = 0
         self.altitude:float = 0.0 # altitude above sea level, in meters
+        self.HDOP:float = 0.0 # Horizontal Dilution of Precision. Measures quality (accuracy) of the GPS fix. Lower values are more accurate.
+
+        # from GPRMC
+        self.speed_last_updated_ticks_ms:int = 0
+        self.speed_knots:float = 0.0
+
+    @property
+    def speed_mph(self) -> float:
+        return self.speed_knots * 1.15078
+
 
     def feed(self, data:str) -> None:
         if data != None:
@@ -51,12 +61,24 @@ class NMEAParser:
                         # number of GPS satellites
                         self.satellites = int(parts[7])
 
+                        # HDOP (Horizontal Dilution of Precision)
+                        self.HDOP = float(parts[8])
+
                         # altitude above sea level, in meters
                         self.altitude = float(parts[9])
 
                         # update last received time
                         self.position_last_updated_ticks_ms = time.ticks_ms()
                 
+            # get GPRMC line
+            GPRMC:str = self._isolate_sentence(data, "GPRMC")
+            if GPRMC != None:
+                if self._validate_checksum(GPRMC):
+                    parts:list[str] = GPRMC.split(",")
+
+                    # speed, knots
+                    self.speed_knots = float(parts[7])
+
     def _validate_checksum(self, line:str) -> bool:
 
         loc1 = line.find("$")
