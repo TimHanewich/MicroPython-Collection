@@ -55,7 +55,7 @@ class NMEAParser:
                     self.altitude = float(parts[9])
 
                     # update last received time
-                    self.position_last_updated_ticks_ms = time.time_ns()
+                    self.position_last_updated_ticks_ms = time.ticks_ms()
                 
     def _validate_checksum(self, line:str) -> bool:
 
