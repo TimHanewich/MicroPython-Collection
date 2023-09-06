@@ -24,4 +24,7 @@ The components of this NMEA sentence:
 Different NMEA sentences exist for various types of data, such as GPS position, speed, heading, depth, and more. Each sentence has its own unique sentence identifier and structure.
 
 ## Sample Data
-I captured 250 raw samples (decoded bytes) of NMEA readings from a [NEO-6M](https://www.amazon.com/gp/product/B07P8YMVNT/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1) GPS module, captured in UART, [here](./nmea_data.json)
+I captured 250 raw samples (decoded bytes) of NMEA readings from a [NEO-6M](https://www.amazon.com/gp/product/B07P8YMVNT/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1) GPS module, captured in UART, [here](./nmea_data.json).
+
+## Script to Collect NMEA Data
+I wrote [this simple script](./collect_nmea_data.py) for collecting NMEA data from a [NEO-6M](https://www.amazon.com/gp/product/B07P8YMVNT/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1) GPS module, captured in UART.
