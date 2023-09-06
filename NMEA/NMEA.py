@@ -17,44 +17,45 @@ class NMEAParser:
         self.altitude:float = 0.0 # altitude above sea level, in meters
 
     def feed(self, data:str) -> None:
+        if data != None:
 
-        # get GPGGA line
-        GPGGA:str = self._isolate_sentence(data, "GPGGA")
-        if GPGGA != None:
-            if self._validate_checksum(GPGGA):
-                parts:list[str] = GPGGA.split(",")
-                                
-                # UTC time
-                if len(parts) >= 2:
-                    self.utc_hours = int(parts[1][0:2])
-                    self.utc_minutes = int(parts[1][2:4])
-                    self.utc_seconds = float(parts[1][4:])
+            # get GPGGA line
+            GPGGA:str = self._isolate_sentence(data, "GPGGA")
+            if GPGGA != None:
+                if self._validate_checksum(GPGGA):
+                    parts:list[str] = GPGGA.split(",")
 
-                # Latitude & longitude
-                if len(parts) >= 6:
+                    # UTC time
+                    if len(parts) >= 2:
+                        self.utc_hours = int(parts[1][0:2])
+                        self.utc_minutes = int(parts[1][2:4])
+                        self.utc_seconds = float(parts[1][4:])
 
-                    # latitude
-                    lat_s:str = parts[2][0:2]
-                    lat_d:float = float(parts[2][2:])
-                    self.latitude = float(lat_s + "." + str(lat_d / 60.0).replace("0.", ""))
-                    if parts[3].lower() == "s":
-                        self.latitude = self.latitude * -1
-                    
-                    # longitude
-                    lon_s:str = parts[4][0:3]
-                    lon_d:float = float(parts[4][3:])
-                    self.longitude = float(lon_s + "." + str(lon_d / 60.0).replace("0.", ""))
-                    if parts[5].lower() == "w":
-                        self.longitude = self.longitude * -1
+                    # Latitude & longitude
+                    if len(parts) >= 6:
 
-                    # number of GPS satellites
-                    self.satellites = int(parts[7])
+                        # latitude
+                        lat_s:str = parts[2][0:2]
+                        lat_d:float = float(parts[2][2:])
+                        self.latitude = float(lat_s + "." + str(lat_d / 60.0).replace("0.", ""))
+                        if parts[3].lower() == "s":
+                            self.latitude = self.latitude * -1
+                        
+                        # longitude
+                        lon_s:str = parts[4][0:3]
+                        lon_d:float = float(parts[4][3:])
+                        self.longitude = float(lon_s + "." + str(lon_d / 60.0).replace("0.", ""))
+                        if parts[5].lower() == "w":
+                            self.longitude = self.longitude * -1
 
-                    # altitude above sea level, in meters
-                    self.altitude = float(parts[9])
+                        # number of GPS satellites
+                        self.satellites = int(parts[7])
 
-                    # update last received time
-                    self.position_last_updated_ticks_ms = time.ticks_ms()
+                        # altitude above sea level, in meters
+                        self.altitude = float(parts[9])
+
+                        # update last received time
+                        self.position_last_updated_ticks_ms = time.ticks_ms()
                 
     def _validate_checksum(self, line:str) -> bool:
 
