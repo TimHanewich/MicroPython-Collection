@@ -37,38 +37,47 @@ class NMEAParser:
 
                     # UTC time
                     if len(parts) >= 2:
-                        self.utc_hours = int(parts[1][0:2])
-                        self.utc_minutes = int(parts[1][2:4])
-                        self.utc_seconds = float(parts[1][4:])
+                        if (parts[1] != ""):
+                            self.utc_hours = int(parts[1][0:2])
+                            self.utc_minutes = int(parts[1][2:4])
+                            self.utc_seconds = float(parts[1][4:])
 
                     # Latitude & longitude
                     if len(parts) >= 6:
 
-                        # latitude
-                        lat_s:str = parts[2][0:2]
-                        lat_d:float = float(parts[2][2:])
-                        self.latitude = float(lat_s + "." + str(lat_d / 60.0).replace("0.", ""))
-                        if parts[3].lower() == "s":
-                            self.latitude = self.latitude * -1
-                        
-                        # longitude
-                        lon_s:str = parts[4][0:3]
-                        lon_d:float = float(parts[4][3:])
-                        self.longitude = float(lon_s + "." + str(lon_d / 60.0).replace("0.", ""))
-                        if parts[5].lower() == "w":
-                            self.longitude = self.longitude * -1
+                        # lat and long
+                        if parts[2] != "" and parts[3] != "" and parts[4] != "" and parts[5] != "":
+
+                            # latitude
+                            lat_s:str = parts[2][0:2]
+                            lat_d:float = float(parts[2][2:])
+                            self.latitude = float(lat_s + "." + str(lat_d / 60.0).replace("0.", ""))
+                            if parts[3].lower() == "s":
+                                self.latitude = self.latitude * -1
+                            
+                            # longitude
+                            lon_s:str = parts[4][0:3]
+                            lon_d:float = float(parts[4][3:])
+                            self.longitude = float(lon_s + "." + str(lon_d / 60.0).replace("0.", ""))
+                            if parts[5].lower() == "w":
+                                self.longitude = self.longitude * -1
+
+                            # update last received time
+                            self.position_last_updated_ticks_ms = time.ticks_ms()
 
                         # number of GPS satellites
-                        self.satellites = int(parts[7])
+                        if parts[7] != "":
+                            self.satellites = int(parts[7])
 
                         # HDOP (Horizontal Dilution of Precision)
-                        self.HDOP = float(parts[8])
+                        if parts[8] != "":
+                            self.HDOP = float(parts[8])
 
                         # altitude above sea level, in meters
-                        self.altitude = float(parts[9])
+                        if parts[9] != "":
+                            self.altitude = float(parts[9])
 
-                        # update last received time
-                        self.position_last_updated_ticks_ms = time.ticks_ms()
+                            
                 
             # get GPRMC line
             GPRMC:str = self._isolate_sentence(data, "GPRMC")
@@ -77,10 +86,12 @@ class NMEAParser:
                     parts:list[str] = GPRMC.split(",")
 
                     # speed, knots
-                    self.speed_knots = float(parts[7])
+                    if len(parts) >= 8:
+                        if parts[7] != "":
+                            self.speed_knots = float(parts[7])
 
-                    # update last received time
-                    self.speed_last_updated_ticks_ms = time.ticks_ms()
+                            # update last received time
+                            self.speed_last_updated_ticks_ms = time.ticks_ms()
 
     def _validate_checksum(self, line:str) -> bool:
 
