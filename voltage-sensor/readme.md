@@ -1,6 +1,10 @@
 # Voltage Sensor
 I purchased [this voltage detection sensor](https://www.amazon.com/gp/product/B07L81QJ75/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1) on Amazon and have developed a module in MicroPython for reading analog values from it and converting this into a voltage reading. This class was designed and tested on the Raspberry Pi Pico (RP2040), but could be used on other hardware.
 
+![what i bought](https://i.imgur.com/w0DztuT.png)
+
+As noted in the description, on 3.3V systems (the Raspberry Pi Pico I am using), the maximum detected voltage is 16.5; in reality, I tested it to be around 16.3. I don't believe this means it will *damage* the sensor or other hardware in anyway, I believe this only means that it will not be able to tell if the voltage goes over this voltage level. So, in my `VoltageSensor` class described below, the returned value of the `voltage` function will not surpass the 16.3 I tested against and had the most success with.
+
 ## Wiring
 - VCC and GND input from battery serves as input into the module
 - "-" Pin to GND on Raspberry Pi Pico. I used pin 38.
