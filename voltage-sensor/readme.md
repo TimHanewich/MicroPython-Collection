@@ -10,7 +10,7 @@ I purchased [this voltage detection sensor](https://www.amazon.com/gp/product/B0
 ```
 import voltage
 import time
-vs = voltage.VoltageSensor(26)
+vs = voltage.VoltageSensor(28)
 while True:
 	print(round(vs.voltage(), 1))
 ```
