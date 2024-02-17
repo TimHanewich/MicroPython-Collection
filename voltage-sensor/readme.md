@@ -15,3 +15,10 @@ while True:
 ```
 
 The above script will continuously take voltage readings and print them.
+
+## Development Notes
+During development, I took a series of measurements with varying voltage inputs to the sensor module and observed the Raspberry Pi Pico's (RP2040) U16 ADC reading. That is included below:
+
+![readings](https://i.imgur.com/jVJOcZT.png)
+
+You can see in the chart above that the relationship between the voltage and analog reading is linear. This understanding is what the `voltage` function of the `VoltageSensor` module is based on.
