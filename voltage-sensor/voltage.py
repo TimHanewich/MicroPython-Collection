@@ -1,20 +1,6 @@
 import machine
 import time
-
-class MovingAverageFilter:
-    def __init__(self, weight:float = 0.98):
-        self.weight = weight
-        self._last_val:float = None
-    
-    def filter(self, reading:float) -> float:
-        if self._last_val == None:
-            self._last_val = reading
-            return reading
-        else:
-            val = (self._last_val * self.weight) + (reading * (1 - self.weight))
-            self._last_val = val
-            return val
-        
+       
 class VoltageSensor:
     def __init__(self, adc_gpio:int) -> None:
         self._adc = machine.ADC(adc_gpio)
