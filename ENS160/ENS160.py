@@ -91,9 +91,16 @@ class ENS160:
         self.operating_mode = 2
         time.sleep(0.50)
 
+    def _get_status(self) -> int:
+        """Returns the value of DATA_STATUS at 0x20"""
+        return self.i2c.readfrom_mem(self.address, 0x20, 1)[0]
 
-
-    
+    def error_detected(self) -> bool:
+        error:int = self._byte_to_binary(self._get_status())[1]
+        if error == 1:
+            return True
+        else:
+            return False
         
     def _translate_pair(self, high:int, low:int) -> int:
         """Converts a byte pair to a usable value. Borrowed from https://github.com/m-rtijn/mpu6050/blob/0626053a5e1182f4951b78b8326691a9223a5f7d/mpu6050/mpu6050.py#L76C39-L76C39."""
@@ -102,7 +109,7 @@ class ENS160:
             value = -((65535 - value) + 1)
         return value   
     
-    def _byte_to_binary(byte:int):
+    def _byte_to_binary(self, byte:int):
         if byte < 0 or byte > 255:
             raise Exception("Value of '" + str(byte) + "' is not a byte. Unable to convert.")
         binary:str = ""
