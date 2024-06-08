@@ -113,6 +113,22 @@ class ENS160:
         else:
             return False
         
+    @property
+    def signal_rating(self) -> int:
+        """Also referred to as 'Validity Flag', assesses the current operational mode and reliability of output signals."""
+
+        bind:str = self._byte_to_binary(self._get_status())
+        vf:str = bind[4] + bind[5]
+        if vf == "00":
+            return 0
+        elif vf == "01":
+            return 1
+        elif vf == "10":
+            return 2
+        elif vf == "11":
+            return 3
+
+        
     def _translate_pair(self, high:int, low:int) -> int:
         """Converts a byte pair to a usable value. Borrowed from https://github.com/m-rtijn/mpu6050/blob/0626053a5e1182f4951b78b8326691a9223a5f7d/mpu6050/mpu6050.py#L76C39-L76C39."""
         value = (high << 8) + low
