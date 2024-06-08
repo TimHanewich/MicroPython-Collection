@@ -101,3 +101,12 @@ class ENS160:
         if value >= 0x8000:
             value = -((65535 - value) + 1)
         return value   
+    
+    def _byte_to_binary(byte:int):
+        if byte < 0 or byte > 255:
+            raise Exception("Value of '" + str(byte) + "' is not a byte. Unable to convert.")
+        binary:str = ""
+        for x in range(8):
+            binary = str(byte & 1) + binary
+            byte >>= 1
+        return binary
