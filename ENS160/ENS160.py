@@ -32,14 +32,23 @@ class ENS160:
         self.i2c = i2c
     
     @property
-    def operating_mode(self) -> int:
+    def operating_mode(self) -> dict:
         """
         Reads the operating mode that the ENS160 is currently in.
         0 = Deep Sleep Mode (low power standby)
         1 = Idle mode (low-power)
         2 = Standard Gas Sensing Mode
         """
-        return self.i2c.readfrom_mem(self.address, 0x10, 1)[0]
+        op_mode:int = self.i2c.readfrom_mem(self.address, 0x10, 1)[0]
+
+        if op_mode == 0:
+            return {"value": 0, "text": "deep sleep"}
+        elif op_mode == 1:
+            return {"value": 1, "text": "idle"}
+        elif op_mode == 2:
+            return {"value": 2, "text": "standard gas sensing"}
+        else:
+            return {"value": op_mode, "text": "(unknown)"}
     
     @operating_mode.setter
     def operating_mode(self, value):
