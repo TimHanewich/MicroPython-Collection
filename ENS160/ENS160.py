@@ -97,8 +97,18 @@ class ENS160:
 
     @property
     def error(self) -> bool:
+        """Indicates if there is an error with the sensor."""
         error:int = self._byte_to_binary(self._get_status())[1]
         if error == 1:
+            return True
+        else:
+            return False
+        
+    @property
+    def new_data_available(self) -> bool:
+        """Indicates if new sensor data is available to read."""
+        nd:int = self._byte_to_binary(self._get_status())[6]
+        if nd == 1:
             return True
         else:
             return False
