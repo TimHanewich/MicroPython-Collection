@@ -66,7 +66,7 @@ class ENS160:
         return self._translate_pair(bs[1], bs[0])
     
     @property
-    def AQI(self) -> int:
+    def AQI(self) -> dict:
         """
         Reads the calculated Air Quality Index (AQI) according to the UBA
         1 = Excellent
@@ -75,7 +75,20 @@ class ENS160:
         4 = Poor
         5 = Unhealthy
         """
-        return self.i2c.readfrom_mem(self.address, 0x21, 1)[0]
+        val:int = self.i2c.readfrom_mem(self.address, 0x21, 1)[0]
+
+        if val == 1:
+            return {"value": val, "text": "excellent"}
+        elif val == 2:
+            return {"value": val, "text": "good"}
+        elif val == 3:
+            return {"value": val, "text": "moderate"}
+        elif val == 4:
+            return {"value": val, "text": "poor"}
+        elif val == 5:
+            return {"value": val, "text": "unhealthy"}
+        else:
+            return {"value": val, "text": "(unknown)"}
     
     def reset(self) -> None:
         """Resets and returns to standard operating mode (2)"""
