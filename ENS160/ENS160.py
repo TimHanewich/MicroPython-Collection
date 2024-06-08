@@ -95,7 +95,8 @@ class ENS160:
         """Returns the value of DATA_STATUS at 0x20"""
         return self.i2c.readfrom_mem(self.address, 0x20, 1)[0]
 
-    def error_detected(self) -> bool:
+    @property
+    def error(self) -> bool:
         error:int = self._byte_to_binary(self._get_status())[1]
         if error == 1:
             return True
