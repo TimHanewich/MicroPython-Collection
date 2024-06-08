@@ -54,7 +54,7 @@ class ENS160:
         self.i2c.writeto_mem(self.address, 0x10, bytes([value]))
         
     @property
-    def CO2(self) -> int:
+    def ECO2(self) -> int:
         """Reads the calculated equivalent CO2-concentration in PPM, based on the detected VOCs and hydrogen"""
         bs = self.i2c.readfrom_mem(self.address, 0x24, 2)
         return self._translate_pair(bs[1], bs[0])
