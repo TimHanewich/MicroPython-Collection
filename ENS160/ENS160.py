@@ -115,7 +115,15 @@ class ENS160:
         
     @property
     def signal_rating(self) -> int:
-        """Also referred to as 'Validity Flag', assesses the current operational mode and reliability of output signals."""
+        """
+        Also referred to as 'Validity Flag', assesses the current operational mode and reliability of output signals.
+        
+        Values can be interpreted as:
+        0: Normal operation
+        1: Warm-Up phase
+        2: Initial Start-Up phase
+        3: Invalid output
+        """
 
         bind:str = self._byte_to_binary(self._get_status())
         vf:str = bind[4] + bind[5]
