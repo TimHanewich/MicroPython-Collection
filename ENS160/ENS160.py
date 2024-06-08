@@ -114,7 +114,7 @@ class ENS160:
             return False
         
     @property
-    def signal_rating(self) -> int:
+    def signal_rating(self) -> dict:
         """
         Also referred to as 'Validity Flag', assesses the current operational mode and reliability of output signals.
         
@@ -128,13 +128,13 @@ class ENS160:
         bind:str = self._byte_to_binary(self._get_status())
         vf:str = bind[4] + bind[5]
         if vf == "00":
-            return 0
+            return {"value": 0, "text": "Normal operation"}
         elif vf == "01":
-            return 1
+            return {"value": 1, "text": "Warm-Up phase"}
         elif vf == "10":
-            return 2
+            return {"value": 2, "text": "Initial Start-Up phase"}
         elif vf == "11":
-            return 3
+            return {"value": 3, "text": "Invalid output"}
 
         
     def _translate_pair(self, high:int, low:int) -> int:
