@@ -97,20 +97,6 @@ class ENS160:
             return {"value": val, "text": "unhealthy"}
         else:
             return {"value": val, "text": "(unknown)"}
-    
-    def reset(self) -> None:
-        """Resets and returns to standard operating mode (2)"""
-
-        self.operating_mode = 0xF0 # reset
-        time.sleep(1.0)
-        self.operating_mode = 1
-        time.sleep(0.25)
-        self.i2c.writeto_mem(self.address, 0x12, bytes([0x00]))
-        time.sleep(0.15)
-        self.i2c.writeto_mem(self.address, 0x12, bytes([0xCC])) # reset command register
-        time.sleep(0.35)
-        self.operating_mode = 2
-        time.sleep(0.50)
 
     def _get_status(self) -> int:
         """Returns the value of DATA_STATUS at 0x20"""
