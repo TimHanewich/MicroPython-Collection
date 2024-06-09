@@ -11,6 +11,8 @@ print(ens.TVOC) # 106
 print(ens.ECO2) # 559
 ```
 
+I also provided an example script [here](./example.py). However, please note this does not include recommended built-in logic for how to handle a scenario in which the ENS160 stops functioning randomly (read on below).
+
 ## Poor Reliability Issues
 I purchased ENS160 + AHT21 sensors on a single breakout board from Amazon [here](https://a.co/d/id3JsgZ). I am not sure if this issue is specific to this item I purchased, but I have been experiencing serious reliability issues with the ENS160. Oftentimes, the ENS160 will work perfectly for anywhere between one minute and 30 minutes. And then, suddenly, it just starts returning invalid data. All values (AQI, TVOC, ECO2) are "0". And there isn't any particular error or problem indicated by the sensor.
 
