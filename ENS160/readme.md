@@ -1,5 +1,5 @@
 # ENS160.py
-A lightweight class for interfacing with an ENS160 digital multi-gas sensor.
+A lightweight class for interfacing with an ENS160 digital multi-gas sensor. This class was built to interface with the ENS160 according to [it's official datasheet](https://github.com/TimHanewich/MicroPython-Collection/releases/download/1/ENS160_datasheet.pdf).
 
 ## Example Usage
 ```
