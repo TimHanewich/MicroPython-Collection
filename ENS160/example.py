@@ -7,7 +7,7 @@ i2c = machine.I2C(0, scl=machine.Pin(17), sda=machine.Pin(16))
 print(i2c.scan())
 sensor = ENS160.ENS160(i2c)
 
-# set operating mode
+# set operating mode to 2 (gas sensing)
 sensor.operating_mode = 2 
 print("Operating mode set to 2")
 
