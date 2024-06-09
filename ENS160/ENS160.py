@@ -58,7 +58,7 @@ class ENS160:
         1 = Idle mode (low-power)
         2 = Standard Gas Sensing Mode
         """
-        if value not in [0, 1, 2, 0xF0]:
+        if value not in [0, 1, 2, 0xF0]: # 0xF0 is supposedly a reset command that I've only seen in some datasheets. Leaving it here as an acceptable option, but that isn't advertised in this functions description.
             raise Exception("Operating value you're setting must be 0, 1, or 2")
         self.i2c.writeto_mem(self.address, 0x10, bytes([value]))
         
