@@ -1,7 +1,6 @@
 """
 ENS160.py MicroPython driver for the ENS160 Digital Metal-Oxide Multi-Gas Sensor manufactured by ScioSense - https://www.sciosense.com/products/environmental-sensors/ens160-digital-multi-gas-sensor/
 Author Tim Hanewich, github.com/TimHanewich
-Version 1.2, August 21, 2023
 Find updates to this code: https://github.com/TimHanewich/MicroPython-Collection/blob/master/ENS160/ENS160.py
 
 MIT License
