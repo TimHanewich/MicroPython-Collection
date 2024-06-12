@@ -131,9 +131,9 @@ class ENS160:
 
         # New data
         if statuss[6] == "1":
-            ToReturn["NEWDDAT"] = True
+            ToReturn["NEWDAT"] = True
         else:
-            ToReturn["NEWDDAT"] = False
+            ToReturn["NEWDAT"] = False
         
         # New GPR (General Purpose Read registers)
         if statuss[7] == "1":
@@ -149,7 +149,7 @@ class ENS160:
         return self.status["STATER"]
         
     @property
-    def new_data_available(self) -> bool:
+    def new_data(self) -> bool:
         """Indicates if new sensor data is available to read."""
         return self.status["NEWDAT"]
         
