@@ -98,9 +98,50 @@ class ENS160:
         else:
             return {"value": val, "text": "(unknown)"}
 
-    def _get_status(self) -> int:
-        """Returns the value of DATA_STATUS at 0x20"""
-        return self.i2c.readfrom_mem(self.address, 0x20, 1)[0]
+    @property
+    def status(self) -> dict:
+        statusb:int = self.i2c.readfrom_mem(self.address, 0x20, 1)[0]
+        statuss:str = self._byte_to_binary(statusb)
+        
+        ToReturn:dict = {}
+
+        # STATAS
+        if statuss[0] == "1":
+            ToReturn["STATAS"] = True
+        else:
+            ToReturn["STATAS"] = False
+
+        # STATER (error)
+        if statuss[1] == "1":
+            ToReturn["STATER"] = True
+        else:
+            ToReturn["STATER"] = False
+        
+        # validity flag
+        vf = ToReturn[4] + ToReturn[5]
+        if vf == "00":
+            ToReturn["VALIDITY FLAG"] = 0
+        elif vf == "01":
+            ToReturn["VALIDITY FLAG"] = 1
+        elif vf == "10":
+            ToReturn["VALIDITY FLAG"] = 2
+        elif vf == "11":
+            ToReturn["VALIDITY FLAG"] = 3
+
+        # New data
+        if statuss[6] == "1":
+            ToReturn["NEWDDAT"] = True
+        else:
+            ToReturn["NEWDDAT"] = False
+        
+        # New GPR (General Purpose Read registers)
+        if statuss[7] == "1":
+            ToReturn["NEWGPR"] = True
+        else:
+            ToReturn["NEWGPR"] = True
+
+        return ToReturn
+
 
     @property
     def error(self) -> bool:
@@ -144,6 +185,11 @@ class ENS160:
             return {"value": 3, "text": "Invalid output"}
 
         
+
+    def _get_status(self) -> int:
+        """Returns the value of DATA_STATUS at 0x20"""
+        return self.i2c.readfrom_mem(self.address, 0x20, 1)[0]
+
     def _translate_pair(self, high:int, low:int) -> int:
         """Converts a byte pair to a usable value. Borrowed from https://github.com/m-rtijn/mpu6050/blob/0626053a5e1182f4951b78b8326691a9223a5f7d/mpu6050/mpu6050.py#L76C39-L76C39."""
         value = (high << 8) + low
@@ -151,7 +197,8 @@ class ENS160:
             value = -((65535 - value) + 1)
         return value   
     
-    def _byte_to_binary(self, byte:int):
+    def _byte_to_binary(self, byte:int) -> str:
+        """Converts a byte into a 8-character string, each character representing a single bit, being 0 or 1."""
         if byte < 0 or byte > 255:
             raise Exception("Value of '" + str(byte) + "' is not a byte. Unable to convert.")
         binary:str = ""
