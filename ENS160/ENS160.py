@@ -118,7 +118,7 @@ class ENS160:
             ToReturn["STATER"] = False
         
         # validity flag
-        vf = ToReturn[4] + ToReturn[5]
+        vf = statuss[4] + statuss[5]
         if vf == "00":
             ToReturn["VALIDITY FLAG"] = 0
         elif vf == "01":

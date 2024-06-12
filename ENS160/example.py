@@ -3,13 +3,9 @@ import machine
 import ENS160
 import time
 
-i2c = machine.I2C(0, scl=machine.Pin(17), sda=machine.Pin(16))
+i2c = machine.I2C(0, scl=machine.Pin(17), sda=machine.Pin(16), freq=100000)
 print(i2c.scan())
 sensor = ENS160.ENS160(i2c)
-
-# set operating mode to 2 (gas sensing)
-sensor.operating_mode = 2 
-print("Operating mode set to 2")
 
 def loop():
     while True:
