@@ -30,7 +30,7 @@ class ENS160:
     
     def __str__(self) -> str:
         ToReturn = "Operating Mode: " + self.operating_mode["text"]
-        ToReturn = ToReturn + "\n" + "AQI: " + self.AQI["text"]
+        ToReturn = ToReturn + "\n" + "AQI: " + str(self.AQI)
         ToReturn = ToReturn + "\n" + "TVOC: " + str(self.TVOC)
         ToReturn = ToReturn + "\n" + "ECO2: " + str(self.ECO2)
         ToReturn = ToReturn + "\n" + "Status: " + str(self.status)
