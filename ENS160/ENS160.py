@@ -201,6 +201,8 @@ class ENS160:
     @humidity.setter
     def humidity(self, relative_humidity:float) -> None:
         """Sets the relative humidity (between 0.0 and 1.0) that will be used in calculations."""
+        if relative_humidity < 0.0 or relative_humidity > 1.0:
+            raise Exception("Please provide your relative humidity between 0.0 and 1.0 (a percentage).")
         rhi:int = int(round(relative_humidity * 100, 0)) # the RH will be provided between 0.0 and 1.0. So scale it up to two digits.
         rhi = rhi * 512 # the ENS160 stores it as it is multiplied by 512
         asbs:bytes = rhi.to_bytes(2, "little")
