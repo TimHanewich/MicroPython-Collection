@@ -174,6 +174,27 @@ class ENS160:
         elif SR == 3:
             return {"value": 3, "text": "Invalid output"}
 
+    @property
+    def temperature(self) -> float:
+        """Reports the temperature used in calculations, in Celsius."""
+        DATA_T:bytes = self.i2c.readfrom_mem(self.address, 0x30, 2) # read raw bytes
+        DATA_T_i:int = int.from_bytes(DATA_T, "little") # convert bytes to int
+        ToReturnF:float = DATA_T_i / 64 # it is stored *64 (weird, idk why), so undo it.
+        ToReturnF = ToReturnF - 273.15
+        return ToReturnF
+
+    @temperature.setter
+    def temperature(self, temperature_c:float) -> None:
+        """Sets the temperature, in Celsius, that the ENS160 uses in its calculations."""
+        kelvin:float = temperature_c + 273.15 # the ENS160 stores as Kelvin
+        to_write:float = kelvin * 64 # for whatever reason, the ENS160 stores the temperature, in kelvin, multiplied by 64. Weird, but okay.
+        asbs:bytes = int(to_write).to_bytes(2, "little")
+        self.i2c.writeto_mem(self.address, 0x13, asbs) # write to TEMP_IN on address 0x13
+
+
+
+
+
     def _translate_pair(self, high:int, low:int) -> int:
         """Converts a byte pair to a usable value. Borrowed from https://github.com/m-rtijn/mpu6050/blob/0626053a5e1182f4951b78b8326691a9223a5f7d/mpu6050/mpu6050.py#L76C39-L76C39."""
         value = (high << 8) + low
