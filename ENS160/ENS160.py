@@ -143,7 +143,6 @@ class ENS160:
 
         return ToReturn
 
-
     @property
     def error(self) -> bool:
         return self.status["STATER"]
