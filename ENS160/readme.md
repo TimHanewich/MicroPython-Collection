@@ -14,6 +14,4 @@ print(ens.ECO2) # 559
 I also provided an example script [here](./example.py). However, please note this does not include recommended built-in logic for how to handle a scenario in which the ENS160 stops functioning randomly (read on below).
 
 ## Poor Reliability Issues
-Some forms of the ENS160 sensor, like [these ones I purchased on Amazon](https://a.co/d/id3JsgZ), I have found are very unreliable. I've tried many things to get them to return stable readings, with no success. My trials are documented [in this repo](https://github.com/TimHanewich/diagnosing-ens160).
-
-However, I have had much success with the SparkFun ENS160 I bought [on Amazon](https://a.co/d/i8LiwVQ).
+I have had much success with the SparkFun ENS160 I bought [on Amazon](https://a.co/d/i8LiwVQ). However, some forms of the ENS160 sensor, like [these ones I purchased on Amazon](https://a.co/d/id3JsgZ), I have found are very unreliable. I've tried many things to get them to return stable readings, with no success. My trials are documented [in this repo](https://github.com/TimHanewich/diagnosing-ens160).
