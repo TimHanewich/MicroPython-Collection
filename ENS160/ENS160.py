@@ -100,6 +100,7 @@ class ENS160:
 
     @property
     def status(self) -> dict:
+        """Reads the DATA_STATUS register and translates this single byte into each field's value."""
         statusb:int = self.i2c.readfrom_mem(self.address, 0x20, 1)[0]
         statuss:str = self._byte_to_binary(statusb)
         
@@ -145,21 +146,12 @@ class ENS160:
 
     @property
     def error(self) -> bool:
-        """Indicates if there is an error with the sensor."""
-        error:int = int(self._byte_to_binary(self._get_status())[1])
-        if error == 1:
-            return True
-        else:
-            return False
+        return self.status["STATER"]
         
     @property
     def new_data_available(self) -> bool:
         """Indicates if new sensor data is available to read."""
-        nd:int = int(self._byte_to_binary(self._get_status())[6])
-        if nd == 1:
-            return True
-        else:
-            return False
+        return self.status["NEWDAT"]
         
     @property
     def signal_rating(self) -> dict:
@@ -173,22 +165,15 @@ class ENS160:
         3: Invalid output
         """
 
-        bind:str = self._byte_to_binary(self._get_status())
-        vf:str = bind[4] + bind[5]
-        if vf == "00":
+        SR:int = self.status["VALIDITY FLAG"]
+        if SR == 0:
             return {"value": 0, "text": "Normal operation"}
-        elif vf == "01":
+        elif SR == 1:
             return {"value": 1, "text": "Warm-Up phase"}
-        elif vf == "10":
+        elif SR == 2:
             return {"value": 2, "text": "Initial Start-Up phase"}
-        elif vf == "11":
+        elif SR == 3:
             return {"value": 3, "text": "Invalid output"}
-
-        
-
-    def _get_status(self) -> int:
-        """Returns the value of DATA_STATUS at 0x20"""
-        return self.i2c.readfrom_mem(self.address, 0x20, 1)[0]
 
     def _translate_pair(self, high:int, low:int) -> int:
         """Converts a byte pair to a usable value. Borrowed from https://github.com/m-rtijn/mpu6050/blob/0626053a5e1182f4951b78b8326691a9223a5f7d/mpu6050/mpu6050.py#L76C39-L76C39."""
