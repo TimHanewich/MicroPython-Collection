@@ -189,7 +189,22 @@ class ENS160:
         asbs:bytes = int(to_write).to_bytes(2, "little")
         self.i2c.writeto_mem(self.address, 0x13, asbs) # write to TEMP_IN on address 0x13
 
+    @property
+    def humidity(self) -> float:
+        """Reports the relative humidity used in calculations."""
+        DATA_RH:bytes = self.i2c.readfrom_mem(self.address, 0x32, 2)
+        DATA_RH_i:int = int.from_bytes(DATA_RH, "little")
+        ToReturnF:float = DATA_RH_i / 512
+        ToReturnF = ToReturnF / 100 # return as between 0.0 and 1.0 (a percentage)
+        return ToReturnF
 
+    @humidity.setter
+    def humidity(self, relative_humidity:float) -> None:
+        """Sets the relative humidity (between 0.0 and 1.0) that will be used in calculations."""
+        rhi:int = int(round(relative_humidity * 100, 0)) # the RH will be provided between 0.0 and 1.0. So scale it up to two digits.
+        rhi = rhi * 512 # the ENS160 stores it as it is multiplied by 512
+        asbs:bytes = rhi.to_bytes(2, "little")
+        self.i2c.writeto_mem(self.address, 0x15, asbs)
 
 
 
