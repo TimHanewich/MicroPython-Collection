@@ -1,7 +1,7 @@
-import color_toolkit.color_toolkit
+import color_toolkit
 import machine
 import time
-import neopixel.neopixel
+import neopixel
 import ssd1306
 import voltage
 import BatteryMonitor
