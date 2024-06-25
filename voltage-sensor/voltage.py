@@ -5,14 +5,12 @@ class VoltageSensor:
     def __init__(self, adc_gpio:int) -> None:
         self._adc = machine.ADC(adc_gpio)
 
-    def _sample_analog(self) -> int:
+    def _sample_analog(self, duration:float = 0.5, samples:int = 10) -> int:
         """Takes average of analog reading over short period of time."""
         # I've learned that, no matter what duration you take samples over, the min, mean, and max should be the same. So taking these samples rapidly over 1.5 seconds is fine.
-        duration:float = 1.5
-        samples:int = 30
         delay:float = duration / samples
         total:int = 0
-        for x in range(samples):
+        for _ in range(samples):
             total = total + self._adc.read_u16()
             time.sleep(delay)
         return int(round(total / samples, 0))
