@@ -54,3 +54,6 @@ Still on a 5V supply from DC power, I then had it instead sense the voltage of a
 	- Read voltage on screen, with neopixel attached and working: 3.88v
 	- When I re-booted without the neopixel attached: 3.98v
 		- As soon as I plug the neopixel back in and they are working, the voltage drops to 3.88v again.
+- [test3](./test3/) - this test is to observe the ambient noise (value) on the ADC GP pin 26 when powered by USB or external.
+	- On USB: `12,000`
+	- On external: `10,300`

@@ -11,7 +11,7 @@ oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 adc = machine.ADC(machine.Pin(26)) # GP26
 
 # set up weighted avg calculator
-wac = WeightedAverageCalculator.WeightedAverageCalculator(alpha=0.95)
+wac = WeightedAverageCalculator.WeightedAverageCalculator(alpha=0.99)
 
 def test() -> None:
 
