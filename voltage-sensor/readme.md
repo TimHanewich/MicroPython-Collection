@@ -38,3 +38,14 @@ Through multiple tests, I narrowed this down to this problem arising specificall
 Even when not using the MT3608 converted, when powering directly from solid 5V provided by DC-DC power supply, still had issue. It couldn't sense the 5V correctly. Was reading around 3.8 or 3.9
 
 Still on a 5V supply from DC power, I then had it instead sense the voltage of an 18650 battery. Not a battery being used in any way, just the voltage of a standalone battery. Still incorrect.
+
+### What I've gotten to work
+- Configuration 1
+	- Powering pico via 5V from DC-DC.
+	- Voltage sensor is also powered via 5V DC-DC
+	- Voltage sensor hooked up to battery under no load (just sitting).
+- Configuration 2
+	- Powering pico from MT3608 boosted to 5V. 
+	- M3608 supplied power via 18650 battery.
+	- Voltage sensor plugged into 18650 battery
+	- Voltage sensor powered from MT3608 boosted 5V (along with the pico)
