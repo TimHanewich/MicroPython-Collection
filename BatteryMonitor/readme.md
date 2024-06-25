@@ -2,6 +2,8 @@
 This module provides a simple class, `BatteryMonitor` for estimating a battery's state of charge as a percentage, based upon the read voltage of the battery.
 
 ## Example Usage
+The below example demonstrates using the `BatteryMonitor` class for a simple single-cell 18650 Lithium-Ion battery:
+
 ```
 from BatteryMonitor import *
 
@@ -9,7 +11,7 @@ bm = BatteryMonitor()
 print("State of Charge for 3.5V: " + str(bm.soc(3.5))) # 0.3, or 30%
 ```
 
-## Discharge Profiles
+## Other Battery Types
 Battery discharge curves can vary significantly depending on the type of battery, its chemistry, design, and application. While there are some commonalities, each battery type has its unique characteristics, and their discharge curves can differ in several ways.
 
 The `BatteryMonitor` class supports extension of other battery discharge curves through the use of "discharge profiles". As seen in the `PROFILE_18650` variable of the [`BatteryModule.py`](./BatteryMonitor.py) file, this is nothing more than a simple list of tuples, corresponding to known voltage-SOC pairs. 
