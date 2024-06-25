@@ -40,11 +40,11 @@ Even when not using the MT3608 converted, when powering directly from solid 5V p
 Still on a 5V supply from DC power, I then had it instead sense the voltage of an 18650 battery. Not a battery being used in any way, just the voltage of a standalone battery. Still incorrect.
 
 ### What I've gotten to work
-- Configuration 1
+- Configuration 1, running [test1](./test1/)
 	- Powering pico via 5V from DC-DC.
 	- Voltage sensor is also powered via 5V DC-DC
 	- Voltage sensor hooked up to battery under no load (just sitting).
-- Configuration 2
+- Configuration 2, running [test1](./test1/)
 	- Powering pico from MT3608 boosted to 5V. 
 	- M3608 supplied power via 18650 battery.
 	- Voltage sensor plugged into 18650 battery
