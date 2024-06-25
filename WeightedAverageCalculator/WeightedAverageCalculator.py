@@ -12,6 +12,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 class WeightedAverageCalculator:
     def __init__(self, alpha:float = 0.9, starting_value:float = None) -> None:
+        """Alpha is a value that determines how strong the averaging will be. A high alpha value favors historical values yet is insensitive to quick fluctuations while a low alpha value is more sensitive to quick fluctuations (more granular, but also noisier)."""
         self._alpha = alpha
         self._last = starting_value
 
