@@ -1,7 +1,7 @@
 """
 Just a simple class for passing a stream of values through a weighted average filter continuously.
 Author Tim Hanewich, github.com/TimHanewich
-Find updates to this code: https://github.com/TimHanewich/MicroPython-Collection
+Find updates to this code: https://github.com/TimHanewich/MicroPython-Collection/tree/master/WeightedAverageCalculator
 
 MIT License
 Copyright Tim Hanewich
