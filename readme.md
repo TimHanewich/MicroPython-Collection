@@ -9,3 +9,4 @@ None of these modules are in PyPi. If you wish to use any of them, copy and past
 - [HCSR04](./HCSR04/) - Module for measuring distance with an HCSR04 ultrasonic range finder.
 - [wlan_helper](./wlan_helper/) - a helper module for connecting to a WLAN (wifi) in MicroPython using the *network* module.
 - [request_tools](./request_tools/) - Helper module for parsing an incoming HTTP request (received from a socket in a web server type scenario)
+- [Weighted Average Calculator](./WeightedAverageCalculator/) - simple class for passing a continuous stream of values (i.e. from a sensor) through an averaging filter.
