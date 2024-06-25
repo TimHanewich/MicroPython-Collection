@@ -15,8 +15,8 @@ class VoltageSensor:
             time.sleep(delay)
         return int(round(total / samples, 0))
 
-    def voltage(self) -> float:
-        analog:int = self._sample_analog()
+    def voltage(self, duration:float = 0.5, samples:int = 10) -> float:
+        analog:int = self._sample_analog(duration, samples)
         max_analog:int = 65535
         min_analog:int = 600
         max_voltage:float = 16.3
