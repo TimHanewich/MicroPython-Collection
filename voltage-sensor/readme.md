@@ -49,3 +49,8 @@ Still on a 5V supply from DC power, I then had it instead sense the voltage of a
 	- M3608 supplied power via 18650 battery.
 	- Voltage sensor plugged into 18650 battery
 	- Voltage sensor powered from MT3608 boosted 5V (along with the pico)
+- Running [test2](./test2/) in the same configuration as configuration 2:
+	- Real voltage of battery (multimeter): 4.05v
+	- Read voltage on screen, with neopixel attached and working: 3.88v
+	- When I re-booted without the neopixel attached: 3.98v
+		- As soon as I plug the neopixel back in and they are working, the voltage drops to 3.88v again.
