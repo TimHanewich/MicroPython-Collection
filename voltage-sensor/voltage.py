@@ -16,6 +16,7 @@ class VoltageSensor:
         return int(round(total / samples, 0))
 
     def voltage(self, duration:float = 0.5, samples:int = 10) -> float:
+        """Burst-samples analog reading and converts to voltage estimate."""
         analog:int = self._sample_analog(duration, samples)
         max_analog:int = 65535
         min_analog:int = 600
