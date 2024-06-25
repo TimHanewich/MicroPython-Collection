@@ -1,7 +1,7 @@
 """
 Simple class for estimating a battery's state of charge as a percentage, based upon the read voltage of the battery.
 Author Tim Hanewich, github.com/TimHanewich
-Find updates to this code: https://github.com/TimHanewich/...
+Find updates to this code: https://github.com/TimHanewich/MicroPython-Collection/tree/master/BatteryMonitor
 
 MIT License
 Copyright 2023 Tim Hanewich
