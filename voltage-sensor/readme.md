@@ -29,3 +29,12 @@ During development, I took a series of measurements with varying voltage inputs 
 ![readings](https://i.imgur.com/jVJOcZT.png)
 
 You can see in the chart above that the relationship between the voltage and analog reading is linear. This understanding is what the `voltage` function of the `VoltageSensor` module is based on.
+
+## Measuring the Voltage of its own Power Source
+I performed some testing on June 25, 2024. For whatever reason, the voltage measured is consistently *lower* than it actually is by sometimes up to a full volt, sometimes more.
+
+Through multiple tests, I narrowed this down to this problem arising specifically when a Raspberry Pi Pico is measuring the voltage of a battery that is also powering the Pico itself. During my tests, I was using an MT3608 voltage converter to lift the voltage of the battery to a stable 5V.
+
+Even when not using the MT3608 converted, when powering directly from solid 5V provided by DC-DC power supply, still had issue. It couldn't sense the 5V correctly. Was reading around 3.8 or 3.9
+
+Still on a 5V supply from DC power, I then had it instead sense the voltage of an 18650 battery. Not a battery being used in any way, just the voltage of a standalone battery. Still incorrect.
