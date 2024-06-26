@@ -10,7 +10,7 @@ oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
 # set up neopixel
 last_switched_ticks_ms:int = 0
-switch_every_ticks_ms:int = 50000 # 5 seconds
+switch_every_ticks_ms:int = 5000 # 5 seconds
 current_status:bool = False # off = False, on = True
 pixels = neopixel.Neopixel(12, 0, 22, "GRB")
 
