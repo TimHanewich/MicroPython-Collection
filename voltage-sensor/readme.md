@@ -39,17 +39,17 @@ Even when not using the MT3608 converted, when powering directly from solid 5V p
 
 Still on a 5V supply from DC power, I then had it instead sense the voltage of an 18650 battery. Not a battery being used in any way, just the voltage of a standalone battery. Still incorrect.
 
-### What I've gotten to work
-- Configuration 1, running [test1](./test1/)
+### Tests I've run
+- Seems to work: Configuration 1, running [test1](./test1/)
 	- Powering pico via 5V from DC-DC.
 	- Voltage sensor is also powered via 5V DC-DC
 	- Voltage sensor hooked up to battery under no load (just sitting).
-- Configuration 2, running [test1](./test1/)
+- Seems to work: Configuration 2, running [test1](./test1/)
 	- Powering pico from MT3608 boosted to 5V. 
 	- M3608 supplied power via 18650 battery.
 	- Voltage sensor plugged into 18650 battery
 	- Voltage sensor powered from MT3608 boosted 5V (along with the pico)
-- Running [test2](./test2/) in the same configuration as configuration 2:
+- Seeing problems: Running [test2](./test2/) in the same configuration as configuration 2:
 	- Real voltage of battery (multimeter): 4.05v
 	- Read voltage on screen, with neopixel attached and working: 3.88v
 	- When I re-booted without the neopixel attached: 3.98v
@@ -57,3 +57,5 @@ Still on a 5V supply from DC power, I then had it instead sense the voltage of a
 - [test3](./test3/) - this test is to observe the ambient noise (value) on the ADC GP pin 26 when powered by USB or external.
 	- On USB: `12,000`
 	- On external: `10,300`
+	- This is just due to noise. No need to worry about these differences I do not think.
+- [test4](./test4/) - same as [test1](./test1/) but no SSD-1306 display. Just printing over REPL for now (want to see if SSD-1306 has any effect)
