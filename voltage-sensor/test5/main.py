@@ -1,6 +1,5 @@
 import machine
 import ssd1306
-import WeightedAverageCalculator
 import time
 
 # set up SSD1306
