@@ -111,3 +111,15 @@ You could see the different in analog readings when they were on vs. off.
 - Reading while the pixels were off: 13,100
 
 I also observed this on the multimeter, but differing by 0.02v. Not much.
+
+
+## Observing Raw ADC Readings of Voltages applied to ADC
+Using a voltage divider with equal resistors, a maximum of 4.2V (fully charged of 18650) would be split down to 2.1. And a minimum charge of 3.0V would be split down to 3.0 (50% in both scenarios, divided in half perfectly).
+
+Here is the reading on the ADC pin of the Pico for both 1.5V (empty) and 2.1V (full):
+- 1.5V: 30,500
+- 2.1V: 42,700
+
+In other words, it appears the raw reading on the ADC pin fluctuates by 20,333 per difference in 1.0 volt. Go up one volt, it should be about 20,333 points higher, go down one volt, it should be about 20,333 lower. Give or take. **But, that is on the split voltage**. So in reality, the difference in recognized voltage on the ADC channel needs to be multiplied by two to restore it to its full state (we split it in half via the voltage divider). 
+
+... So, really, a difference in reading of 10,167 makes up a full volt difference on the battery. So, for example, being off in reading by 1,000 on the ADC channel would equate to only about 0.1 volts of a difference. Close enough.
