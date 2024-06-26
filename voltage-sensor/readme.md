@@ -71,11 +71,20 @@ In the wiring diagram on Amazon, they do not have a +5V being connected. I was c
 	- The SSD-1306 is now wired in and being used.
 	- https://i.imgur.com/fv3mjM6.jpeg
 	- Again, works very well just as test4 does.
-- [test5](./test5/)
+- [test5](./test5/) - **ignore these results, I think I was testing different batteries here**
 	- It seems like this is a difference in ambient state noise being read on the ADC channels.
 	- Test 5 reads all 3 of the pico's ADC channels and just displays them to the SSD-1306.
 	- I want to run this code in the following configurations:
-		- On USB power, nothing attached.
-		- On battery power (using MT3608 boost to 5V is fine), nothing attached.
-		- On USB power, voltage sensor attached, sensing external no-load battery.
-		- On battery power, voltage sensor attached, sensing external no-load battery.
+		- On USB power, nothing attached. **Result: random between 7,000 and 14,000**
+		- On battery power (using MT3608 boost to 5V is fine), nothing attached. **Result: random, but seems to stick around 12,000**
+		- On USB power, voltage sensor attached, sensing external no-load battery. **Result: large range of random values around 16,050, but all over the place. Still averages out stably probably**
+		- On battery power, voltage sensor attached, sensing external no-load battery. **Result: Solid around 16,050**
+		- On battery power, voltage sensor attached, sensing the voltage of its own battery. **Result: 16,800 it seems**
+- [test6](./test6/)
+	- I was worried I was only sampling the curve at the high/low end by change so I am going to burst sample now using the VoltageSensor class.
+	- Want to conduct same tests as in [test5](./test5/)
+		- On USB power, nothing attached. 
+		- On battery power (using MT3608 boost to 5V is fine), nothing attached. 
+		- On USB power, voltage sensor attached, sensing external no-load battery. **Result: Avg 13,400**
+		- On battery power, voltage sensor attached, sensing external no-load battery. 
+		- On battery power, voltage sensor attached, sensing the voltage of its own battery. **Result: Avg 13,300**
