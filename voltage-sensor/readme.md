@@ -71,3 +71,11 @@ In the wiring diagram on Amazon, they do not have a +5V being connected. I was c
 	- The SSD-1306 is now wired in and being used.
 	- https://i.imgur.com/fv3mjM6.jpeg
 	- Again, works very well just as test4 does.
+- [test5](./test5/)
+	- It seems like this is a difference in ambient state noise being read on the ADC channels.
+	- Test 5 reads all 3 of the pico's ADC channels and just displays them to the SSD-1306.
+	- I want to run this code in the following configurations:
+		- On USB power, nothing attached.
+		- On battery power (using MT3608 boost to 5V is fine), nothing attached.
+		- On USB power, voltage sensor attached, sensing external no-load battery.
+		- On battery power, voltage sensor attached, sensing external no-load battery.
