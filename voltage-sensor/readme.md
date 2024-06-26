@@ -88,3 +88,17 @@ In the wiring diagram on Amazon, they do not have a +5V being connected. I was c
 		- On USB power, voltage sensor attached, sensing external no-load battery. **Result: Avg 13,400**
 		- On battery power, voltage sensor attached, sensing external no-load battery. 
 		- On battery power, voltage sensor attached, sensing the voltage of its own battery. **Result: Avg 13,300**
+- [test7](./test7) - doing what [test6](./test6/) does, but print over REPL, not SSD1306
+
+
+## Seeing consistent readings
+Using burst sampling from test 6, I've observed a stable hover around 13,350 for a battery @ 4.06v. And that is powering it via battery power through MT3608 boost.
+
+When on USB power, I've observed the same results. Same analog values.
+
+Also, when on USB power using REPL, observed same results. Same analog values.
+
+I also tried to run [test7](./test7/) which continuously printed the results through REPL, not to the SSD-1306. Same results, same analog readings. Weird. 
+
+Weird that it is working so well now. I also tried plugging in the +5V to VBUS while under USB power. Same results. It is behaving so well.
+
