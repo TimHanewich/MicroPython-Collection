@@ -89,6 +89,7 @@ In the wiring diagram on Amazon, they do not have a +5V being connected. I was c
 		- On battery power, voltage sensor attached, sensing external no-load battery. 
 		- On battery power, voltage sensor attached, sensing the voltage of its own battery. **Result: Avg 13,300**
 - [test7](./test7) - doing what [test6](./test6/) does, but print over REPL, not SSD1306
+- [test8](./test8/) - same as [test6](./test6/), but with powering 12 neopixels w/ different random colors each cycle
 
 
 ## Seeing consistent readings
