@@ -58,7 +58,16 @@ Still on a 5V supply from DC power, I then had it instead sense the voltage of a
 	- On USB: `12,000`
 	- On external: `10,300`
 	- This is just due to noise. No need to worry about these differences I do not think.
+
+## Tests I've run after realizing my wiring may have been wrong the night of June 25, 2024
+In the wiring diagram on Amazon, they do not have a +5V being connected. I was connecting it. Maybe providing the voltage sensor with its own power through things off. I don't know.
 - [test4](./test4/) - same as [test1](./test1/) but no SSD-1306 display. Just printing over REPL for now (want to see if SSD-1306 has any effect)
 	- When plugged in via USB, reading from a battery under no load, this seems to work very well.
 	- I am noticing long-term noise patterns. Where it will read 4.05v (correct) for a period of time, and then 20 seconds later creep up to 4.12 and then 20 seconds later creep back down to 4.05, then creep down to 4.02. Weird.
 		- I noticed this same behaviour when the pin is floating, not being used (in [test3](./test3/)). Perhaps it is this behaviour still penetrating through to these readings.
+- Running [test1](./test1/) on USB power.
+	- The pico is still being powered by USB
+	- The battery is still under no load
+	- The SSD-1306 is now wired in and being used.
+	- https://i.imgur.com/fv3mjM6.jpeg
+	- Again, works very well just as test4 does.
