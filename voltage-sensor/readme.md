@@ -103,3 +103,11 @@ I also tried to run [test7](./test7/) which continuously printed the results thr
 
 Weird that it is working so well now. I also tried plugging in the +5V to VBUS while under USB power. Same results. It is behaving so well.
 
+## Testing with battery under signifiant load vs. not
+In [test8](./test8/), I had a strand of neopixels lighting up for 8 seconds and then turning off for 8 seconds. 
+
+You could see the different in analog readings when they were on vs. off.
+- Reading while the pixels were on: 11,900
+- Reading while the pixels were off: 13,100
+
+I also observed this on the multimeter, but differing by 0.02v. Not much.
