@@ -9,7 +9,7 @@ oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 # set up adc
 adc0 = machine.ADC(machine.Pin(26)) # GP26
 adc1 = machine.ADC(machine.Pin(27)) # GP27
-adc2 = machine.ADC(machine.PIn(28)) # GP28
+adc2 = machine.ADC(machine.Pin(28)) # GP28
 
 def test() -> None:
 
