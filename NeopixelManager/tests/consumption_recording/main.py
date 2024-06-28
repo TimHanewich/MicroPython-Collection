@@ -1,7 +1,7 @@
 import neopixel
 import time
 
-pixels = neopixel.Neopixel(12, 0, 22, "GRB")
+pixels = neopixel.Neopixel(11, 0, 22, "GRB")
 
 def fill_and_wait(color:tuple[int, int, int]) -> None:
     pixels.fill(color)
