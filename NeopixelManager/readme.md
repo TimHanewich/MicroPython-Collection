@@ -28,14 +28,14 @@ Current Consumption of Raspberry Pi Pico on its own: **0.022 amps**
 The following tests are observations of current consumption with several different color patterns (each pixel the same color):
 
 With a strand of 12 pixels:
-|Pixels|Color|Amps (including Pi)|W/O Pi|Amps Per Pixel|
-|-|-|-|-|-|
-|12|255,255,255|0.477|0.455|0.037916667|
-|12|255,0,0|0.179|0.157|0.013083333|
-|12|0,255,0|0.179|0.157|0.013083333|
-|12|0,0,255|0.178|0.156|0.013|
-|12|128,128,128|0.256|0.234|0.0195|
-|12|0,0,0|0.03|0.008|0.000666667|
+|Pixels|Color|Amps (including Pi)|W/O Pi|
+|-|-|-|-|
+|12|255,255,255|0.477|0.455|
+|12|255,0,0|0.179|0.157|
+|12|0,255,0|0.179|0.157|
+|12|0,0,255|0.178|0.156|
+|12|128,128,128|0.256|0.234|
+|12|0,0,0|0.03|0.008|
 |11|1,1,1|0.028|
 |11|1,0,0|0.027|
 |11|0,1,0|0.027|
@@ -44,25 +44,24 @@ With a strand of 12 pixels:
 |11|10,10,0|0.035|
 |11|0,10,10|0.035|
 |11|10,0,10|0.035|
-|11|50,0,0|0.05|0.028|0.0025454545|
-|11|150,0,0|0.103|0.081|0.0073636364|
-|11|255,0,0|0.161|0.139|0.0126363636|
-|11|0,50,0|0.05|0.028|0.0025454545|
-|11|0,150,0|0.104|0.082|0.0074545455|
-|11|0,255,0|0.161|0.139|0.0126363636|
-|11|0,0,50|0.05|0.028|0.0025454545|
-|11|0,0,150|0.103|0.081|0.0073636364|
-|11|0,0,255|0.160|0.138|0.0125454545|
-|11|50,50,50|0.104|0.082|0.0074545455|
-|11|150,150,150|0.265|0.243|0.0220909091|
-|11|255,255,255|0.435|0.413|0.0375454545|
-|11|0,0,0|0.027|0.005|0.0004545455|
+|11|50,0,0|0.05|0.028|
+|11|150,0,0|0.103|0.081|
+|11|255,0,0|0.161|0.139|
+|11|0,50,0|0.05|0.028|
+|11|0,150,0|0.104|0.082|
+|11|0,255,0|0.161|0.139|
+|11|0,0,50|0.05|0.028|
+|11|0,0,150|0.103|0.081|
+|11|0,0,255|0.160|0.138|
+|11|50,50,50|0.104|0.082|
+|11|150,150,150|0.265|0.243|
+|11|255,255,255|0.435|0.413|
+|11|0,0,0|0.027|0.005|
 
 Columns in the above table explained:
 - **Color** - the RGB color that was shown on all 12 pixels.
 - **Amps (including Pi)** - the total amps reading from the DC power supply (powering both the Pi Pico and Neopixels, nothing more)
 - **W/O Pi** - The total amps, minus the known value that the Pi consumes, 0.022 amps (@ 5V)
-- **Amps Per Pixel** - the amps from the **W/O Pi** column, divided by 12 (the number of pixels), to get a per-pixel amount.
 
 In the above table, you may wonder why measuring the color (0, 0, 0), no color at all, is important. That is because these neopixels have an *idle current draw*. Even while not showing a color, they still consume a small amount of power, on a per-pixel basis.
 
