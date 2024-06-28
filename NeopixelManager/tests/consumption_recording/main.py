@@ -6,7 +6,7 @@ pixels = neopixel.Neopixel(12, 0, 22, "GRB")
 def fill_and_wait(color:tuple[int, int, int]) -> None:
     pixels.fill(color)
     pixels.show()
-    time.sleep(10)
+    time.sleep(8)
 
 # inf loop
 while True:
