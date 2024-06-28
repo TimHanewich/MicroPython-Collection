@@ -217,7 +217,12 @@ class PixelStatus:
     @property
     def current(self) -> float:
         """Returns the current consumption estimate of this single pixel, in milliamps"""
-        return self.luminary_value * 0.0458513708513709 # this value is a constant, observed as the average current consumption, in milliamps, of a single LED pixel per "luminary value" point.
+
+        # calculated consumption rates @ 5V
+        idle_ma:float = 0.56060606060606 # the milliamps consumed just for idling (even displaying (0,0,0) will consume this, per pixel)
+        per_lum_ma:float = 0.04423637342142 # the milliamps consumed per "lux pt", or per single R,G,B value
+
+        return idle_ma + (self.luminary_value * per_lum_ma)
 
     def __str__(self) -> str:
         return str({"index": self.index, "color": self.color, "color_set": self.color_set})
