@@ -23,9 +23,11 @@ Please note that even after setting a different color for a pixel or pixels, the
 ## Estimating Per-Pixel Current Consumption of Neopixels
 All measurements were @ 5V supply.
 
-Current Consumption of Raspberry Pi Pico on its own: 0.022 amps
+Current Consumption of Raspberry Pi Pico on its own: **0.022 amps**
 
-With a single strand of 12 WS2812b Neopixels hooked up to my DC power supply, going through several color patterns (each pixel the same color), and monitoring the current consumption:
+The following tests are observations of current consumption with several different color patterns (each pixel the same color):
+
+With a strand of 12 pixels:
 |Color|Amps (including Pi)|W/O Pi|Amps Per Pixel|
 |-|-|-|-|
 |255,255,255|0.477|0.455|0.038|
@@ -42,6 +44,22 @@ With a single strand of 12 WS2812b Neopixels hooked up to my DC power supply, go
 |0,10,10|0.041|0.019|0.002|
 |10,0,10|0.041|0.008|0.002|
 |0,0,0|0.03|0.008|< 0.001|
+
+With a strand of 11 pixels:
+|Color|Amps (including Pi)|W/O Pi|Amps Per Pixel|
+|-|-|-|-|
+|50,0,0|
+|150,0,0|
+|255,0,0|
+|0,50,0|
+|0,150,0|
+|0,255,0|
+|0,0,50|
+|0,0,150|
+|0,0,255|
+|50,50,50|
+|150,150,150|
+|255,255,255|
 
 Columns in the above table explained:
 - **Color** - the RGB color that was shown on all 12 pixels.
