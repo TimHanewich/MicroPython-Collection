@@ -10,12 +10,12 @@ pixels = neopixel.Neopixel(5, 0, 22, "GRB") # set up 5 pixels
 nm = neopixel.NeopixelManager(pixels) # initialize an instance of the NeopixelManager class
 nm.fill((255, 255, 255)) # fill with all white
 nm.show() # show
-print("Current consumption, in mA: " + str(nm.current)) # 175.3816
+print("Current consumption, in mA: " + str(nm.current)) # 172.0072
 
 nm.set_pixel(0, (0, 0, 255))
 nm.set_pixel(0, (128, 0, 0))
 nm.show()
-print("Current consumption, in mA: " + str(nm.current)) # 146.1742
+print("Current consumption, in mA: " + str(nm.current)) # 143.8286
 ```
 
 Please note that even after setting a different color for a pixel or pixels, the current consumption will not change until it is shown via the `show()` function! This is because when set, the color change has now actually shown on the strand yet until the `show()` function is called!
