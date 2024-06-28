@@ -219,6 +219,8 @@ class PixelStatus:
         """Returns the current consumption estimate of this single pixel, in milliamps"""
 
         # calculated consumption rates @ 5V
+        # the assumptions below are more accurate at higher brightness values, less accurate at lower brightness values
+        # the assumptions below also generally underestimate current consumption at high brightness and overestimate at low brightness
         idle_ma:float = 0.56060606060606 # the milliamps consumed just for idling (even displaying (0,0,0) will consume this, per pixel)
         per_lum_ma:float = 0.04423637342142 # the milliamps consumed per "lux pt", or per single R,G,B value
 
