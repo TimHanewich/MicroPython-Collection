@@ -40,8 +40,8 @@ def brighten(color:tuple[int, int, int], strength:float = 1.0) -> tuple[int, int
     return (r, g, b)
 
 def relative_luminance(color:tuple[int, int, int]) -> float:
-    ToReturn = (0.2126 * color[0]) + (0.7152 * color[1]) + (0.0722 * color[2])
-    return ToReturn
+    """Calculates the relative luminance of a given color. The relative luminance is a measure of how bright a color appears to the human eye."""
+    return (0.2126 * color[0]) + (0.7152 * color[1]) + (0.0722 * color[2])
 
 # makes the color whiter while attempting to respect the same luminance
 def whiten_color(color:tuple[int, int, int], percent:float) -> tuple[int, int, int]:
