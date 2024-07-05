@@ -66,7 +66,8 @@ def gradient_slices(color1:tuple[int, int, int], color2:tuple[int, int, int], co
     
     return ToReturn
 
-def point_on_visible_spectrum(percent:float) -> tuple[int, int, int]:
+def spectrum_point(percent:float) -> tuple[int, int, int]:
+    """Generates a color on the visible spectrum based on a given percentage. The percentage is used to determine the point on the spectrum, with 0% being red and 100% being violet."""
     
     r = 255
     g = 0
