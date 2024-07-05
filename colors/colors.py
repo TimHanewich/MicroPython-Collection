@@ -18,14 +18,26 @@ def random_color() -> tuple[int, int, int]:
     b = random.randrange(0, 256)
     return (r, g, b)
 
-# actually makes the LED dimmer (darker, less bright)
-def dim_color(color:tuple[int, int, int], percent:float) -> tuple[int, int, int]:
-    return gradient_point(color, (0, 0, 0), percent)
+def brighten(color:tuple[int, int, int], strength:float = 1.0) -> tuple[int, int, int]:
+    """Brighten/dim a color according to a specified strenght level. Strength > 1.0 will brighten, Strength < 1.0 will dim."""
 
+    # convert
+    r:float = color[0] * strength
+    g:float = color[1] * strength
+    b:float = color[2] * strength
 
-# actually makes the LED brighter (whiter, more bright)
-def brighten_color(color:tuple[int, int, int], percent:float) -> tuple[int, int, int]:
-    return gradient_point(color, (255, 255, 255), percent)
+    # min/max
+    r = min(max(r, 0), 255)
+    g = min(max(g, 0), 255)
+    b = min(max(b, 0), 255)
+
+    # round
+    r:int = int(r)
+    g:int = int(g)
+    b:int = int(b)
+
+    # return
+    return (r, g, b)
 
 def relative_luminance(color:tuple[int, int, int]) -> float:
     ToReturn = (0.2126 * color[0]) + (0.7152 * color[1]) + (0.0722 * color[2])
