@@ -96,7 +96,8 @@ def spectrum_point(percent:float) -> tuple[int, int, int]:
 
     return (r, g, b)
 
-def rainbow_slices(count:int) -> list[tuple[int, int, int]]:
+def spectrum_slices(count:int) -> list[tuple[int, int, int]]:
+    """Generates a list of colors, each representing a point on the visible spectrum, divided into a specified number of slices."""
 
     # create list of percentages we should get
     percents:list[float] = []
@@ -106,36 +107,6 @@ def rainbow_slices(count:int) -> list[tuple[int, int, int]]:
 
     ToReturn:list[tuple[int, int, int]] = []
     for percent in percents:
-        ToReturn.append(point_on_visible_spectrum(percent))
+        ToReturn.append(spectrum_point(percent))
 
     return ToReturn
-
-
-def generate_rainbow_swirl(led_count:int) -> list[list[tuple[int, int, int]]]:
-    slices:list[tuple[int, int, int]] = rainbow_slices(led_count)
-
-    # generate
-    ToReturn:list[list[tuple[int, int, int]]] = []
-    for offset in range(0, led_count):
- 
-        # assemble the index pattern
-        pattern:list[int] = []
-        current = offset
-        while current > 0:
-            pattern.append(current)
-            current = current - 1
-        
-        while len(pattern) < led_count:
-            pattern.append(current)
-            current = current + 1
-
-        # assemble the actual colors
-        ToAdd:list[tuple[int, int, int]] = []
-        for i in pattern:
-            ToAdd.append(slices[i])
-        
-        # add this frame
-        ToReturn.append(ToAdd)
-
-    return ToReturn
-
