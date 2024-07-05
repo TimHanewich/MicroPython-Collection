@@ -43,24 +43,22 @@ def relative_luminance(color:tuple[int, int, int]) -> float:
     """Calculates the relative luminance of a given color. The relative luminance is a measure of how bright a color appears to the human eye."""
     return (0.2126 * color[0]) + (0.7152 * color[1]) + (0.0722 * color[2])
     
-
-    
-
 def gradient_point(color1:tuple[int, int, int], color2:tuple[int, int, int], percent:float) -> tuple[int, int, int]:
+    """Calculates a color that is a certain percentage between two given colors"""
     r = round(color1[0] + ((color2[0] - color1[0]) * percent))
     g = round(color1[1] + ((color2[1] - color1[1]) * percent))
     b = round(color1[2] + ((color2[2] - color1[2]) * percent))
     return (r, g, b)
 
 def gradient_slices(color1:tuple[int, int, int], color2:tuple[int, int, int], count: int) -> list[tuple[int, int, int]]:
+    """Generates a list of colors that form a gradient between two given colors"""
 
     # create list of percentages we should get
     percents:list[float] = []
     gap = 1.0 / max(1, (count - 1))
     for x in range(0, count):
         percents.append(x * gap)
-
-    
+  
     # calculate the proper gradient for each one
     ToReturn:list[tuple[int, int, int]] = []
     for percent in percents:
