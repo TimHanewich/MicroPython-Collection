@@ -201,8 +201,7 @@ class Neopixel:
 ## ADDITIONS TO BASE CODE BELOW!
 
 class PixelStatus:
-    def __init__(self, index:int = 0) -> None:
-        self.index:int = index
+    def __init__(self) -> None:
 
         # actually displaying color
         self.color:tuple[int, int, int] = (0, 0, 0) # default is all off
@@ -227,7 +226,7 @@ class PixelStatus:
         return idle_ma + (self.luminary_value * per_lum_ma)
 
     def __str__(self) -> str:
-        return str({"index": self.index, "color": self.color, "color_set": self.color_set})
+        return str({"color": self.color, "color_set": self.color_set})
 
 
 class NeopixelManager:
@@ -242,8 +241,8 @@ class NeopixelManager:
 
         # create empty pixel settings for the length of them
         self._statuses:list[PixelStatus] = []
-        for i in range(self.num_leds):
-            self._statuses.append(PixelStatus(i))
+        for _ in range(self.num_leds):
+            self._statuses.append(PixelStatus())
 
     @property
     def num_leds(self) -> int:
@@ -251,15 +250,13 @@ class NeopixelManager:
     
     def set_pixel(self, pixel_index:int, color:tuple[int, int, int]) -> None:
 
+        # error check
+        if (pixel_index + 1) > self.num_leds:
+            raise Exception("Index of " + str(pixel_index) + " is too high! Only " + str(self.num_leds) + " pixels are configured!")
+
         # set the next color setting
-        pix_set:bool = False
-        for ps in self._statuses:
-            if ps.index == pixel_index:
-                ps.color_set = color
-                pix_set = True
-        if pix_set == False:
-            raise Exception("Pixel with index '" + str(pixel_index) + "' not found in Neopixel strand of length " + str(self.num_leds) + ".")
-    
+        self._statuses[pixel_index].color_set = color
+
         # set it against the actualy pixels
         self._pixels.set_pixel(pixel_index, color)
 
