@@ -252,7 +252,7 @@ class NeopixelManager:
 
         # error check
         if (pixel_index + 1) > self.num_leds:
-            raise Exception("Index of " + str(pixel_index) + " is too high! Only " + str(self.num_leds) + " pixels are configured!")
+            raise Exception("Index of " + str(pixel_index) + " is too high! Only " + str(self.num_leds) + " pixels are configured on this strand!")
 
         # set the next color setting
         self._statuses[pixel_index].color_set = color
