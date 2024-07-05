@@ -42,48 +42,6 @@ def brighten(color:tuple[int, int, int], strength:float = 1.0) -> tuple[int, int
 def relative_luminance(color:tuple[int, int, int]) -> float:
     """Calculates the relative luminance of a given color. The relative luminance is a measure of how bright a color appears to the human eye."""
     return (0.2126 * color[0]) + (0.7152 * color[1]) + (0.0722 * color[2])
-
-# makes the color whiter while attempting to respect the same luminance
-def whiten_color(color:tuple[int, int, int], percent:float) -> tuple[int, int, int]:
-    
-    # calculate the color we want
-    color_:tuple[int, int, int] = brighten_color(color, percent)
-
-    # determine the luminances
-    l_start:float = relative_luminance(color)
-    l_end:float = relative_luminance(color_)
-
-    # dim until the luminance of the end is below or equal to what it was to begin with
-    p_dip:int = 1
-    while l_end > l_start:
-        color_ = adjust_brightness(color_, (p_dip / 100) * -1) # dim by the next percentage
-        l_end = relative_luminance(color_)
-        p_dip = p_dip + 1 # dip by another 1% next time
-
-    return color_
-
-
-
-# percent can be between -1.0 and 1.0.
-# 1.0 = boost brightness 100% (will produce white)
-# -1.0 dim 100% (will produce black)
-# anything in between is a gradient between white and black
-def adjust_brightness(color:tuple[int, int, int], percent:float) -> tuple[int, int, int]:
-
-    # get the % to use
-    tup = percent
-    if tup > 1.0:
-        tup = 1.0
-    elif tup < -1.0:
-        tup = -1.0
-
-    if tup > 0.0:
-        return gradient_point(color, (255, 255, 255), tup)
-    elif tup < 0.0:
-        return gradient_point(color, (0, 0, 0), tup * -1)
-    else:
-        return color
-
     
 
     
