@@ -178,6 +178,18 @@ class RYLR998:
             raise Exception("Setting parameters to " + str(value) + " failed with response " + str(response) + "! A common mistake here is pairing together incompatible Spreading Factors and Bandwidths. Or, setting an incompatible programmed preamble for the module's current network ID. For more information, please see the AT+PARAMETER command specification in the AT COMMANDS documentation (see readme).")
 
 
+    @property
+    def output_power(self) -> int:
+        """The RF output power, in dBm."""
+        response:bytes = self._command_response("AT+CRFOP?\r\n".encode("ascii"))
+        if response.find("+CRFOP=".encode("ascii")) == -1:
+            raise Exception("RF output power read request did not return a valid rate! (no = sign in response)")
+        return int(response[7:].decode("ascii"))
+
+
+
+
+
 
 
     def send(self, address:int, data:bytes) -> None:
@@ -278,4 +290,4 @@ class RYLR998:
     
 u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 r = RYLR998(u)
-print(r._parameter)
+print(r.output_power)
