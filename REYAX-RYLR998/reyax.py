@@ -108,10 +108,9 @@ class RYLR998:
     def baudrate(self) -> int:
         """The UART baud rate the RYLY988 is using to communicate."""
         response:bytes = self._command_response("AT+IPR?\r\n".encode("ascii"))
-        i_equal = response.find("=".encode("ascii"))
-        if i_equal == -1:
+        if response.find("+IPR=".encode("ascii")) == -1:
             raise Exception("Baud rate read request did not return a valid rate! (no = sign in response)")
-        return int(response[i_equal+1:].decode("ascii"))
+        return int(response[5:].decode("ascii"))
     
     @baudrate.setter
     def baudrate(self, value:int) -> None:
@@ -297,4 +296,4 @@ class RYLR998:
     
 u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 r = RYLR998(u)
-print(r.address)
+print(r.baudrate)
