@@ -49,7 +49,7 @@ class RYLR998:
         print("Going to send: " + str(cmd))
 
         # send the command, get the response
-        response:bytes = self._command_response(cmd)
+        response:bytes = self._command_response(cmd, 1.0)
 
         # if not successful
         if response != "+OK\r\n".encode("ascii"):
