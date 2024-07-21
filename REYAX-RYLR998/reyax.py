@@ -212,7 +212,7 @@ class RYLR998:
         cmd += "\r\n".encode("ascii")
 
         # send the command, get the response
-        response:bytes = self._command_response(cmd, 8000)
+        response:bytes = self._command_response(cmd, 8000) # wait 8 seconds max (generous in how long we will wait because of larger payloads taking longer)
 
         # if not successful
         if response != "+OK\r\n".encode("ascii"):
