@@ -145,7 +145,6 @@ class RYLR998:
         i_comma2:int = rcv.find(",".encode("ascii"), i_comma1 + 1)
         i_comma4:int = rcv.rfind(",".encode("ascii")) # search from end
         i_comma3:int = rcv.rfind(",".encode("ascii"), i_comma4 - 1) # search from end, but last comma at end
-        
         i_linebreak:int = rcv.find("\r\n".encode("ascii"))
 
         # extract
