@@ -43,6 +43,16 @@ class RYLR998:
         return response == "+OK\r\n".encode("ascii")
 
     @property
+    def UID(self) -> str:
+        """Unique identifier of this particular RYLR998 module."""
+        return self._command_response("AT+UID?\r\n".encode("ascii"))[5:-2].decode("ascii")
+    
+    @property
+    def version(self) -> str:
+        """The firmware version of this particular RYLR998 module."""
+        return self._command_response("AT+VER?\r\n".encode("ascii"))[5:-2].decode("ascii")
+
+    @property
     def networkid(self) -> int:
         """The network ID is the group of RYLR998 modules that are tuned in to each other."""
         response:bytes = self._command_response("AT+NETWORKID?\r\n".encode("ascii"))
@@ -184,10 +194,3 @@ class RYLR998:
         self._rxbuf = self._rxbuf[0:-new_bytes_count]
 
         return response
-
-u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
-r = RYLR998(u)
-print("Pulse: " + str(r.pulse))
-
-print(r.address)
-r.address = 0
