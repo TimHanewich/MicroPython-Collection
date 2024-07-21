@@ -151,7 +151,14 @@ class RYLR998:
     
     @property
     def rf_parameters(self) -> tuple[int, int, int, int]:
-        """Returns the RF parameters using the AT+PARAMETER command, returning each value as an integer within a 4-integer tuple. See AT commands specification sheet for more information."""
+        """
+        Returns the RF parameters using the AT+PARAMETER command, returning each value as an integer within a 4-integer tuple. See AT commands specification sheet for more information.
+        
+        First int = Spreading Factor
+        Second int = Bandwidth
+        Third int = Coding Rate
+        Fourth int = Programmed Preamble
+        """
         response:bytes = self._command_response("AT+PARAMETER?\r\n".encode("ascii"))
         iequals:int = response.find("=".encode("ascii"))
         if iequals == -1:
