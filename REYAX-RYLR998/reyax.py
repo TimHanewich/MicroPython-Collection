@@ -239,11 +239,14 @@ print(r._rxbuf)
 r.baudrate = 115200
 print(r._rxbuf)
 print(r.pulse)
+print(r.baudrate)
 
 r.baudrate = 9600
 print(r._rxbuf)
 print(r.pulse)
+print(r.baudrate)
 
 r.baudrate = 115200
 print(r._rxbuf)
 print(r.pulse)
+print(r.baudrate)
