@@ -42,6 +42,24 @@ class RYLR998:
         response:bytes = self._command_response("AT\r\n".encode("ascii"))
         return response == "+OK\r\n".encode("ascii")
 
+    @property
+    def networkid(self) -> int:
+        """The network ID is the group of RYLR998 modules that are tuned in to each other."""
+        response:bytes = self._command_response("AT+NETWORKID?\r\n".encode("ascii"))
+        i_equal = response.find("=".encode("ascii"))
+        if i_equal == -1:
+            raise Exception("Network ID read request did not return a valid network ID! (no = sign in response)")
+        return int(response[i_equal+1:].decode("ascii"))
+    
+    @networkid.setter
+    def networkid(self, value:int) -> None:
+        valid_ids:list[int] = [3,4,5,6,7,8,9,10,11,12,13,14,15,18]
+        if value not in valid_ids: # valid network ID's according to datasheet
+            raise Exception("Network ID of '" + str(value) + "' is invalid. Must be a valid network ID: " + str(valid_ids))
+        response:bytes = self._command_response("AT+NETWORKID=".encode("ascii") + str(value).encode("ascii") + "\r\n".encode("ascii"))
+        if response != "+OK\r\n".encode("ascii"):
+            raise Exception("Setting network ID to '" + str(value) + "' failed with response '" + str(response) + "'")
+
     def send(self, address:int, data:bytes) -> None:
         """Send a packet of binary data to a specified address."""
 
@@ -148,11 +166,10 @@ class RYLR998:
 
         return response
 
-# u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
-# r = RYLR998(u)
-# print("Pulse: " + str(r.pulse))
+u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
+r = RYLR998(u)
+print("Pulse: " + str(r.pulse))
 
-# r._rxbuf = "yoyo".encode("ascii") + "+RCV=50,5,HELLO,-99,40\r\n".encode("ascii") + "hehehe".encode("ascii")
-# print(r._rxbuf)
+print(r.networkid)
 
-# print(str(r.receive()))
+r.networkid = 18
