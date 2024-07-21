@@ -13,8 +13,6 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 import machine
 import time
 
-response_delay:float = 0.1 # the amount of time, in seconds, that should be waited before validating the response from the module for a command.
-
 class RYLR998:
 
     def __init__(self, uart:machine.UART) -> None:
@@ -40,20 +38,22 @@ class RYLR998:
         if len(data) > 240:
             raise Exception("Provided data packet of length " + str(len(data)) + " to send is too large! Limit is 240 bytes.")
 
-        # form base command and encode to bytes
-        cmd:str = "AT+SEND=" + str(address) + "," + str(len(data)) + ","
-        cmd_ba:bytearray = bytearray(cmd.encode())
+        # assemble the command
+        cmd:bytes = bytes()
+        cmd += "AT+SEND=".encode("ascii")
+        cmd += str(address).encode("ascii") + ",".encode("ascii")
+        cmd += str(len(data)).encode("ascii") + ",".encode("ascii")
+        cmd += data
+        cmd += "\r\n".encode("ascii")
 
-        # append data to send
-        cmd_ba.extend(data)
-        
-        # append \r\n (newline)
-        cmd_ba.extend("\r\n".encode())
-        
-        # send!
-        self._uart.write(cmd_ba)
+        print("Going to send: " + str(cmd))
 
-        print("Just sent: " + str(bytes(cmd_ba)))
+        # send the command, get the response
+        response:bytes = self._command_response(cmd)
+
+        # if not successful
+        if response != "+OK\r\n".encode("ascii"):
+            raise Exception("Send command '" + str(cmd) + "' returned abnormal response '" + str(response) + "'")
 
     def _colrx(self) -> None:
         """Collects and moves all bytes from UART Rx buffer to internal buffer."""
@@ -61,7 +61,7 @@ class RYLR998:
         if all_bytes != None:
             self._rxbuf += all_bytes
     
-    def _command_response(self, command:bytes)-> bytes:
+    def _command_response(self, command:bytes, response_delay:float = 0.5)-> bytes:
         """Sends a byte sequence (AT command) to the RYLR988 module, and collects the response while still preserving any pre-existing bytes in the internal Rx buffer."""
 
         # collect any bytes still left over in UART Rx and make note of the length of the internal buffer before the command is sent out and response for it is received
@@ -97,4 +97,6 @@ u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 r = RYLR998(u)
 
 print("Pulse?: " + str(r.pulse))
+
+r.send(1, "hello".encode("ascii"))
 
