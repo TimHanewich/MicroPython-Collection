@@ -14,12 +14,12 @@ import machine
 import time
 
 class ReceivedMessage:
-    def __init__(self, address:int = None, length:int = None, data:bytes = None, RSSI:int = None, SNR:int = None) -> None:
-        self.address:int = address # the address of the transmitter it came from
-        self.length:int = length # the length (number of bytes) of the data payload
-        self.data:bytes = data # the payload data itself
-        self.RSSI:int = RSSI # Received signal strength indicator
-        self.SNR:int = SNR # Signal-to-noise ratio
+    def __init__(self) -> None:
+        self.address:int = None # the address of the transmitter it came from
+        self.length:int = None # the length (number of bytes) of the data payload
+        self.data:bytes = None # the payload data itself
+        self.RSSI:int = None # Received signal strength indicator
+        self.SNR:int = None # Signal-to-noise ratio
 
     def parse(self, full_line:bytes) -> None:
         """Parses a received message from the raw line of byte data received over UART. For example, b'+RCV=50,5,HELLO,-99,40'"""
