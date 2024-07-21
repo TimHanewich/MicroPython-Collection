@@ -290,8 +290,3 @@ class RYLR998:
         self._rxbuf = self._rxbuf[0:-new_bytes_count]
 
         return response
-
-    
-u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
-r = RYLR998(u)
-print(r.rf_parameters)
