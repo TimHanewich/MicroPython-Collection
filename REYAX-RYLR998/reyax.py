@@ -143,13 +143,17 @@ class RYLR998:
         if response != "+OK\r\n".encode("ascii"):
             raise Exception("Setting frequency to " + str(value) + " Hz failed with response '" + str(response) + "'")
 
-
-
     def software_reset(self) -> None:
         """Software reset of RYLR998 module."""
         response:bytes = self._command_response("AT+RESET\r\n")
         if response != "+RESET\r\n+READY\r\n".encode("ascii"):
             raise Exception("Software reset was not confirmed to be successful! Response '" + str(response) + "' received instead of standard +RESET and +READY!")
+
+    @property
+    def spreading_factor(self) -> int:
+        return self._parameter()[0]
+
+
 
 
     def send(self, address:int, data:bytes) -> None:
@@ -247,6 +251,7 @@ class RYLR998:
 
         return response
 
+    @property
     def _parameter(self) -> tuple[int, int, int, int]:
         """Runs the AT+PARAMETER command, receiving and returning a tuple of four integers, each representing something different."""
         response:bytes = self._command_response("AT+PARAMETER?\r\n".encode("ascii"))
@@ -257,8 +262,17 @@ class RYLR998:
         paramstr = paramstr.replace("\r\n", "") # \r\n will be left at the end of the string, so remove it before proceeding
         params:list[str] = paramstr.split(",")
         return (int(params[0]), int(params[1]), int(params[2]), int(params[3]))
+    
+    @_parameter.setter
+    def _parameter(self, value:tuple[int, int, int, int]) -> None:
+        params_str = str(value[0]) + "," + str(value[1]) + "," + str(value[2]) + "," + str(value[3])
+        cmd:bytes = "AT+PARAMETER=".encode("ascii") + params_str.encode("ascii") + "\r\n".encode("ascii")
+        print("CMD: " + str(cmd))
+        response:bytes = self._command_response(cmd)
+        if response != "+OK\r\n".encode("ascii"):
+            raise Exception("Setting parameters to " + str(value) + " failed with response " + str(response) + "! A common mistake here is pairing together incompatible Spreading Factors and Bandwidths. Or, setting an incompatible programmed preamble for the module's current network ID. For more information, please see the AT+PARAMETER command specification in the AT COMMANDS documentation (see readme).")
 
 
 u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 r = RYLR998(u)
-print(r._parameter())
+print(r._parameter)
