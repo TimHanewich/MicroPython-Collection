@@ -13,6 +13,17 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 import machine
 import time
 
+class ReceivedMessage:
+    def __init__(self, address:int = None, length:int = None, data:bytes = None, RSSI:int = None, SNR:int = None) -> None:
+        self.address:int = address # the address of the transmitter it came from
+        self.length:int = length # the length (number of bytes) of the data payload
+        self.data:bytes = data # the payload data itself
+        self.RSSI:int = RSSI # Received signal strength indicator
+        self.SNR:int = SNR # Signal-to-noise ratio
+
+    def __str__(self) -> str:
+        return str({"address":self.address, "length":self.length, "data":self.data, "RSSI":self.RSSI, "SNR":self.SNR})
+
 class RYLR998:
 
     def __init__(self, uart:machine.UART) -> None:
@@ -54,6 +65,53 @@ class RYLR998:
         # if not successful
         if response != "+OK\r\n".encode("ascii"):
             raise Exception("Send command '" + str(cmd) + "' returned abnormal response '" + str(response) + "'")
+        
+    def receive(self) -> ReceivedMessage:
+        """If there is a message awaiting retrieval, returns it."""
+
+        # collect anything on the Rx to local buffer
+        self._colrx()
+
+        # find where the +RCV (receive message start) starts
+        i1:int = self._rxbuf.find("+RCV=".encode("ascii")) # find where the received message starts
+
+        # if there is no message to be found, return None
+        if i1 == -1: 
+            return None
+    
+        # find where it ends from here (newline)
+        i2:int = self._rxbuf.find("\r\n".encode("ascii"), i1 + 1)
+
+        # if no \r\n found
+        if i2 == -1:
+            raise Exception("Received message beginning at index '" + str(i1) + "' in internal buf did not terminate in '\\r\\n'")
+        
+        # get bytes of the full RCV
+        rcv:bytes = self._rxbuf[i1:i2 + 2] # add +2 for  the length of the \r\n (actually 2 characters)
+
+        # "pluck" it out
+        self._rxbuf = self._rxbuf[0:i1] + self._rxbuf[i2+2:]
+
+        # now time to convert the RCV message to useful data
+
+        # find landmarkers that will help with parsing
+        i_equal:int = rcv.find("=".encode("ascii"))
+        i_comma1:int = rcv.find(",".encode("ascii"))
+        i_comma2:int = rcv.find(",".encode("ascii"), i_comma1 + 1)
+        i_comma3:int = rcv.find(",".encode("ascii"), i_comma2 + 1)
+        i_comma4:int = rcv.find(",".encode("ascii"), i_comma3 + 1)
+        i_linebreak:int = rcv.find("\r\n".encode("ascii"))
+
+        # extract
+        ToReturn:ReceivedMessage = ReceivedMessage()
+        ToReturn.address = int(rcv[i_equal + 1:i_comma1].decode("ascii"))
+        ToReturn.length = int(rcv[i_comma1 + 1:i_comma2].decode("ascii"))
+        ToReturn.data = rcv[i_comma2 + 1:i_comma3]
+        ToReturn.RSSI = int(rcv[i_comma3 + 1:i_comma4].decode("ascii"))
+        ToReturn.SNR = int(rcv[i_comma4 + 1:i_linebreak].decode("ascii"))
+
+        return ToReturn
+
 
     def _colrx(self) -> None:
         """Collects and moves all bytes from UART Rx buffer to internal buffer."""
@@ -92,3 +150,11 @@ class RYLR998:
 
         return response
 
+# u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
+# r = RYLR998(u)
+# print("Pulse: " + str(r.pulse))
+
+# r._rxbuf = "yoyo".encode("ascii") + "+RCV=50,5,HELLO,-99,40\r\n".encode("ascii") + "hehehe".encode("ascii")
+# print(r._rxbuf)
+
+# print(str(r.receive()))
