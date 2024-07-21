@@ -22,24 +22,23 @@ class ReceivedMessage:
         self.SNR:int = SNR # Signal-to-noise ratio
 
     def parse(self, full_line:bytes) -> None:
-
-        rcv = full_line
+        """Parses a received message from the raw line of byte data received over UART. For example, b'+RCV=50,5,HELLO,-99,40'"""
 
         # find landmarkers that will help with parsing
-        i_equal:int = rcv.find("=".encode("ascii"))
-        i_comma1:int = rcv.find(",".encode("ascii"))
-        i_comma2:int = rcv.find(",".encode("ascii"), i_comma1 + 1)
-        i_comma4:int = rcv.rfind(",".encode("ascii")) # search from end
-        i_comma3:int = rcv.rfind(",".encode("ascii"), 0, i_comma4-1) # search for a comma from right, starting at 0 and ending at the last comma (or right before it)
-        i_linebreak:int = rcv.find("\r\n".encode("ascii"))
+        i_equal:int = full_line.find("=".encode("ascii"))
+        i_comma1:int = full_line.find(",".encode("ascii"))
+        i_comma2:int = full_line.find(",".encode("ascii"), i_comma1 + 1)
+        i_comma4:int = full_line.rfind(",".encode("ascii")) # search from end
+        i_comma3:int = full_line.rfind(",".encode("ascii"), 0, i_comma4-1) # search for a comma from right, starting at 0 and ending at the last comma (or right before it)
+        i_linebreak:int = full_line.find("\r\n".encode("ascii"))
         
         # extract
         self.ReceivedMessage = ReceivedMessage()
-        self.address = int(rcv[i_equal + 1:i_comma1].decode("ascii"))
-        self.length = int(rcv[i_comma1 + 1:i_comma2].decode("ascii"))
-        self.data = rcv[i_comma2 + 1:i_comma3]
-        self.RSSI = int(rcv[i_comma3 + 1:i_comma4].decode("ascii"))
-        self.SNR = int(rcv[i_comma4 + 1:i_linebreak].decode("ascii"))
+        self.address = int(full_line[i_equal + 1:i_comma1].decode("ascii"))
+        self.length = int(full_line[i_comma1 + 1:i_comma2].decode("ascii"))
+        self.data = full_line[i_comma2 + 1:i_comma3]
+        self.RSSI = int(full_line[i_comma3 + 1:i_comma4].decode("ascii"))
+        self.SNR = int(full_line[i_comma4 + 1:i_linebreak].decode("ascii"))
 
     def __str__(self) -> str:
         return str({"address":self.address, "length":self.length, "data":self.data, "RSSI":self.RSSI, "SNR":self.SNR})
