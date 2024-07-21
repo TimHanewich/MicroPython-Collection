@@ -170,7 +170,6 @@ class RYLR998:
         """Sets the RF parameters as a group of four integers, each representing a unique parameter. See AT commands specification sheet for more information."""
         params_str = str(value[0]) + "," + str(value[1]) + "," + str(value[2]) + "," + str(value[3])
         cmd:bytes = "AT+PARAMETER=".encode("ascii") + params_str.encode("ascii") + "\r\n".encode("ascii")
-        print("CMD: " + str(cmd))
         response:bytes = self._command_response(cmd)
         if response != "+OK\r\n".encode("ascii"):
             raise Exception("Setting parameters to " + str(value) + " failed with response " + str(response) + "! A common mistake here is pairing together incompatible Spreading Factors and Bandwidths. Or, setting an incompatible programmed preamble for the module's current network ID. For more information, please see the AT+PARAMETER command specification in the AT COMMANDS documentation (see readme).")
