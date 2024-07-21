@@ -212,7 +212,7 @@ class RYLR998:
         # wait max time for bytes to be available
         started_waiting_at_ticks_ms:int = time.ticks_ms()
         while (time.ticks_ms() - started_waiting_at_ticks_ms) < response_timeout_ms and self._uart.any() == 0:
-            time.sleep(1)
+            time.sleep_ms(1)
 
         # collect any new bytes in UART Rx
         self._colrx()
@@ -236,19 +236,3 @@ class RYLR998:
 u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 r = RYLR998(u)
 print(r.pulse)
-print(r._rxbuf)
-
-r.baudrate = 115200
-print(r._rxbuf)
-print(r.pulse)
-print(r.baudrate)
-
-r.baudrate = 9600
-print(r._rxbuf)
-print(r.pulse)
-print(r.baudrate)
-
-r.baudrate = 115200
-print(r._rxbuf)
-print(r.pulse)
-print(r.baudrate)
