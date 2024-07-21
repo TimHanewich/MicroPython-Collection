@@ -76,7 +76,7 @@ class RYLR998:
         """The network ID is the group of RYLR998 modules that are tuned in to each other."""
         response:bytes = self._command_response("AT+NETWORKID?\r\n".encode("ascii"))
         if response.find("+NETWORKID=".encode("ascii")) == -1:
-            raise Exception("Network ID read request did not return a valid network ID! (no = sign in response)")
+            raise Exception("Network ID read request did not return a valid network ID! Response: " + str(response))
         return int(response[11:].decode("ascii")) # please note that I noticed a mistake in the AT command documentation. It says the network is returned via response like "+NETWORK=6". Not true. It is "+NETWORKID=6". 
     
     @networkid.setter
@@ -92,10 +92,9 @@ class RYLR998:
     def address(self) -> int:
         """The address the RYLR998 will use to self-identify with when transmitting and receiving."""
         response:bytes = self._command_response("AT+ADDRESS?\r\n".encode("ascii"))
-        i_equal = response.find("=".encode("ascii"))
-        if i_equal == -1:
-            raise Exception("Address read request did not return a valid network ID! (no = sign in response)")
-        return int(response[i_equal+1:].decode("ascii"))
+        if response.find("+ADDRESS=".encode("ascii")) == -1:
+            raise Exception("Address read request did not return a valid address! Returned: " + str(response))
+        return int(response[9:].decode("ascii"))
     
     @address.setter
     def address(self, value:int) -> None:
@@ -298,4 +297,4 @@ class RYLR998:
     
 u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 r = RYLR998(u)
-print(r.networkid)
+print(r.address)
