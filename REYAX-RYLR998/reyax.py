@@ -20,12 +20,18 @@ class RYLR998:
     def __init__(self, uart:machine.UART) -> None:
         self._uart = uart
 
+        # clear out UART Rx buf
+        while self._uart.any() > 0:
+            self._uart.read()
+
         # set up internal RX buffer
         self._rxbuf:bytes = bytes()
 
+    @property
     def pulse(self) -> bool:
         """Runs a simple test command to the RYLR998 module to validate it is connected and functioning properly."""
-        pass
+        response:bytes = self._command_response("AT\r\n".encode("ascii"))
+        return response == "+OK\r\n".encode("ascii")
 
     def send(self, address:int, data:bytes) -> None:
         """Send a packet of binary data to a specified address."""
@@ -56,6 +62,7 @@ class RYLR998:
             self._rxbuf += all_bytes
     
     def _command_response(self, command:bytes)-> bytes:
+        """Sends a byte sequence (AT command) to the RYLR988 module, and collects the response while still preserving any pre-existing bytes in the internal Rx buffer."""
 
         # collect any bytes still left over in UART Rx and make note of the length of the internal buffer before the command is sent out and response for it is received
         self._colrx()
@@ -81,7 +88,13 @@ class RYLR998:
         response:bytes = self._rxbuf[-new_bytes_count:]
 
         # trim the internal buffer now that we just "plucked" the response out of it
-        self._rxbuf = self._rxbuf[0:-3]
+        self._rxbuf = self._rxbuf[0:-new_bytes_count]
 
         return response
+
+import machine
+u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
+r = RYLR998(u)
+
+print("Pulse?: " + str(r.pulse))
 
