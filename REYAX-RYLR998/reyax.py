@@ -109,7 +109,7 @@ class RYLR998:
         """The UART baud rate the RYLY988 is using to communicate."""
         response:bytes = self._command_response("AT+IPR?\r\n".encode("ascii"))
         if response.find("+IPR=".encode("ascii")) == -1:
-            raise Exception("Baud rate read request did not return a valid rate! (no = sign in response)")
+            raise Exception("Baud rate read request did not return a valid rate! Response: " + str(response))
         return int(response[5:].decode("ascii"))
     
     @baudrate.setter
@@ -178,7 +178,7 @@ class RYLR998:
         """The RF output power, in dBm."""
         response:bytes = self._command_response("AT+CRFOP?\r\n".encode("ascii"))
         if response.find("+CRFOP=".encode("ascii")) == -1:
-            raise Exception("RF output power read request did not return a valid rate! (no = sign in response)")
+            raise Exception("RF output power read request did not return a valid rate! Response: " + str(response))
         return int(response[7:].decode("ascii"))
     
     @output_power.setter
