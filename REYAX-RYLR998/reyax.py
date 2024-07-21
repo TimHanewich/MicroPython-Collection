@@ -92,11 +92,3 @@ class RYLR998:
 
         return response
 
-import machine
-u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
-r = RYLR998(u)
-
-print("Pulse?: " + str(r.pulse))
-
-r.send(1, "hello".encode("ascii"))
-
