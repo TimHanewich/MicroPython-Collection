@@ -5,3 +5,15 @@ Here is [the RYLR998 datasheet that describes the AT commands required for inter
 
 ## Great learning resources
 - https://mschoeffler.com/2020/12/19/lora-sender-receiver-communication-with-reyax-rylr896-breakout-boards-rylr890-modules/
+
+
+
+
+
+
+## NOTES
+Pico:
+u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
+
+Pico W:
+u = machine.UART(0, baudrate=115200, tx=machine.Pin(12), rx=machine.Pin(13))

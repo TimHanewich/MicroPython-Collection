@@ -11,14 +11,21 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 """
 
 import machine
+import time
+
+response_delay:float = 0.1 # the amount of time, in seconds, that should be waited before validating the response from the module for a command.
 
 class RYLR998:
 
     def __init__(self, uart:machine.UART) -> None:
         self._uart = uart
-        
-        # clear RX buffer to start
-        self._clearrx()
+
+        # set up internal RX buffer
+        self._rxbuf:bytes = bytes()
+
+    def pulse(self) -> bool:
+        """Runs a simple test command to the RYLR998 module to validate it is connected and functioning properly."""
+        pass
 
     def send(self, address:int, data:bytes) -> None:
         """Send a packet of binary data to a specified address."""
@@ -42,21 +49,39 @@ class RYLR998:
 
         print("Just sent: " + str(bytes(cmd_ba)))
 
-    def _clearrx(self) -> None:
-        """Clears all bytes from the Rx buffer by reading all."""
-        while True:
-            if (len(self._readall())) == 0:
-                break
-
-    def _readline(self) -> bytes:
-        """Read a line, ending in newline character (\n)"""
-        return self._uart.readline()
+    def _colrx(self) -> None:
+        """Collects and moves all bytes from UART Rx buffer to internal buffer."""
+        all_bytes:bytes = self._uart.read()
+        if all_bytes != None:
+            self._rxbuf += all_bytes
     
-    def _any(self) -> int:
-        """Returns the number of bytes available on the Rx line available for reading."""
-        return self._uart.any()
+    def _command_response(self, command:bytes)-> bytes:
 
-    def _readall(self) -> bytes:
-        """Returns all bytes available for reading on the Rx line (held in buffer)."""
-        return self._uart.read(self._uart.any())
+        # collect any bytes still left over in UART Rx and make note of the length of the internal buffer before the command is sent out and response for it is received
+        self._colrx()
+        len_before:int = len(self._rxbuf)
+
+        # send command
+        self._uart.write(command)
+
+        # wait a little for it to be processed and then the response to arrive
+        time.sleep(response_delay)
+
+        # collect any new bytes in UART Rx
+        self._colrx()
+
+        # count the number of new bytes that were just added!
+        new_bytes_count:int = len(self._rxbuf) - len_before
+
+        # if there are not any new bytes in the internal buf, it failed!
+        if new_bytes_count == 0:
+            raise Exception("Response from RYLY998 for command " + str(command) + " was not received after waiting " + str(response_delay) + " seconds!")
         
+        # get the ones we just received
+        response:bytes = self._rxbuf[-new_bytes_count:]
+
+        # trim the internal buffer now that we just "plucked" the response out of it
+        self._rxbuf = self._rxbuf[0:-3]
+
+        return response
+
