@@ -21,6 +21,26 @@ class ReceivedMessage:
         self.RSSI:int = RSSI # Received signal strength indicator
         self.SNR:int = SNR # Signal-to-noise ratio
 
+    def parse(self, full_line:bytes) -> None:
+
+        rcv = full_line
+
+        # find landmarkers that will help with parsing
+        i_equal:int = rcv.find("=".encode("ascii"))
+        i_comma1:int = rcv.find(",".encode("ascii"))
+        i_comma2:int = rcv.find(",".encode("ascii"), i_comma1 + 1)
+        i_comma4:int = rcv.rfind(",".encode("ascii")) # search from end
+        i_comma3:int = rcv.rfind(",".encode("ascii"), 0, i_comma4-1) # search for a comma from right, starting at 0 and ending at the last comma (or right before it)
+        i_linebreak:int = rcv.find("\r\n".encode("ascii"))
+        
+        # extract
+        self.ReceivedMessage = ReceivedMessage()
+        self.address = int(rcv[i_equal + 1:i_comma1].decode("ascii"))
+        self.length = int(rcv[i_comma1 + 1:i_comma2].decode("ascii"))
+        self.data = rcv[i_comma2 + 1:i_comma3]
+        self.RSSI = int(rcv[i_comma3 + 1:i_comma4].decode("ascii"))
+        self.SNR = int(rcv[i_comma4 + 1:i_linebreak].decode("ascii"))
+
     def __str__(self) -> str:
         return str({"address":self.address, "length":self.length, "data":self.data, "RSSI":self.RSSI, "SNR":self.SNR})
 
@@ -138,24 +158,11 @@ class RYLR998:
         self._rxbuf = self._rxbuf[0:i1] + self._rxbuf[i2+2:]
 
         # now time to convert the RCV message to useful data
-
-        # find landmarkers that will help with parsing
-        i_equal:int = rcv.find("=".encode("ascii"))
-        i_comma1:int = rcv.find(",".encode("ascii"))
-        i_comma2:int = rcv.find(",".encode("ascii"), i_comma1 + 1)
-        i_comma4:int = rcv.rfind(",".encode("ascii")) # search from end
-        i_comma3:int = rcv.rfind(",".encode("ascii"), i_comma4 - 1) # search from end, but last comma at end
-        i_linebreak:int = rcv.find("\r\n".encode("ascii"))
-
-        # extract
         ToReturn:ReceivedMessage = ReceivedMessage()
-        ToReturn.address = int(rcv[i_equal + 1:i_comma1].decode("ascii"))
-        ToReturn.length = int(rcv[i_comma1 + 1:i_comma2].decode("ascii"))
-        ToReturn.data = rcv[i_comma2 + 1:i_comma3]
-        ToReturn.RSSI = int(rcv[i_comma3 + 1:i_comma4].decode("ascii"))
-        ToReturn.SNR = int(rcv[i_comma4 + 1:i_linebreak].decode("ascii"))
+        ToReturn.parse(rcv)
 
         return ToReturn
+        
 
 
     def _colrx(self) -> None:
@@ -194,3 +201,11 @@ class RYLR998:
         self._rxbuf = self._rxbuf[0:-new_bytes_count]
 
         return response
+
+
+data = "+RCV=50,5,HELLO,-99,40".encode("ascii")
+data = "+RCV=50,5,HELLO, my boi,-99,40".encode("ascii")
+
+msg = ReceivedMessage()
+msg.parse(data)
+print(str(msg))
