@@ -126,7 +126,22 @@ class RYLR998:
         else: # We found the confirmation, it was successful! 
             self._uart.init(value) # adjust to the new baudrate so any subsequent communication is read + sent correctly.
 
-        
+    @property
+    def band(self) -> int:
+        """The RF frequency at which the RYLR998 module operates."""
+        response:bytes = self._command_response("AT+BAND?\r\n".encode("ascii"))
+        i_equal = response.find("=".encode("ascii"))
+        if i_equal == -1:
+            raise Exception("Frequency (band) read request did not return a valid rate! (no = sign in response)")
+        return int(response[i_equal+1:].decode("ascii"))
+    
+    @band.setter
+    def band(self, value:int) -> None:
+        if value < 820000000 or value > 960000000: # valid addresses according to datasheet
+            raise Exception("Frequency of " + str(value) + " Hz is invalid. Must be between 820,000,000 Hz and 960,000,000 Hz.")
+        response:bytes = self._command_response("AT+BAND=".encode("ascii") + str(value).encode("ascii") + "\r\n".encode("ascii"))
+        if response != "+OK\r\n".encode("ascii"):
+            raise Exception("Setting frequency to " + str(value) + " Hz failed with response '" + str(response) + "'")
 
 
 
@@ -235,4 +250,6 @@ class RYLR998:
 
 u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 r = RYLR998(u)
-print(r.pulse)
+print(r.band)
+r.band = 820000000
+print(r.band)
