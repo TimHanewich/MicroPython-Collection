@@ -106,6 +106,35 @@ class RYLR998:
         if response != "+OK\r\n".encode("ascii"):
             raise Exception("Setting address to '" + str(value) + "' failed with response '" + str(response) + "'")
         
+    @property
+    def baudrate(self) -> int:
+        """The UART baud rate the RYLY988 is using to communicate."""
+        response:bytes = self._command_response("AT+IPR?\r\n".encode("ascii"))
+        i_equal = response.find("=".encode("ascii"))
+        if i_equal == -1:
+            raise Exception("Baud rate read request did not return a valid rate! (no = sign in response)")
+        return int(response[i_equal+1:].decode("ascii"))
+    
+    @baudrate.setter
+    def baudrate(self, value:int) -> None:
+        acceptable_rates:list[int] = [300,1200,4800,9600,19200,28800,38400,57600,115200]
+        if value not in acceptable_rates:
+            raise Exception("You cannot set a baud rate of '" + str(value) + "'! Baud rate must be one of these: " + str(acceptable_rates))
+        response:bytes = self._command_response("AT+IPR=".encode("ascii") + str(value).encode("ascii") + "\r\n".encode("ascii"))
+        if response.find("+IPR=".encode("ascii") + str(value).encode("ascii") + "\r\n".encode("ascii")) == -1:
+            raise Exception("Setting baud rate to '" + str(value) + "' failed! Confirmation message not heard back.")
+        else: # We found the confirmation, it was successful! 
+            self._uart.init(value) # adjust to the new baudrate so any subsequent communication is read + sent correctly.
+
+        
+
+
+
+    def software_reset(self) -> None:
+        """Software reset of RYLR998 module."""
+        response:bytes = self._command_response("AT+RESET\r\n")
+        if response != "+RESET\r\n+READY\r\n".encode("ascii"):
+            raise Exception("Software reset was not confirmed to be successful! Response '" + str(response) + "' received instead of standard +RESET and +READY!")
 
 
     def send(self, address:int, data:bytes) -> None:
@@ -202,9 +231,19 @@ class RYLR998:
         return response
 
 
-data = "+RCV=50,5,HELLO,-99,40".encode("ascii")
-data = "+RCV=50,5,HELLO, my boi,-99,40".encode("ascii")
+u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
+r = RYLR998(u)
+print(r.pulse)
+print(r._rxbuf)
 
-msg = ReceivedMessage()
-msg.parse(data)
-print(str(msg))
+r.baudrate = 115200
+print(r._rxbuf)
+print(r.pulse)
+
+r.baudrate = 9600
+print(r._rxbuf)
+print(r.pulse)
+
+r.baudrate = 115200
+print(r._rxbuf)
+print(r.pulse)
