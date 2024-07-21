@@ -57,8 +57,6 @@ class RYLR998:
         cmd += data
         cmd += "\r\n".encode("ascii")
 
-        print("Going to send: " + str(cmd))
-
         # send the command, get the response
         response:bytes = self._command_response(cmd, 1.0)
 
