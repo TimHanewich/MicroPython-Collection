@@ -148,10 +148,6 @@ class RYLR998:
         response:bytes = self._command_response("AT+RESET\r\n")
         if response != "+RESET\r\n+READY\r\n".encode("ascii"):
             raise Exception("Software reset was not confirmed to be successful! Response '" + str(response) + "' received instead of standard +RESET and +READY!")
-
-    @property
-    def spreading_factor(self) -> int:
-        return self._parameter()[0]
     
     @property
     def rf_parameters(self) -> tuple[int, int, int, int]:
