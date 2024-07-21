@@ -59,6 +59,25 @@ class RYLR998:
         response:bytes = self._command_response("AT+NETWORKID=".encode("ascii") + str(value).encode("ascii") + "\r\n".encode("ascii"))
         if response != "+OK\r\n".encode("ascii"):
             raise Exception("Setting network ID to '" + str(value) + "' failed with response '" + str(response) + "'")
+        
+    @property
+    def address(self) -> int:
+        """The address the RYLR998 will use to self-identify with when transmitting and receiving."""
+        response:bytes = self._command_response("AT+ADDRESS?\r\n".encode("ascii"))
+        i_equal = response.find("=".encode("ascii"))
+        if i_equal == -1:
+            raise Exception("Address read request did not return a valid network ID! (no = sign in response)")
+        return int(response[i_equal+1:].decode("ascii"))
+    
+    @address.setter
+    def address(self, value:int) -> None:
+        if value < 0 or value > 65535: # valid addresses according to datasheet
+            raise Exception("Address of '" + str(value) + "' is invalid. Must be between 0-65535.")
+        response:bytes = self._command_response("AT+ADDRESS=".encode("ascii") + str(value).encode("ascii") + "\r\n".encode("ascii"))
+        if response != "+OK\r\n".encode("ascii"):
+            raise Exception("Setting address to '" + str(value) + "' failed with response '" + str(response) + "'")
+        
+
 
     def send(self, address:int, data:bytes) -> None:
         """Send a packet of binary data to a specified address."""
@@ -170,6 +189,5 @@ u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 r = RYLR998(u)
 print("Pulse: " + str(r.pulse))
 
-print(r.networkid)
-
-r.networkid = 18
+print(r.address)
+r.address = 0
