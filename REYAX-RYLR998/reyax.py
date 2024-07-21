@@ -199,7 +199,7 @@ class RYLR998:
         if all_bytes != None:
             self._rxbuf += all_bytes
     
-    def _command_response(self, command:bytes, response_delay:float = 0.5)-> bytes:
+    def _command_response(self, command:bytes, response_timeout_ms:int = 500)-> bytes:
         """Sends a byte sequence (AT command) to the RYLR988 module, and collects the response while still preserving any pre-existing bytes in the internal Rx buffer."""
 
         # collect any bytes still left over in UART Rx and make note of the length of the internal buffer before the command is sent out and response for it is received
@@ -209,8 +209,10 @@ class RYLR998:
         # send command
         self._uart.write(command)
 
-        # wait a little for it to be processed and then the response to arrive
-        time.sleep(response_delay)
+        # wait max time for bytes to be available
+        started_waiting_at_ticks_ms:int = time.ticks_ms()
+        while (time.ticks_ms() - started_waiting_at_ticks_ms) < response_timeout_ms and self._uart.any() == 0:
+            time.sleep(1)
 
         # collect any new bytes in UART Rx
         self._colrx()
@@ -220,7 +222,7 @@ class RYLR998:
 
         # if there are not any new bytes in the internal buf, it failed!
         if new_bytes_count == 0:
-            raise Exception("Response from RYLY998 for command " + str(command) + " was not received after waiting " + str(response_delay) + " seconds!")
+            raise Exception("Response from RYLY998 for command " + str(command) + " was not received after waiting " + str(response_timeout_ms) + " ms!")
         
         # get the ones we just received
         response:bytes = self._rxbuf[-new_bytes_count:]
