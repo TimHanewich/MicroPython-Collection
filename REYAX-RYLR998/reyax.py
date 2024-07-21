@@ -247,9 +247,18 @@ class RYLR998:
 
         return response
 
+    def _parameter(self) -> tuple[int, int, int, int]:
+        """Runs the AT+PARAMETER command, receiving and returning a tuple of four integers, each representing something different."""
+        response:bytes = self._command_response("AT+PARAMETER?\r\n".encode("ascii"))
+        iequals:int = response.find("=".encode("ascii"))
+        if iequals == -1:
+            raise Exception("AT+PARAMETER command did not successfully return the module's parameter properies. Instead, it returned '" + str(response) + "'")
+        paramstr:str = response[iequals+1:].decode("ascii")
+        paramstr = paramstr.replace("\r\n", "") # \r\n will be left at the end of the string, so remove it before proceeding
+        params:list[str] = paramstr.split(",")
+        return (int(params[0]), int(params[1]), int(params[2]), int(params[3]))
+
 
 u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 r = RYLR998(u)
-print(r.band)
-r.band = 820000000
-print(r.band)
+print(r._parameter())
