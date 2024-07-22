@@ -106,7 +106,7 @@ Receiving on B:
 The RYLR998 module has several settings that can be configured to cater to your particular use case. You'd typically modify these to further refine where you want your modules to perform on the tradeoff of speed and range.
 
 ### Center Frequency
-We can use the `band()` function to change the center frequency that the RYLR998 module uses to transmit and receive messages. Lower frequencies can better penetrate walls and other objects, have longer range, and generally suffer from less interference. However, higher frequencies benefit from faster data rates and lower latency.
+We can use the `band` property to change the center frequency that the RYLR998 module uses to transmit and receive messages. Lower frequencies can better penetrate walls and other objects, have longer range, and generally suffer from less interference. However, higher frequencies benefit from faster data rates and lower latency.
 
 The RYLR998 can operate between **820 MHz** and **960 MHz**. The transmitter and receiver must use the same frequency to communicate with each other, so make sure you set them both on the same frequency.
 
