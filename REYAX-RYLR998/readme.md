@@ -8,7 +8,7 @@ I've developed a MicroPython driver that allows developers to easily interface w
 [reyax.py](./reyax.py) provides an easy-to-use driver (helper) for interfacing with the [REYAX RYLR998 LoRa Module](https://reyax.com/products/RYLR998), allowing you to **easily** send data packets of information between two RYLR998 LoRa modules. I picked up two of these inexpensive modules [on Amazon](https://a.co/d/ebrZeHn)!
 
 ## Wiring
-Wiring up and RYLR998 module to work with your microcontroller is very easy:
+Wiring up an RYLR998 module to work with your microcontroller is very easy:
 - **VDD** to a 3.3V supply on your microcontroller.
 - **CND** to a ground pin on your microcontroller.
 - **RXD** to a UART **TX** pin on your microcontroller.
@@ -106,7 +106,7 @@ Receiving on B:
 The RYLR998 module has several settings that can be configured to cater to your particular use case. You'd typically modify these to further refine where you want your modules to perform on the tradeoff of speed and range.
 
 ### Center Frequency
-We can use the `band()` function to change the center frequency that the RYLR998 module uses to transmit and receive messages. Lower frequencies can better penetrate walls and other objects, have longer range, and generally suffer from less interferance. However, higher frequencies benefit from faster data rates and lower latency.
+We can use the `band()` function to change the center frequency that the RYLR998 module uses to transmit and receive messages. Lower frequencies can better penetrate walls and other objects, have longer range, and generally suffer from less interference. However, higher frequencies benefit from faster data rates and lower latency.
 
 The RYLR998 can operate between **820 MHz** and **960 MHz**. The transmitter and receiver must use the same frequency to communicate with each other, so make sure you set them both on the same frequency.
 
@@ -128,7 +128,7 @@ The RYLR998 module has several parameters that can be customized to further cont
 
 Each of the four integers above represents a unique RF parameter, described here in order:
 - **Spreading Factor** - The Spreading Factor (SF) determines how much the LoRa signal is spread across the frequency band. It's a critical parameter that affects the trade-off between data rate, range, and interference robustness. A higher SF means the signal is spread more, resulting in longer range and better penetration through obstacles. A lower SF means the signal is spread less, resulting in a fast data rate, but shorter range and more susceptibility to interference.
-- **Bandwidth** - The Bandwidth (BW) determines the frequency range used for LoRa transmission. A wider bandwidth allows for faster data rates, but also increases the susceptibility to interference. The RYLR998 supports three bandwidth settings: 125 KHz (default), 250 KHz, and 500 KHz. 125 KHz is narrowband, resistant to interferance while 500 KHz is wideband, faster, but more prone to interfernace, with the 250 KHz being a balance.
+- **Bandwidth** - The Bandwidth (BW) determines the frequency range used for LoRa transmission. A wider bandwidth allows for faster data rates, but also increases the susceptibility to interference. The RYLR998 supports three bandwidth settings: 125 KHz (default), 250 KHz, and 500 KHz. 125 KHz is narrowband, resistant to interference while 500 KHz is wideband, faster, but more prone to interference, with the 250 KHz being a balance.
 - **Coding Rate** - The Coding Rate (CR) determines the error correction capability of the LoRa transmission. It's a forward error correction (FEC) mechanism that adds redundancy to the data to detect and correct errors. A higher CR means more redundancy is added, resulting in better error correction capabilities but a slower data rate. A low CR means less redundance is added, resulting in a faster data rate, but is more prone to errors in transmission.
 - **Programmed Preamble** - The Programmed Preamble (PP) is a sequence of bits transmitted at the beginning of each LoRa packet to help the receiver synchronize with the transmitter. A longer preamble (i.e. 16 symbols) provides better receiver synchronization and packet detection, but has longer transmission time. A shorter preamble (i.e. 8 symbols) provides faster transmission time but is a less robust.
 
