@@ -1,4 +1,6 @@
 # REYAX RYLR998 LoRa Module MicroPython Driver
+![opening](https://i.imgur.com/r51HAFz.png)
+
 The RYLR998 LoRa module by REYAX is a powerful and versatile wireless communication solution for IoT applications. With its long-range capabilities and low power consumption, it's an ideal choice for a wide range of projects, from smart sensors to industrial automation.
 
 I've developed a MicroPython driver that allows developers to easily interface with the module from their microcontrollers. This driver provides a simple and intuitive API for sending and receiving data, configuring the module's settings, and monitoring its status.
@@ -216,6 +218,7 @@ Use the `version` property to access the firmware version that is running on you
 ## Official Documentation
 - [REYAX RYLR998 Datasheet](https://github.com/TimHanewich/MicroPython-Collection/releases/download/3/RYLR998_EN.pdf)
 - [REYAX RYLR998 AT Commands Specification](https://github.com/TimHanewich/MicroPython-Collection/releases/download/2/LoRa_AT_Command_RYLR998_RYLR498_EN.pdf)
+- [REYAX RYLR998 STL File (3D model)](https://github.com/TimHanewich/MicroPython-Collection/releases/download/4/RYLR998.stl)
 
 ## Great learning resources
 - https://mschoeffler.com/2020/12/19/lora-sender-receiver-communication-with-reyax-rylr896-breakout-boards-rylr890-modules/
