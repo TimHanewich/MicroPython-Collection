@@ -5,7 +5,14 @@ I've developed a MicroPython driver that allows developers to easily interface w
 
 [reyax.py](./reyax.py) provides an easy-to-use driver (helper) for interfacing with the [REYAX RYLR998 LoRa Module](https://reyax.com/products/RYLR998), allowing you to **easily** send data packets of information between two RYLR998 LoRa modules. I picked up two of these inexpensive modules [on Amazon](https://a.co/d/ebrZeHn)!
 
-## Quick Start
+## Wiring
+Wiring up and RYLR998 module to work with your microcontroller is very easy:
+- **VDD** to a 3.3V supply on your microcontroller.
+- **CND** to a ground pin on your microcontroller.
+- **RXD** to a UART **TX** pin on your microcontroller.
+- **TXD** to a UART **RX** pin on your microcontroller.
+
+## Code Quick Start
 To get up and running as quickly as possible with two new RYLR998 modules (default settings have not yet been modified), here is some sample code:
 
 ### Step 1: Set up Module A
