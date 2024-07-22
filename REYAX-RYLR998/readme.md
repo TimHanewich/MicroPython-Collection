@@ -10,7 +10,7 @@ I've developed a MicroPython driver that allows developers to easily interface w
 ## Wiring
 Wiring up an RYLR998 module to work with your microcontroller (I am using the Raspberry Pi Pico in this example) is very easy:
 - **VDD** to a 3.3V supply on your microcontroller.
-- **CND** to a ground pin on your microcontroller.
+- **GND** to a ground pin on your microcontroller.
 - **RXD** to a UART **TX** pin on your microcontroller.
 - **TXD** to a UART **RX** pin on your microcontroller.
 
