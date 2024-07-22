@@ -214,23 +214,7 @@ Use the `version` property to access the firmware version that is running on you
 'RYLR998_REYAX_V1.2.3'
 ```
 
-
 ## Official Documentation
 - [REYAX RYLR998 Datasheet](https://github.com/TimHanewich/MicroPython-Collection/releases/download/3/RYLR998_EN.pdf)
 - [REYAX RYLR998 AT Commands Specification](https://github.com/TimHanewich/MicroPython-Collection/releases/download/2/LoRa_AT_Command_RYLR998_RYLR498_EN.pdf)
 - [REYAX RYLR998 STL File (3D model)](https://github.com/TimHanewich/MicroPython-Collection/releases/download/4/RYLR998.stl)
-
-## Great learning resources
-- https://mschoeffler.com/2020/12/19/lora-sender-receiver-communication-with-reyax-rylr896-breakout-boards-rylr890-modules/
-
-
-
-
-
-
-## NOTES
-Pico:
-u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
-
-Pico W:
-u = machine.UART(0, baudrate=115200, tx=machine.Pin(12), rx=machine.Pin(13))
