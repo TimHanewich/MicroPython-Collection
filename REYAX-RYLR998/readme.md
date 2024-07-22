@@ -4,7 +4,7 @@
 ## Quick Start
 To get up and running as quickly as possible with two new RYLR998 modules (default settings have not yet been modified), here is some sample code:
 
-### Step 1: Set up Module A (on a separate device)
+### Step 1: Set up Module A
 ```
 >>> import reyax
 >>> import machine
@@ -18,7 +18,7 @@ True
 0
 ```
 
-### Step 2: Set up Module B (on a separate device)
+### Step 2: Set up Module B
 ```
 >>> import reyax
 >>> import machine
