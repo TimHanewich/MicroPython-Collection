@@ -1,5 +1,5 @@
 # REYAX RYLR998 Driver (Helper)
-[reyax.py](./reyax.py) provides an easy-tou-use driver (helper) for interfacing with the [REYAX RYLR998 LoRa Module](https://reyax.com/products/RYLR998), allowing you to send data packets of information between two RYLR998 LoRa modules.
+[reyax.py](./reyax.py) provides an easy-to-use driver (helper) for interfacing with the [REYAX RYLR998 LoRa Module](https://reyax.com/products/RYLR998), allowing you to send data packets of information between two RYLR998 LoRa modules.
 
 ## Quick Start
 To get up and running as quickly as possible with two new RYLR998 modules (default settings have not yet been modified), here is some sample code:
