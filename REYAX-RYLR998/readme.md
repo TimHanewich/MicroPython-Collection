@@ -12,6 +12,8 @@ Wiring up and RYLR998 module to work with your microcontroller is very easy:
 - **RXD** to a UART **TX** pin on your microcontroller.
 - **TXD** to a UART **RX** pin on your microcontroller.
 
+![wiring](https://i.imgur.com/ZI126QJ.jpeg)
+
 ## Code Quick Start
 To get up and running as quickly as possible with two new RYLR998 modules (default settings have not yet been modified), here is some sample code:
 
