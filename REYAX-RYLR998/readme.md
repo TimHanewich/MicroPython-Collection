@@ -180,7 +180,24 @@ The RYLR998 module can interface with your microcontroller over UART using sever
 
 Since this only defines the baud rate speed between the module and the microcontroller you are using to control it, the baud rates used by both modules do not need to match; this has nothing to do with RF transmission/receiving.
 
+## Other Data
+The RYLR998 also provides a few other commands that can be used to access data about the module you are using.
 
+### Module ID
+Use the `UID` property (short for "unique ID") to access the model ID, a unique ID assigned to that particular RYLR998 module:
+
+```
+>>> lora.UID
+'0014003104691F6900001B06'
+```
+
+### Firmware Version
+Use the `version` property to access the firmware version that is running on your RYLR998 module:
+
+```
+>>> lora.version
+'RYLR998_REYAX_V1.2.3'
+```
 
 
 ## Official Documentation
