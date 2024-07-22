@@ -189,13 +189,6 @@ class RYLR998:
         if response != "+OK\r\n".encode("ascii"):
             raise Exception("Setting RF output power to " + str(value) + "' dBm failed with response " + str(response))
         
-
-
-
-
-
-
-
     def send(self, address:int, data:bytes) -> None:
         """Send a packet of binary data to a specified address."""
 
@@ -250,8 +243,6 @@ class RYLR998:
 
         return ToReturn
         
-
-
     def _colrx(self) -> None:
         """Collects and moves all bytes from UART Rx buffer to internal buffer."""
         all_bytes:bytes = self._uart.read()
