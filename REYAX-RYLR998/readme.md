@@ -90,7 +90,7 @@ Receiving on B:
 ## Advanced Configuration
 The RYLR998 module has several settings that can be configured to cater to your particular use case. You'd typically modify these to further refine where you want your modules to perform on the tradeoff of speed and distance.
 
-## Center Frequency
+### Center Frequency
 We can use the `band()` function to change the center frequency that the RYLR998 module uses to transmit and receive messages. Lower frequencies can better penetrate walls and other objects, have longer range, and generally suffer from less interferance. However, higher frequencies benefit from faster data rates and lower latency.
 
 The RYLR998 can operate between **820 MHz** and **960 MHz**. The transmitter and receiver must use the same frequency to communicate with each other, so make sure you set them both on the same frequency.
@@ -103,7 +103,7 @@ The RYLR998 can operate between **820 MHz** and **960 MHz**. The transmitter and
 820000000
 ```
 
-## RF Parameters
+### RF Parameters
 The RYLR998 module has several parameters that can be customized to further control how the module transmits and receives. We can access these four parameters using the `rf_parameters` property:
 
 ```
@@ -154,6 +154,31 @@ This often happens because you are trying to set a spreading factor and bandwidt
 
 **REMEMBER: For your modules to communicate with each other, all RF parameters must be set to the same values on both modules!**
 
+### RF Output Power
+The RF output power, a measure of the power of the radio frequency signal transmitted expressed in decibels relative to one milliwatt (dbM), can be modified.
+
+The power can be set to between 0 and 22 dBm, with 22 dBm (the most powerful broadcast) being the default. To read/change the output power:
+
+```
+>>> lora.output_power
+22
+>>> lora.output_power = 10
+>>> lora.output_power
+10
+```
+
+### Change UART Baud Rate
+The RYLR998 module can interface with your microcontroller over UART using several different baud rates (transmission speeds from your microcontroller to the module over the wire, not to be confused with the radio transmission speed between modules). While I don't recommend changing the baud rate (the default of 115200 has proved to work well), it can be adjusted:
+
+```
+>>> lora.baudrate
+115200
+>>> lora.baudrate = 9600
+>>> lora.baudrate
+9600
+```
+
+Since this only defines the baud rate speed between the module and the microcontroller you are using to control it, the baud rates used by both modules do not need to match; this has nothing to do with RF transmission/receiving.
 
 
 
