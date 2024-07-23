@@ -141,10 +141,29 @@ class RYLR998:
 
     def software_reset(self) -> None:
         """Software reset of RYLR998 module."""
-        response:bytes = self._command_response("AT+RESET\r\n")
-        if response != "+RESET\r\n+READY\r\n".encode("ascii"):
-            raise Exception("Software reset was not confirmed to be successful! Response '" + str(response) + "' received instead of standard +RESET and +READY!")
-    
+
+        # the only reason we are not use the "_command_response()" function like every other function
+        # in this class is because this is the only command that returns two individual lines
+        # one after the other. 
+        # The first line is "+RESET\r\n". The second is "+READY\r\n" and comes exactly 5 milliseconds after  the first.
+        # "_command_response()" will only grab the first data line that is collected (it will not wait for a subsequent next one)
+
+        # send command
+        self._uart.write("AT+RESET\r\n".encode("ascii"))
+
+        # wait for response
+        start:int = time.ticks_ms()
+        full_response:bytes = bytes()
+        while (time.ticks_ms() - start) < 5000: # maximum time we will wait for the reset to be confirmed is 5 seconds... but it should be WAY quicker than that.
+            if self._uart.any() > 0: # there is something to read
+                data = self._uart.read()
+                full_response = full_response + data
+                if full_response == "+RESET\r\n+READY\r\n":
+                    return # stop the function! It was successful!
+                
+        # If we got this far, it means the timeout above happened. So it didn't work. We never saw the full reset confirmation.
+        raise Exception("Software reset was not confirmed to be successful! Response from RYLR998 was '" + str(full_response) + "' which was not the expected confirmation response.")
+
     @property
     def rf_parameters(self) -> tuple[int, int, int, int]:
         """
