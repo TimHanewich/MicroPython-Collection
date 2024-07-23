@@ -158,7 +158,7 @@ class RYLR998:
             if self._uart.any() > 0: # there is something to read
                 data = self._uart.read()
                 full_response = full_response + data
-                if full_response == "+RESET\r\n+READY\r\n":
+                if full_response == "+RESET\r\n+READY\r\n".encode("ascii"):
                     return # stop the function! It was successful!
                 
         # If we got this far, it means the timeout above happened. So it didn't work. We never saw the full reset confirmation.
