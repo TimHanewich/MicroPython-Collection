@@ -27,10 +27,10 @@ def example():
             heap = heap[split_position + 1:] # set the heap to the remainder, stripping out both the first chunk and the split sequence
 
             # handle this chunk
-            print("Chunk: " + str(chunk))
+            print("Chunk: " + str(chunk)) # the print function writes back through serial. Very simple!
             
-        # handle what needs to be done (processing, reacting to inputs, etc.)
-        print("Hello at time " + str(time.ticks_ms()) + "!")
+        # handle what needs to be done (processing, reacting to inputs, responding, etc.)
+        print("Hello at time " + str(time.ticks_ms()) + "!") # the print function writes back through serial. Very simple!
         
         # small wait period
         time.sleep(0.5)
