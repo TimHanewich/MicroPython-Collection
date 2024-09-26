@@ -304,8 +304,12 @@ class RYLR998:
 
         return response
     
-import machine
 
+
+import machine
 u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
 lora = RYLR998(u)
-print(lora._command_confirm("AT\r\n".encode(), "+OK\r\n".encode()))
+
+for _ in range(10):
+    print(lora._command_response("AT\r\n"))
+    print(lora._rxbuf)
