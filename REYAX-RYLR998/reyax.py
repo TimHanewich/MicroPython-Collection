@@ -305,3 +305,39 @@ class RYLR998:
         self._rxbuf = self._rxbuf[0:-new_bytes_count]
 
         return response
+    
+    def _command_response_v2(self, command:bytes, response_timeout_ms:int = 500)-> bytes:
+        """Sends a byte sequence (AT command) to the RYLR988 module, and collects the response while still preserving any pre-existing bytes in the internal Rx buffer."""
+
+        # the _command_response() function should never return a "+RCV" response. +RCV is the message that shows up when a message was received.
+        # the reason it should never return an +RCV is because +RCV is NEVER the RESPONSE to a command,
+        # but rather a message that pops up when a message is received (not directly a result of a command sent to the RYLR998 via UART)
+        # Because of this rule, any +RCV will just be ignored and be stored in the buffer.
+
+        # collect any bytes still left over in UART Rx 
+        # we do this just in case there were previously un-handled response bytes (i.e. +RCV)
+        new_bytes:bytes = self._uart.read()
+        if new_bytes != None:
+            self._rxbuf += new_bytes
+
+        # send command
+        self._uart.write(command)
+
+        # wait for a response, but also wait for an appropriate response (ignore + cache any received messages)
+        started_waiting_at_ticks_ms:int = time.ticks_ms()
+        response:bytes = None # will contain the actual response we will return back.
+        while (time.ticks_ms() - started_waiting_at_ticks_ms) < response_timeout_ms and response == None:
+            if self._uart.any() > 0: # if there are bytes to read
+                new_bytes = self._uart.read() # read the bytes
+                if new_bytes.startswith("+RCV".encode("ascii")): # if the new bytes we just received are actually a message we just received (not a direct response to the command we just sent), add it to the buffer for us to get to it later
+                    self._rxbuf += new_bytes # add it to the buffer for us to get later. It is not the response to our command we were looking for.
+                else:
+                    response = new_bytes # This is our response! So save it.
+            else:
+                time.sleep_ms(1) # wait 1 ms
+
+        # if there are not any new bytes in the internal buf, it failed!
+        if response == None:
+            raise Exception("Response from RYLY998 for command " + str(command) + " was not received after waiting " + str(response_timeout_ms) + " ms!")
+
+        return response
