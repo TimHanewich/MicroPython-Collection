@@ -278,9 +278,7 @@ class RYLR998:
 
         # collect any bytes still left over in UART Rx 
         # we do this just in case there were previously un-handled response bytes (i.e. +RCV)
-        new_bytes:bytes = self._uart.read()
-        if new_bytes != None:
-            self._rxbuf += new_bytes
+        self._colrx()
 
         # send command
         self._uart.write(command)
