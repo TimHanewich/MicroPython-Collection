@@ -301,13 +301,3 @@ class RYLR998:
             raise Exception("Response from RYLY998 for command " + str(command) + " was not received after waiting " + str(response_timeout_ms) + " ms!")
 
         return response
-    
-
-
-import machine
-u = machine.UART(0, baudrate=115200, tx=machine.Pin(16), rx=machine.Pin(17))
-lora = RYLR998(u)
-
-for _ in range(10):
-    print(lora._command_response("AT\r\n"))
-    print(lora._rxbuf)
