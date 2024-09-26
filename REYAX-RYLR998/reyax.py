@@ -271,6 +271,11 @@ class RYLR998:
     def _command_response(self, command:bytes, response_timeout_ms:int = 500)-> bytes:
         """Sends a byte sequence (AT command) to the RYLR988 module, and collects the response while still preserving any pre-existing bytes in the internal Rx buffer."""
 
+        # the _command_response() function should never return a "+RCV" response. +RCV is the message that shows up when a message was received.
+        # the reason it should never return an +RCV is because +RCV is NEVER the RESPONSE to a command,
+        # but rather a message that pops up when a message is received (not directly a result of a command sent to the RYLR998 via UART)
+        # Because of this rule, any +RCV will just be ignored and be stored in the buffer.
+
         # collect any bytes still left over in UART Rx and make note of the length of the internal buffer before the command is sent out and response for it is received
         self._colrx()
         len_before:int = len(self._rxbuf)
