@@ -251,7 +251,7 @@ class RYLR998:
             raise Exception("Received message beginning at index '" + str(i1) + "' in internal buf did not terminate in '\\r\\n'")
         
         # get bytes of the full RCV
-        rcv:bytes = self._rxbuf[i1:i2 + 2] # add +2 for  the length of the \r\n (actually 2 characters)
+        rcv:bytes = self._rxbuf[i1:i2 + 2] # add +2 for the length of the \r\n (actually 2 characters)
 
         # "pluck" it out
         self._rxbuf = self._rxbuf[0:i1] + self._rxbuf[i2+2:]
