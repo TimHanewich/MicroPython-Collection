@@ -147,7 +147,7 @@ class QueueService:
         """Clears the queue of all messages"""
 
         # make DELETE request
-        delete_url:str = urljoin(self._url, "messages")
+        delete_url:str = urljoin(self._url, "messages") + "?" + self._token
         response = requests.delete(delete_url)
 
         # handle error
