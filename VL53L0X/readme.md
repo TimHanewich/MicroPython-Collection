@@ -9,5 +9,7 @@ I did not write a library for these sensors myself, but am using two that I foun
 
 From what I can tell from testing, the maximum distance it can measure appears to be about 1,200 mm (after subtracting out the 50mm). After surpassing around this number, it reads 8140mm (after subtracting out the 50mm).
 
+From what I can tell, at least with my sensor and the example code [here](./src/main.py), the measurement isn't actually accurate. 1200mm is close to 4 feet, but in my tests it was reading 1200 mm at like maybe 2 feet. So this can be used for relative distances but might need some tweaking for accurate distance measuring.
+
 ## Sample Code
 For an example on how to use Kevin McAleer's version, see the code in [the src folder](./src/).
