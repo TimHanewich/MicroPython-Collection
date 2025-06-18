@@ -134,7 +134,7 @@ lcd.putstr(chr(0) + " <-- heart!")
 
 ## Advanced Examples
 All of the examples below assume you already have the two precursor modules on the Pi Pico (see above).
-- [Displaying battery voltage, temperature, and humidity](./samples/voltage-temp-rh.py) - uses a custom character and positioning calculation
+- [Displaying battery voltage, temperature, and humidity](./samples/voltage-temp-rh.py) - uses a custom character and positioning calculation. [Example display](https://i.imgur.com/XnHHV8R.png).
 
 ## Other Tutorials
 - [Tom's Hardware Tutorial](https://www.tomshardware.com/how-to/lcd-display-raspberry-pi-pico) is excellent.
