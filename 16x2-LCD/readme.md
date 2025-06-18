@@ -81,5 +81,56 @@ while True:
     time.sleep(2)
 ```
 
+## Displaying Custom Characters
+You can also display *custom characters* on the LCD display. Each character is a 5x8 matrix (5 pixels across, 8 pixels tall). You can fully customize a character by specifying what pixels should be populated.
+
+To do this, I highly recommend using [maxpromer's LCD Character Creator](https://maxpromer.github.io/LCD-Character-Creator/):
+
+![char creator](https://i.imgur.com/63wo5o5.png)
+
+As you can see, each row can be represented by 5 bits. For each row, we can use the state of the 5 bits to make a byte. For example, to represent the **first row** (top row) in Python, it would be `0b01010`. The second would be `0b11111`, the third `0b01110`, and so on.
+
+We can then put each of these rows into an array of bytes to represent a full character map:
+
+```
+heart = bytes([0b01010, 0b11111, 0b01110, 0b00100, 0b00000, 0b00000, 0b00000, 0b00000])
+```
+
+To display this on the LCD display, we first must "save it" to the LCD display's memory as one of the **eight** available CGRAM custom characters it can display.
+
+```
+lcd.custom_char(0, heart) # store the custom character (a heart in this case) to customer character 0
+```
+
+Finally, to then use that custom character, we can use the traditional `putstr()` method! Simply append `chr(0)` to the string to indicate character 0 being used in that position and the LCD will summon what it has stored for character 0.
+
+```
+lcd.putstr(chr(0) + " <-- heart!")
+```
+
+Full example below:
+
+```
+import machine
+import time
+import pico_i2c_lcd
+
+# Get LCD's I2C address
+i2c = machine.I2C(0, sda=machine.Pin(16), scl=machine.Pin(17)) # change the numbers here to your I2C interface!
+print("I2C Scan: " + str(i2c.scan()))
+addr = i2c.scan()[0]
+print("I will assume this is the I2C address of your LCD: " + str(addr) + " (" + str(hex(addr)) + ")")
+
+# set up LCD interface
+lcd = pico_i2c_lcd.I2cLcd(i2c, addr, 2, 16) # 2 is the height, 16 is the width (in # of characters)
+
+# create, store, and display a custom character!
+lcd.backlight_on()
+heart = bytes([0b01010, 0b11111, 0b01110, 0b00100, 0b00000, 0b00000, 0b00000, 0b00000])
+lcd.custom_char(0, heart) # store the custom character (a heart in this case) to customer character 0
+lcd.putstr(chr(0) + " <-- heart!")
+
+```
+
 ## Other Tutorials
 - [Tom's Hardware Tutorial](https://www.tomshardware.com/how-to/lcd-display-raspberry-pi-pico) is excellent.
