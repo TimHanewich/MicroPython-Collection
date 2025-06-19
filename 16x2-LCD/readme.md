@@ -136,5 +136,19 @@ lcd.putstr(chr(0) + " <-- heart!")
 All of the examples below assume you already have the two precursor modules on the Pi Pico (see above).
 - [Displaying battery voltage, temperature, and humidity](./samples/voltage-temp-rh.py) - uses a custom character and positioning calculation. [Example display](https://i.imgur.com/XnHHV8R.png).
 
+## Power Consumption
+How much current does the 16x2 LCD display consume? I ran a few tests that had the following results, summarized below:
+
+|Scenario|Current (mA)|
+|-|-|
+|Backlight On|23|
+|Backliht Off|1|
+
+*The test results above performed with a Raspberry Pi, with the Pi's nominal current consumption being subtracted out of the full current consumption. The amounts above are only the consumption of the LCD!*
+
+The number of pixels being displayed as **on** has no bearing on the current being consumed. In other words, whether the screen is blank or is full of text, or has every character being displayed with every pixel on (just a solid block), the current consumption is the same.
+
+Obviously there are minor spikes in current consumption as the LCD display is *changing* what it is displaying - but it is only momentarily!
+
 ## Other Tutorials
 - [Tom's Hardware Tutorial](https://www.tomshardware.com/how-to/lcd-display-raspberry-pi-pico) is excellent.
