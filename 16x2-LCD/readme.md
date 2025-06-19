@@ -135,6 +135,7 @@ lcd.putstr(chr(0) + " <-- heart!")
 ## Advanced Examples
 All of the examples below assume you already have the two precursor modules on the Pi Pico (see above).
 - [Displaying battery voltage, temperature, and humidity](./samples/voltage-temp-rh.py) - uses a custom character and positioning calculation. [Example display](https://i.imgur.com/XnHHV8R.png).
+- [Another test cycle](./samples/test-cycle.py), used for the Power Consumption test below.
 
 ## Power Consumption
 How much current does the 16x2 LCD display consume? I ran a few tests that had the following results, summarized below:
