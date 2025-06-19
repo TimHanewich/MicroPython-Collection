@@ -145,7 +145,7 @@ How much current does the 16x2 LCD display consume? I ran a few tests that had t
 |Backlight On|23|
 |Backliht Off|1|
 
-*The test results above performed with a Raspberry Pi, with the Pi's nominal current consumption being subtracted out of the full current consumption. The amounts above are only the consumption of the LCD!*
+*The test results above performed with a Raspberry Pi, with the Pi's nominal current consumption (22 mA) being subtracted out of the full current consumption. The amounts above are only the consumption of the LCD!*
 
 The number of pixels being displayed as **on** has no bearing on the current being consumed. In other words, whether the screen is blank or is full of text, or has every character being displayed with every pixel on (just a solid block), the current consumption is the same.
 
