@@ -14,6 +14,21 @@ The GUVA-S12SD only has three pins: **VCC**, **GND**, and **SIG**.
 I've seen some tutorials (and product descriptions) say you can connect it to a 5V or 3.3V supply - that is true! However, the *output voltage* of the sensor will differ base on the input VCC voltage. If you connect it to a 5V power source, its *max* reading will be close to 5V, well outside of the Pi's 3.3V range, possibly damaging it. So, I've found 3.3V to work perfectly!
 
 ## Example Code
+You can use [GUVA_S12SD.py](./GUVA_S12SD.py), a MicroPython module with a driver for the GUVA-S12SD to read the UV index:
+
+```
+import machine
+import GUVA_S12SD
+import time
+
+# set up GUVA
+guva = GUVA_S12SD.GUVA_S12SD(26) # ADC on GP26
+
+while True:
+    uvi:int = guva.UVI
+    print("UVI: " + str(uvi))
+    time.sleep(0.25)
+```
 
 ## How it Works
 ![mV to UV Index](https://i.imgur.com/qtNq3Wm.png)
