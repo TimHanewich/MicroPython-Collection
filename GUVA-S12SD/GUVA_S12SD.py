@@ -20,6 +20,7 @@ class GUVA_S12SD:
         
     @property
     def UVI(self) -> int:
+        """Return the UV Index (0-11)"""
         
         # measure ADC sample
         tot:int = 0.0
