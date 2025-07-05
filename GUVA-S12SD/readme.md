@@ -42,3 +42,6 @@ Anyway, once we calculate the voltage that the sensor is transmitting over its S
 ![mV to UV Index](https://i.imgur.com/qtNq3Wm.png)
 
 *Note, the graph is quite confusing... It is noted that UV index of 0 has a mV less than 50, and then a UV index of 1 begins at 227 mV... so what is the UV index between 50 mV and 227 mV? In my case, I simply assumed that window is also a UV index of 0!*
+
+## Other Sample Code
+In the [test-sample folder](./test-sample/), I wrote a lightweight test that continuously monitors UV Index and writes it to a small SSD-1306 display.
