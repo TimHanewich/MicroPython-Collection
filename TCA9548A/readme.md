@@ -1,5 +1,5 @@
 # TCA9548A I2C Multiplexer
-![https://i.imgur.com/VkSvdJu.jpeg]
+![pic](https://i.imgur.com/VkSvdJu.jpeg)
 
 The I2C protocol is a powerful tool for connecting multiple devices with minimal wiring, but it comes with a significant limitation—address conflicts. Many I2C peripherals have fixed addresses, making it impossible to connect identical devices to the same bus without interference. That’s where the TCA9548A I2C multiplexer comes in.
 
