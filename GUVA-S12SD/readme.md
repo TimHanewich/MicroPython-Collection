@@ -3,6 +3,8 @@ Ultraviolet (UV) rays are a form of electromagnetic radiation emitted by the sun
 
 The GUVA-S12SD sensor offers a practical way to monitor UV intensity by detecting light in the 240–370 nm range, which covers most of the UVA and UVB spectrum. It outputs an analog voltage proportional to the UV light it receives, allowing users to estimate the UV index and assess potential exposure levels. This makes it a valuable tool for DIY weather stations, wearable sun safety devices, and environmental monitoring projects.
 
+![sensor](https://i.imgur.com/b4UwUjA.jpeg)
+
 I purchased [these GUVA-S12SD sensors](https://a.co/d/jarZjR8) from Amazon and had success with them!
 
 ## Wiring
@@ -31,4 +33,12 @@ while True:
 ```
 
 ## How it Works
+The GUVA-S12SD is actually a quite simple sensor! It is an analog sensor, which means it simply outputs a voltage reading on its signal pin that indicates how much UV light it is getting at any given moment - as the UV light increases, the voltage rises; as the UV light decreases, the voltage decreases.
+
+Using a MicroController like the Raspberry Pi Pico, we can read this voltage level that the sensor outputs on its SIG (signal) pin to infer the UV Index. I won't go into detail about how this is done here, but it is quite simple, just check out [the code in the driver](./GUVA_S12SD.py)!
+
+Anyway, once we calculate the voltage that the sensor is transmitting over its SIG pin, we can use this handy graph that the manufacturer provides to convert from voltage (expressed here as *mV*) to the UV Index:
+
 ![mV to UV Index](https://i.imgur.com/qtNq3Wm.png)
+
+*Note, the graph is quite confusing... It is noted that UV index of 0 has a mV less than 50, and then a UV index of 1 begins at 227 mV... so what is the UV index between 50 mV and 227 mV? In my case, I simply assumed that window is also a UV index of 0!*
