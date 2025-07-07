@@ -109,9 +109,10 @@ class HC12:
         else: # if they did specify, then wait until we receive it and then terminate
             started_at_ticks_ms = time.ticks_ms()
             while (time.ticks_ms() - started_at_ticks_ms) < timeout_ms:
-                self._flush_rx() # "br" short for bytes received, the number of new bytes received
-                if self._rx_buffer.endswith(expected):
-                    break
+                nb:int = self._flush_rx() # "br" short for bytes received, the number of new bytes received
+                if nb > 0:
+                    if self._rx_buffer.endswith(expected):
+                        break
                 time.sleep_ms(1)
         len_after:int = len(self._rx_buffer)
 
