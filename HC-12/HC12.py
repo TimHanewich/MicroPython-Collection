@@ -37,7 +37,8 @@ class HC12:
     def pulse(self) -> bool:
         """Runs a simple test to validate the HC-12 is connected and operating."""
         try:
-            return self._command_response("AT\r\n".encode()) == "OK\r\n".encode()
+            response:bytes = self._command_response("AT\r\n".encode(), "OK\r\n".encode())
+            return response == "OK\r\n".encode()
         except: # error was raised, i.e. it did not response at all! (not even plugged in and working?)
             return False
     
@@ -86,7 +87,11 @@ class HC12:
             #raise Exception("Unable to interpret transmission mode from response '" + str(response) + "'")
 
     def _command_response(self, cmd:bytes, expected:bytes = None, timeout_ms:int = 500) -> bytes:
-        """Brokers the sending of AT commands and collecting a response."""
+        """
+        Brokers the sending of AT commands and collecting a response.
+        If you do NOT provide a expected value, it will wait the entirety of the timeout to collect all bytes in that period.
+        If you DO provide an expected value, it will stop waiting as soon as it receives what you expected, not waiting the entire timeout (faster).
+        """
 
         # enter into AT mode
         self._set_pin.low() # pull it low to go into AT mode
@@ -97,17 +102,17 @@ class HC12:
         len_before:int = len(self._rx_buffer) # record the length of the RX buffer BEFORE we send (for comparison purposes later)
         self._uart.write(cmd) # write the command
 
-        if expected == None:
+        # receive!
+        if expected == None: # if they did not specify what they are expecting, just wait the full timeout
             time.sleep_ms(timeout_ms)
             self._flush_rx()
-        else:
+        else: # if they did specify, then wait until we receive it and then terminate
             started_at_ticks_ms = time.ticks_ms()
             while (time.ticks_ms() - started_at_ticks_ms) < timeout_ms:
-                br:int = self._flush_rx() # "br" short for bytes received, the number of new bytes received
-                if br > 1:
-                    if self._rx_buffer.endswith(expected):
-                        break
-                time.sleep(1)
+                self._flush_rx() # "br" short for bytes received, the number of new bytes received
+                if self._rx_buffer.endswith(expected):
+                    break
+                time.sleep_ms(1)
         len_after:int = len(self._rx_buffer)
 
         # We either received data just now or just hit the timeout
@@ -116,7 +121,7 @@ class HC12:
             raise Exception("No response from HC-12 module after waiting " + str(timeout_ms) + " ms for response from command '" + str(cmd) + "'.")
         
         # piece out what we just received
-        response:bytes = self._rx_buffer[-len_after:] # get the last X bytes we just received
+        response:bytes = bytes(self._rx_buffer[-len_after:]) # get the last X bytes we just received
         self._rx_buffer[-len_after:] = b'' # delete the last X bytes we just received
 
         # go back into non-AT mode (normal mode)
@@ -127,11 +132,6 @@ class HC12:
 
     
 uart = machine.UART(0, tx=machine.Pin(16), rx=machine.Pin(17))
-
 hc12 = HC12(uart, 15)
+
 print(hc12.pulse)
-print(hc12.channel)
-hc12.power = 4
-print(hc12.power)
-print(hc12.mode)
-print(hc12.read())
