@@ -41,7 +41,6 @@ class HC12:
     @property
     def pulse(self) -> bool:
         response = self._command_response("AT\r\n".encode())
-        print("PULSE2 Response: " + str(response))
         return response == "OK\r\n".encode()
             
     @property
