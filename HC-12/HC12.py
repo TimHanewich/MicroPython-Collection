@@ -25,7 +25,7 @@ class HC12:
         else:
             return 0
 
-    def read(self) -> bytes:
+    def receive(self) -> bytes:
         """Returns any bytes that have been received (intentionally excludes any AT command responses)."""
         self._flush_rx() # read anything else awaiting on the UART RX buffer
         ToReturn:bytes = bytes(self._rx_buffer) # prepare to return
