@@ -99,11 +99,7 @@ class HC12:
             raise Exception("Setting transmission mode to " + str(mode) + " was not successful. Response from HC-12 was '" + str(response) + "'")
 
     def _command_response(self, cmd:bytes) -> bytes:
-        """
-        Brokers the sending of AT commands and collecting a response.
-        If you do NOT provide a expected value, it will wait the entirety of the timeout to collect all bytes in that period.
-        If you DO provide an expected value, it will stop waiting as soon as it receives what you expected, not waiting the entire timeout (faster).
-        """
+        """Brokers the sending of AT commands and collecting a response. Returns None if nothing was received."""
 
         # enter into AT mode
         self._set_pin.low() # pull it low to go into AT mode
