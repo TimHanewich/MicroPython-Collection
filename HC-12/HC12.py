@@ -57,6 +57,12 @@ class HC12:
         self._set_pin.high()
             
         return response == "OK\r\n".encode()
+    
+    @property
+    def pulse2(self) -> bool:
+        response = self._command_response("AT\r\n".encode())
+        print("PULSE2 Response: " + str(response))
+        return response == "OK\r\n".encode()
             
     
     @property
@@ -114,7 +120,7 @@ class HC12:
         if response != expected.encode():
             raise Exception("Setting transmission mode to " + str(mode) + " was not successful. Response from HC-12 was '" + str(response) + "'")
 
-    def _command_response(self, cmd:bytes, expected:bytes = None, timeout_ms:int = 500) -> bytes:
+    def _command_response(self, cmd:bytes) -> bytes:
         """
         Brokers the sending of AT commands and collecting a response.
         If you do NOT provide a expected value, it will wait the entirety of the timeout to collect all bytes in that period.
@@ -123,12 +129,13 @@ class HC12:
 
         # enter into AT mode
         self._set_pin.low() # pull it low to go into AT mode
+        time.sleep(self._procTime) # wait a moment for AT mode to be realized
 
         # flush the existing buffer so what we get next is for sure the response from the AT command
         self._flush_rx()
 
         # write AT
-        self._uart.write("AT\r\n".encode())
+        self._uart.write(cmd)
 
         # wait for expected response
         response:bytes = self._uart.readline()
@@ -145,10 +152,4 @@ import time
 uart = machine.UART(0, rx=machine.Pin(17), tx=machine.Pin(16))
 hc12 = HC12(uart, 15)
 
-time.sleep(3.0)
 print(hc12.pulse2)
-
-while True:
-    print(hc12.receive())
-    print(hc12.pulse)
-    time.sleep(0.5)
