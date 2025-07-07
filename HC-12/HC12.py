@@ -74,7 +74,34 @@ class HC12:
     @property
     def mode(self) -> int:
         """Returns the transmission mode of the HC-12, either 1, 2, 3, or 4"""
-        response:bytes = self._command_response("AT+RX\r\n".encode()) # Example: b'OK+B9600\r\nOK+RC001\r\nOK+RP:+08dBm\r\nOK+FU3\r\n'. I find the second half of that takes a bit of time to populate, so adding extra long timeout
+
+        # We have to handle this one differently than using the ._command_response() function because this one gives a whole bunch of lines and takes a moment.
+        # there is no way to get ONLY the transmission mode (FU) with a commmand. We have to ask for all the parameters and parse it out
+
+        # enter into AT mode
+        self._set_pin.low() # pull it low to go into AT mode
+        time.sleep(self._procTime) # wait a moment for AT mode to be realized
+
+        # flush the existing buffer so what we get next is for sure the response from the AT command
+        self._flush_rx()
+
+        # write AT command
+        self._uart.write("AT+RX\r\n".encode())
+
+        # get full response
+        # the last part of the transmission should be the OK+FU, what we are looking for
+        started_at_ticks_ms:int = time.ticks_ms()
+        response:bytes = bytes()
+        while "OK+FU".encode() not in response or (time.ticks_ms() - started_at_ticks_ms) > 1000:
+            time.sleep(self._procTime)
+            data:bytes = self._uart.readline()
+            if data != None:
+                response = response + data
+
+        # enter back into normal mode
+        self._set_pin.high()
+
+        # parse out transmission mode (FU)
         if response.endswith("OK+FU1\r\n".encode()):
             return 1
         elif response.endswith("OK+FU2\r\n".encode()):
