@@ -15,9 +15,12 @@ class HC12:
 
     def _flush_rx(self) -> int:
         """Read all bytes on the UART RX buffer and bring them into an internal buffer. Returns the number of new bytes that were read and captured."""
-        new_data:bytes = self._uart.read()
-        self._rx_buffer = self._rx_buffer + new_data
-        return len(new_data)
+        if self._uart.any() > 0: # if there is data to receive
+            new_data:bytes = self._uart.read()
+            self._rx_buffer = self._rx_buffer + new_data
+            return len(new_data)
+        else:
+            return 0
 
     @property
     def pulse(self) -> bool:
@@ -86,7 +89,7 @@ class HC12:
         # piece out what we just received
         len_after = len(self._rx_buffer)
         response:bytes = self._rx_buffer[-len_after:] # get the last X bytes we just received
-        del self._rx_buffer[-len_after:] # delete the last X bytes we just received
+        self._rx_buffer[-len_after:] = b'' # delete the last X bytes we just received
 
         # go back into non-AT mode (normal mode)
         self._set_pin.high() # pull it high to return to normal mode
