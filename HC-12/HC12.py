@@ -67,7 +67,7 @@ class HC12:
         """Set the transmitting power to a level between 1-8."""
         asstr:str = "AT+P" + str(level) + "\r\n"
         expected:str = "OK+P" + str(level) + "\r\n"
-        response:bytes = self._command_response(asstr.encode(), expected)
+        response:bytes = self._command_response(asstr.encode(), expected.encode())
         if "OK+P".encode() not in response:
             raise Exception("Unable to set transmitting power to " + str(level) + "!")
         
