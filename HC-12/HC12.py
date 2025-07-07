@@ -141,14 +141,3 @@ class HC12:
         time.sleep(self._procTime) # wait a moment
 
         return response
-
-    
-uart = machine.UART(0, tx=machine.Pin(16), rx=machine.Pin(17))
-hc12 = HC12(uart, 15)
-
-print(hc12.pulse)
-print(hc12.channel)
-hc12.power = 8
-print(hc12.power)
-hc12.mode = 3
-print(hc12.mode)
