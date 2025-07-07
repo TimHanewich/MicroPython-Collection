@@ -229,12 +229,3 @@ class HC12:
         self._set_pin.high()
 
         return response
-
-
-import machine
-import time
-
-uart = machine.UART(0, rx=machine.Pin(17), tx=machine.Pin(16))
-hc12 = HC12(uart, 15)
-
-print(hc12.status)
