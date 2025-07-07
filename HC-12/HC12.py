@@ -141,6 +141,27 @@ class HC12:
         if "OK+FU".encode() not in response:
             raise Exception("Setting transmission mode to " + str(mode) + " was not successful. Response from HC-12 was '" + str(response) + "'")
 
+    def sleep(self) -> None:
+        """Puts the HC-12 in sleep mode where receiving is suspended with very low power consumption."""
+        response:bytes = self._command_response("AT+SLEEP\r\n".encode())
+        if response != "OK+SLEEP\r\n".encode():
+            raise Exception("Failed to put HC-12 into sleep mode.")
+
+    @property
+    def firmware(self) -> str:
+        """Return firmware version information on HC-12 module."""
+        response:bytes = self._command_response("AT+V\r\n".encode())
+        if response == None:
+            return response
+        else:
+            return response.decode()
+        
+    def reset(self) -> None:
+        """Reset HC-12 to default baud rate, channel, and transmission mode."""
+        response:bytes = self._command_response("AT+DEFAULT\r\n".encode())
+        if response != "OK+DEFAULT\r\n".encode():
+            raise Exception("Failed to reset HC-12 back to defaults.")
+
     def _command_response(self, cmd:bytes) -> bytes:
         """Brokers the sending of AT commands and collecting a response. Returns None if nothing was received."""
 
@@ -169,8 +190,4 @@ import time
 uart = machine.UART(0, rx=machine.Pin(17), tx=machine.Pin(16))
 hc12 = HC12(uart, 15)
 
-print(hc12.channel)
-hc12.channel = 1
-print(hc12.channel)
-
-#print(hc12._command_response("AT+V\r\n"))
+hc12.reset()
