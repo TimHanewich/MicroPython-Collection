@@ -66,14 +66,15 @@ class HC12:
     def power(self, level:int) -> None:
         """Set the transmitting power to a level between 1-8."""
         asstr:str = "AT+P" + str(level) + "\r\n"
-        response:bytes = self._command_response(asstr.encode())
+        expected:str = "OK+P" + str(level) + "\r\n"
+        response:bytes = self._command_response(asstr.encode(), expected)
         if "OK+P".encode() not in response:
             raise Exception("Unable to set transmitting power to " + str(level) + "!")
         
     @property
     def mode(self) -> int:
         """Returns the transmission mode of the HC-12, either 1, 2, 3, or 4"""
-        response:bytes = self._command_response("AT+RX\r\n".encode()) # b'OK+B9600\r\nOK+RC001\r\nOK+RP:+08dBm\r\nOK+FU3\r\n'
+        response:bytes = self._command_response("AT+RX\r\n".encode(), expected=None, timeout_ms=1000) # Example: b'OK+B9600\r\nOK+RC001\r\nOK+RP:+08dBm\r\nOK+FU3\r\n'. I find the second half of that takes a bit of time to populate, so adding extra long timeout
         if response.endswith("OK+FU1\r\n".encode()):
             return 1
         elif response.endswith("OK+FU2\r\n".encode()):
@@ -83,8 +84,18 @@ class HC12:
         elif response.endswith("OK+FU4\r\n".encode()):
             return 4
         else:
-            return 0
-            #raise Exception("Unable to interpret transmission mode from response '" + str(response) + "'")
+            raise Exception("Unable to interpret transmission mode from response '" + str(response) + "'")
+    
+    @mode.setter
+    def mode(self, mode:int) -> None:
+        """Set the transmission mode of the HC-12 as FU1, FU2, FU3, or FU4."""
+        if mode not in [1,2,3,4]:
+            raise Exception("Transmission mode must be either 1, 2, 3, or 4.")
+        cmd:str = "AT+FU" + str(mode) + "\r\n"
+        expected:str = "OK+FU" + str(mode) + "\r\n"
+        response:bytes = self._command_response(cmd.encode(), expected.encode())
+        if response != expected.encode():
+            raise Exception("Setting transmission mode to " + str(mode) + " was not successful. Response from HC-12 was '" + str(response) + "'")
 
     def _command_response(self, cmd:bytes, expected:bytes = None, timeout_ms:int = 500) -> bytes:
         """
@@ -136,3 +147,8 @@ uart = machine.UART(0, tx=machine.Pin(16), rx=machine.Pin(17))
 hc12 = HC12(uart, 15)
 
 print(hc12.pulse)
+print(hc12.channel)
+hc12.power = 8
+print(hc12.power)
+hc12.mode = 3
+print(hc12.mode)
