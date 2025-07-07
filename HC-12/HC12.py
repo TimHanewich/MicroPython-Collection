@@ -53,6 +53,24 @@ class HC12:
         else:
             raise Exception("Unable to extract channel value from HC-12 response '" + str(response) + "'.")
         
+    @channel.setter
+    def channel(self, ch:int) -> None:
+
+        if ch < 1 or ch > 127:
+            raise Exception("Unable to set channel to '" + str(ch) + "'. Must be between 1 and 127.")
+
+        # Get channel as 00# (3 digits)
+        chstr:str = str(ch)
+        while len(chstr) < 3:
+            chstr = "0" + chstr
+
+        # set the channel
+        setter:str = "AT+C" + chstr + "\r\n"
+        response:bytes = self._command_response(setter.encode())
+        if "OK+C".encode() not in response:
+            raise Exception("Setting to channel '" + str(ch) + "' failed!")
+
+        
     @property
     def power(self) -> int:
         """Checks the transmitter power, in dBm, the HC-12 is currently using."""
@@ -151,7 +169,8 @@ import time
 uart = machine.UART(0, rx=machine.Pin(17), tx=machine.Pin(16))
 hc12 = HC12(uart, 15)
 
-print(hc12.pulse)
 print(hc12.channel)
-print(hc12.power)
-print(hc12.mode)
+hc12.channel = 1
+print(hc12.channel)
+
+#print(hc12._command_response("AT+V\r\n"))
