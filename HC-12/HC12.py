@@ -13,6 +13,9 @@ class HC12:
         self._rx_buffer:bytearray = bytearray()
         self._procTime:float = 0.15 # standard processing time used across functions
 
+        # set up
+        self._uart.read() # clear RX buffer
+
     def _flush_rx(self) -> int:
         """Read all bytes on the UART RX buffer and bring them into an internal buffer. Returns the number of new bytes that were read and captured."""
         if self._uart.any() > 0: # if there is data to receive
