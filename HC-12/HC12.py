@@ -123,39 +123,18 @@ class HC12:
 
         # enter into AT mode
         self._set_pin.low() # pull it low to go into AT mode
-        time.sleep(self._procTime) # wait a moment
 
-        # send data
+        # flush the existing buffer so what we get next is for sure the response from the AT command
         self._flush_rx()
-        len_before:int = len(self._rx_buffer) # record the length of the RX buffer BEFORE we send (for comparison purposes later)
-        self._uart.write(cmd) # write the command
 
-        # receive!
-        if expected == None: # if they did not specify what they are expecting, just wait the full timeout
-            time.sleep_ms(timeout_ms)
-            self._flush_rx()
-        else: # if they did specify, then wait until we receive it and then terminate
-            started_at_ticks_ms = time.ticks_ms()
-            while (time.ticks_ms() - started_at_ticks_ms) < timeout_ms:
-                nb:int = self._flush_rx() # "br" short for bytes received, the number of new bytes received
-                if nb > 0:
-                    if self._rx_buffer.endswith(expected):
-                        break
-                time.sleep_ms(1)
-        len_after:int = len(self._rx_buffer)
+        # write AT
+        self._uart.write("AT\r\n".encode())
 
-        # We either received data just now or just hit the timeout
-        # If we received nothing new, that means we hit a timeout. So raise an exception because we didn't get an expected response.
-        if len_after == len_before:
-            raise Exception("No response from HC-12 module after waiting " + str(timeout_ms) + " ms for response from command '" + str(cmd) + "'.")
-        
-        # piece out what we just received
-        response:bytes = bytes(self._rx_buffer[-len_after:]) # get the last X bytes we just received
-        self._rx_buffer[-len_after:] = b'' # delete the last X bytes we just received
+        # wait for expected response
+        response:bytes = self._uart.readline()
 
-        # go back into non-AT mode (normal mode)
-        self._set_pin.high() # pull it high to return to normal mode
-        time.sleep(self._procTime) # wait a moment
+        # enter back into normal mode
+        self._set_pin.high()
 
         return response
 
