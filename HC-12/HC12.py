@@ -14,7 +14,7 @@ class HC12:
         self._procTime:float = 0.15 # standard processing time used across functions
 
         # set up
-        self._uart.read() # clear RX buffer
+        #self._uart.read() # clear RX buffer
 
     def _flush_rx(self) -> int:
         """Read all bytes on the UART RX buffer and bring them into an internal buffer. Returns the number of new bytes that were read and captured."""
