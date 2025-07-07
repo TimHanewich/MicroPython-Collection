@@ -55,7 +55,7 @@ class HC12:
         """Set the transmitting power to a level between 1-8."""
         asstr:str = "AT+P" + str(level) + "\r\n"
         response:bytes = self._command_response(asstr.encode())
-        if response.startswith("OK+P".encode()) == False:
+        if "OK+P".encode() not in response:
             raise Exception("Unable to set transmitting power to " + str(level) + "!")
 
     def _command_response(self, cmd:bytes, timeout_ms:int = 500) -> bytes:
@@ -80,8 +80,7 @@ class HC12:
             else: # if we did NOT receive at least one new byte
                 if ReceivedAtLeastOneByte: # But if we received one earlier, that means we must be at the END of the transmission
                     break # so break out of this loop... the receiving is done!
-                else: # if we haven't received a single byte yet...
-                    time.sleep_ms(50) # wait a moment
+            time.sleep_ms(50) # wait a moment
         len_after:int = len(self._rx_buffer)
 
         # We either received data just now or just hit the timeout
@@ -105,5 +104,5 @@ uart = machine.UART(0, tx=machine.Pin(16), rx=machine.Pin(17))
 hc12 = HC12(uart, 15)
 print(hc12.pulse)
 print(hc12.channel)
-hc12.power = 5
+hc12.power = 4
 print(hc12.power)
