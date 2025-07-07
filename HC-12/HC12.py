@@ -35,7 +35,7 @@ class HC12:
     
     def send(self, data:bytes) -> None:
         """Sends data via the HC-12."""
-        self._set_pin.high() # put set pin in high, its normal state for sending data (not sending AT commands)
+        self._set_pin.high() # put set pin in high, its normal state for sending data (not sending AT commands)... it should be in this anyway, but doing it again to be sure.
         self._uart.write(data)
     
     @property
@@ -67,15 +67,14 @@ class HC12:
     def power(self, level:int) -> None:
         """Set the transmitting power to a level between 1-8."""
         asstr:str = "AT+P" + str(level) + "\r\n"
-        expected:str = "OK+P" + str(level) + "\r\n"
-        response:bytes = self._command_response(asstr.encode(), expected.encode())
+        response:bytes = self._command_response(asstr.encode())
         if "OK+P".encode() not in response:
             raise Exception("Unable to set transmitting power to " + str(level) + "!")
         
     @property
     def mode(self) -> int:
         """Returns the transmission mode of the HC-12, either 1, 2, 3, or 4"""
-        response:bytes = self._command_response("AT+RX\r\n".encode(), expected=None, timeout_ms=1000) # Example: b'OK+B9600\r\nOK+RC001\r\nOK+RP:+08dBm\r\nOK+FU3\r\n'. I find the second half of that takes a bit of time to populate, so adding extra long timeout
+        response:bytes = self._command_response("AT+RX\r\n".encode()) # Example: b'OK+B9600\r\nOK+RC001\r\nOK+RP:+08dBm\r\nOK+FU3\r\n'. I find the second half of that takes a bit of time to populate, so adding extra long timeout
         if response.endswith("OK+FU1\r\n".encode()):
             return 1
         elif response.endswith("OK+FU2\r\n".encode()):
@@ -93,9 +92,8 @@ class HC12:
         if mode not in [1,2,3,4]:
             raise Exception("Transmission mode must be either 1, 2, 3, or 4.")
         cmd:str = "AT+FU" + str(mode) + "\r\n"
-        expected:str = "OK+FU" + str(mode) + "\r\n"
-        response:bytes = self._command_response(cmd.encode(), expected.encode())
-        if response != expected.encode():
+        response:bytes = self._command_response(cmd.encode())
+        if "OK+FU".encode() not in response:
             raise Exception("Setting transmission mode to " + str(mode) + " was not successful. Response from HC-12 was '" + str(response) + "'")
 
     def _command_response(self, cmd:bytes) -> bytes:
@@ -111,7 +109,7 @@ class HC12:
         # write AT
         self._uart.write(cmd)
 
-        # wait for expected response
+        # wait for response
         response:bytes = self._uart.readline()
 
         # enter back into normal mode
@@ -126,4 +124,7 @@ import time
 uart = machine.UART(0, rx=machine.Pin(17), tx=machine.Pin(16))
 hc12 = HC12(uart, 15)
 
-print(hc12.pulse2)
+print(hc12.pulse)
+print(hc12.channel)
+print(hc12.power)
+print(hc12.mode)
