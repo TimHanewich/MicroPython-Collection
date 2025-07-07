@@ -37,34 +37,13 @@ class HC12:
         """Sends data via the HC-12."""
         self._set_pin.high() # put set pin in high, its normal state for sending data (not sending AT commands)
         self._uart.write(data)
-        
-    @property 
-    def pulse(self) -> bool:
-
-        # enter into AT mode
-        self._set_pin.low() # pull it low to go into AT mode
-
-        # flush the existing buffer so what we get next is for sure the response from the AT command
-        self._flush_rx()
-
-        # write AT
-        self._uart.write("AT\r\n".encode())
-
-        # wait for expected response
-        response:bytes = self._uart.readline()
-
-        # enter back into normal mode
-        self._set_pin.high()
-            
-        return response == "OK\r\n".encode()
     
     @property
-    def pulse2(self) -> bool:
+    def pulse(self) -> bool:
         response = self._command_response("AT\r\n".encode())
         print("PULSE2 Response: " + str(response))
         return response == "OK\r\n".encode()
             
-    
     @property
     def channel(self) -> int:
         """Checks which channel the HC-12 is currently operating on."""
