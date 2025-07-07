@@ -1,5 +1,5 @@
 """
-HC12.py MicroPython driver for the HC-12 for the HC-12 wireless serial communication module
+HC12.py MicroPython driver for the HC-12 wireless serial communication module
 Author Tim Hanewich, github.com/TimHanewich
 Find updates to this code: https://github.com/TimHanewich/MicroPython-Collection/tree/master/HC-12
 
