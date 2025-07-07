@@ -73,11 +73,37 @@ class HC12:
         
     @property
     def power(self) -> int:
-        """Checks the transmitter power, in dBm, the HC-12 is currently using."""
+        """
+        Checks the transmitter power the HC-12 is currently using, from 1-8.
+        Level 1 = -1 dBm
+        Level 2 = 2 dBM
+        Level 3 = 5 dBM
+        Level 4 = 8 dBM
+        Level 5 = 11 dBM
+        Level 6 = 14 dBM
+        Level 7 = 17 dBM
+        Level 8 = 20 dBM
+        """
         response:bytes = self._command_response("AT+RP\r\n".encode())
         responseSTR:str = response.decode()  # 'b'OK+RP:-01dBm\r\n'', 'b'OK+RP:+20dBm\r\n''
         if responseSTR.startswith("OK+RP:"):
-            return int(responseSTR[7:9])
+            dBm:int = int(responseSTR[7:9])
+            if dBm == -1:
+                return 1
+            elif dBm == 2:
+                return 2
+            elif dBm == 5:
+                return 3
+            elif dBm == 8:
+                return 4
+            elif dBm == 11:
+                return 5
+            elif dBm == 14:
+                return 6
+            elif dBm == 17:
+                return 7
+            elif dBm == 20:
+                return 8
         else:
             raise Exception("Unable to extract transmitting power value from HC-12 response '" + str(response) + "'.")
         
@@ -161,6 +187,18 @@ class HC12:
         response:bytes = self._command_response("AT+DEFAULT\r\n".encode())
         if response != "OK+DEFAULT\r\n".encode():
             raise Exception("Failed to reset HC-12 back to defaults.")
+        
+    @property
+    def status(self) -> dict:
+        """Returns a summary of all settings."""
+        try:
+            ToReturn = {}
+            ToReturn["channel"] = self.channel
+            ToReturn["power"] = self.power
+            ToReturn["mode"] = self.mode
+            return ToReturn
+        except Exception as ex:
+            raise Exception("Unable to acquire status values! Internal error: " + str(ex))
 
     def _command_response(self, cmd:bytes) -> bytes:
         """Brokers the sending of AT commands and collecting a response. Returns None if nothing was received."""
@@ -190,4 +228,4 @@ import time
 uart = machine.UART(0, rx=machine.Pin(17), tx=machine.Pin(16))
 hc12 = HC12(uart, 15)
 
-hc12.reset()
+print(hc12.status)
