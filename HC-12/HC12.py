@@ -4,9 +4,20 @@ import time
 class HC12:
 
     def __init__(self, uart:machine.UART, SET_pin:int):
+
+        # primary I/O (UART and the SET pin)
         self._uart = uart
         self._set_pin = machine.Pin(SET_pin, machine.Pin.OUT)
-        self._procTime:float = 0.15 # processing time
+
+        # Internal process variables
+        self._rx_buffer:bytearray = bytearray()
+        self._procTime:float = 0.15 # standard processing time used across functions
+
+    def _flush_rx(self) -> int:
+        """Read all bytes on the UART RX buffer and bring them into an internal buffer. Returns the number of new bytes that were read and captured."""
+        new_data:bytes = self._uart.read()
+        self._rx_buffer = self._rx_buffer + new_data
+        return len(new_data)
 
     @property
     def pulse(self) -> bool:
@@ -52,25 +63,30 @@ class HC12:
         time.sleep(self._procTime) # wait a moment
         
         # send data
-        self._uart.read() # clears the RX buffer first 
+        self._flush_rx()
         self._uart.write(cmd) # write the command
         
         # Wait for data to be received or until we hit the timeout
+        len_before:int = len(self._rx_buffer)
         started_at_ticks_ms = time.ticks_ms()
         while (time.ticks_ms() - started_at_ticks_ms) < timeout_ms:
-            if self._uart.any() > 0: # if we have bytes on the line, break out of the while loop
+            if self._flush_rx() > 0: # if we captured bytes
                 break
             else: # no bytes yet, wait a bit
                 time.sleep(self._procTime)
+        len_after:int = len(self._rx_buffer)
 
-        # If there is not data to be received (we must have hit our timeout), raise Exception
-        if self._uart.any() == 0:
-            raise Exception("No response from HC-12 module after waiting " + str(timeout_ms) + " ms for command '" + str(cmd) + "'.")
+        # We either received data just now or just hit the timeout
+        if len_after > len_before: # we received something!
+            time.sleep(self._procTime) # wait a moment
+            self._flush_rx() # and then grab anything else, just in case it was still in transmission
         else: # there is at least 1 byte!
-            time.sleep(self._procTime) # give it an extra moment for any more bytes to finish being received
+            raise Exception("No response from HC-12 module after waiting " + str(timeout_ms) + " ms for command '" + str(cmd) + "'.")
         
-        # receive it
-        response:bytes = self._uart.read()
+        # piece out what we just received
+        len_after = len(self._rx_buffer)
+        response:bytes = self._rx_buffer[-len_after:] # get the last X bytes we just received
+        del self._rx_buffer[-len_after:] # delete the last X bytes we just received
 
         # go back into non-AT mode (normal mode)
         self._set_pin.high() # pull it high to return to normal mode
