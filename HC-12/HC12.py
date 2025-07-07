@@ -68,6 +68,22 @@ class HC12:
         response:bytes = self._command_response(asstr.encode())
         if "OK+P".encode() not in response:
             raise Exception("Unable to set transmitting power to " + str(level) + "!")
+        
+    @property
+    def mode(self) -> int:
+        """Returns the transmission mode of the HC-12, either 1, 2, 3, or 4"""
+        response:bytes = self._command_response("AT+RX\r\n".encode()) # b'OK+B9600\r\nOK+RC001\r\nOK+RP:+08dBm\r\nOK+FU3\r\n'
+        if response.endswith("OK+FU1\r\n".encode()):
+            return 1
+        elif response.endswith("OK+FU2\r\n".encode()):
+            return 2
+        elif response.endswith("OK+FU3\r\n".encode()):
+            return 3
+        elif response.endswith("OK+FU4\r\n".encode()):
+            return 4
+        else:
+            return 0
+            #raise Exception("Unable to interpret transmission mode from response '" + str(response) + "'")
 
     def _command_response(self, cmd:bytes, timeout_ms:int = 500) -> bytes:
         """Brokers the sending of AT commands and collecting a response."""
@@ -117,4 +133,5 @@ print(hc12.pulse)
 print(hc12.channel)
 hc12.power = 4
 print(hc12.power)
+print(hc12.mode)
 print(hc12.read())
