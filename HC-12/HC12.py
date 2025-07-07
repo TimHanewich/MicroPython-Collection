@@ -37,18 +37,9 @@ class HC12:
         """Sends data via the HC-12."""
         self._set_pin.high() # put set pin in high, its normal state for sending data (not sending AT commands)
         self._uart.write(data)
-
-    @property
-    def pulse(self) -> bool:
-        """Runs a simple test to validate the HC-12 is connected and operating."""
-        try:
-            response:bytes = self._command_response("AT\r\n".encode(), "OK\r\n".encode())
-            return response == "OK\r\n".encode()
-        except: # error was raised, i.e. it did not response at all! (not even plugged in and working?)
-            return False
         
     @property 
-    def pulse2(self) -> bool:
+    def pulse(self) -> bool:
 
         # enter into AT mode
         self._set_pin.low() # pull it low to go into AT mode
