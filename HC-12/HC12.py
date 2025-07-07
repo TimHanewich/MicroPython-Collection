@@ -85,7 +85,7 @@ class HC12:
             return 0
             #raise Exception("Unable to interpret transmission mode from response '" + str(response) + "'")
 
-    def _command_response(self, cmd:bytes, timeout_ms:int = 500) -> bytes:
+    def _command_response(self, cmd:bytes, expected:bytes = None, timeout_ms:int = 500) -> bytes:
         """Brokers the sending of AT commands and collecting a response."""
 
         # enter into AT mode
@@ -96,24 +96,24 @@ class HC12:
         self._flush_rx()
         len_before:int = len(self._rx_buffer) # record the length of the RX buffer BEFORE we send (for comparison purposes later)
         self._uart.write(cmd) # write the command
-        
-        # Wait for data to be received or until we hit the timeout
-        ReceivedAtLeastOneByte:bool = False # tracker that we have received at least one new byte
-        started_at_ticks_ms = time.ticks_ms()
-        while (time.ticks_ms() - started_at_ticks_ms) < timeout_ms:
-            br:int = self._flush_rx() # "br" short for bytes received, the number of new bytes received
-            if br >= 1: # if we received at least one new byte
-                ReceivedAtLeastOneByte = True # flag as true
-            else: # if we did NOT receive at least one new byte
-                if ReceivedAtLeastOneByte: # But if we received one earlier, that means we must be at the END of the transmission
-                    break # so break out of this loop... the receiving is done!
-            time.sleep_ms(50) # wait a moment
+
+        if expected == None:
+            time.sleep_ms(timeout_ms)
+            self._flush_rx()
+        else:
+            started_at_ticks_ms = time.ticks_ms()
+            while (time.ticks_ms() - started_at_ticks_ms) < timeout_ms:
+                br:int = self._flush_rx() # "br" short for bytes received, the number of new bytes received
+                if br > 1:
+                    if self._rx_buffer.endswith(expected):
+                        break
+                time.sleep(1)
         len_after:int = len(self._rx_buffer)
 
         # We either received data just now or just hit the timeout
         # If we received nothing new, that means we hit a timeout. So raise an exception because we didn't get an expected response.
         if len_after == len_before:
-            raise Exception("No response from HC-12 module after waiting " + str(timeout_ms) + " ms for command '" + str(cmd) + "'.")
+            raise Exception("No response from HC-12 module after waiting " + str(timeout_ms) + " ms for response from command '" + str(cmd) + "'.")
         
         # piece out what we just received
         response:bytes = self._rx_buffer[-len_after:] # get the last X bytes we just received
