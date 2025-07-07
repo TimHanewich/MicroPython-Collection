@@ -117,7 +117,16 @@ class HC12:
         
     @property
     def mode(self) -> int:
-        """Returns the transmission mode of the HC-12, either 1, 2, 3, or 4"""
+        """
+        Returns the transmission mode of the HC-12 ("FU", i.e. FU1, FU2, etc.), either 1, 2, 3, or 4
+        
+        FU1: Moderate power usage with fast air transmission and wide UART baud range.
+        FU2: Ultra low-power mode ideal for battery life, but with slow UART limits.
+        FU3: Default mode offering solid reliability with moderate speed and current draw.
+        FU4: Long-range mode with the lowest air speed, best for sparse, distant data.
+
+        Detailed mode description: https://i.imgur.com/6x1I2YQ.png
+        """
 
         # We have to handle this one differently than using the ._command_response() function because this one gives a whole bunch of lines and takes a moment.
         # there is no way to get ONLY the transmission mode (FU) with a commmand. We have to ask for all the parameters and parse it out
