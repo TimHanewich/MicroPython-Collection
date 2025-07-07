@@ -22,6 +22,13 @@ class HC12:
         else:
             return 0
 
+    def read(self) -> bytes:
+        """Returns any bytes that have been received (intentionally excludes any AT command responses)."""
+        self._flush_rx() # read anything else awaiting on the UART RX buffer
+        ToReturn:bytes = bytes(self._rx_buffer) # prepare to return
+        self._rx_buffer = bytearray() # clear the internal RX buffer
+        return ToReturn
+
     @property
     def pulse(self) -> bool:
         """Runs a simple test to validate the HC-12 is connected and operating."""
@@ -106,3 +113,4 @@ print(hc12.pulse)
 print(hc12.channel)
 hc12.power = 4
 print(hc12.power)
+print(hc12.read())
