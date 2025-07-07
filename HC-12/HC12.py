@@ -28,6 +28,10 @@ class HC12:
         ToReturn:bytes = bytes(self._rx_buffer) # prepare to return
         self._rx_buffer = bytearray() # clear the internal RX buffer
         return ToReturn
+    
+    def send(self, data:bytes) -> None:
+        """Sends data via the HC-12."""
+        self._uart.write(data)
 
     @property
     def pulse(self) -> bool:
