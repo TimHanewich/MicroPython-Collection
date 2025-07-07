@@ -14,6 +14,7 @@ class HC12:
         self._procTime:float = 0.15 # standard processing time used across functions
 
         # set up
+        self._uart.init(baudrate=9600, timeout=200, timeout_char=10) # re-init with required param values
         self._uart.read() # clear RX buffer
 
     def _flush_rx(self) -> int:
@@ -34,6 +35,7 @@ class HC12:
     
     def send(self, data:bytes) -> None:
         """Sends data via the HC-12."""
+        self._set_pin.high() # put set pin in high, its normal state for sending data (not sending AT commands)
         self._uart.write(data)
 
     @property
@@ -44,6 +46,27 @@ class HC12:
             return response == "OK\r\n".encode()
         except: # error was raised, i.e. it did not response at all! (not even plugged in and working?)
             return False
+        
+    @property 
+    def pulse2(self) -> bool:
+
+        # enter into AT mode
+        self._set_pin.low() # pull it low to go into AT mode
+
+        # flush the existing buffer so what we get next is for sure the response from the AT command
+        self._flush_rx()
+
+        # write AT
+        self._uart.write("AT\r\n".encode())
+
+        # wait for expected response
+        response:bytes = self._uart.readline()
+
+        # enter back into normal mode
+        self._set_pin.high()
+            
+        return response == "OK\r\n".encode()
+            
     
     @property
     def channel(self) -> int:
@@ -144,3 +167,18 @@ class HC12:
         time.sleep(self._procTime) # wait a moment
 
         return response
+
+
+import machine
+import time
+
+uart = machine.UART(0, rx=machine.Pin(17), tx=machine.Pin(16))
+hc12 = HC12(uart, 15)
+
+time.sleep(3.0)
+print(hc12.pulse2)
+
+while True:
+    print(hc12.receive())
+    print(hc12.pulse)
+    time.sleep(0.5)
