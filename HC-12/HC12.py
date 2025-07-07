@@ -40,8 +40,11 @@ class HC12:
     
     @property
     def pulse(self) -> bool:
-        response = self._command_response("AT\r\n".encode())
-        return response == "OK\r\n".encode()
+        try:
+            response = self._command_response("AT\r\n".encode())
+            return response == "OK\r\n".encode()
+        except:
+            return False
             
     @property
     def channel(self) -> int:
