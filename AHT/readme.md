@@ -1,4 +1,4 @@
-# AHT-Series Sensor Driver
+# MicroPython Driver for the AHT Sensor Series
 The AHT series of temperature and humidity sensors, developed by Aosong Electronics, are compact, digital-output environmental sensors designed for precision and ease of integration. These sensors communicate over I²C using a fixed address (0x38) and a simple command set, making them ideal for embedded systems and IoT applications.
 
 Models like the AHT10, AHT20, and AHT21 offer factory-calibrated measurements with typical accuracies of ±0.3 °C for temperature and ±2% RH for humidity. They feature low power consumption, fast response times, and wide operating ranges, with the AHT21 extending temperature support up to 120 °C for industrial and medical use.
