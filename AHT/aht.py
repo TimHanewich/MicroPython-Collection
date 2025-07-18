@@ -2,7 +2,7 @@
 AHTXX sensor MicroPython driver for the AHT series of Integrated Temperature and Humidity Sensor manufactured by Guangzhou Aosong Electronic Co., Ltd. - http://www.aosong.com/en/products-60.html
 Author Tim Hanewich, github.com/TimHanewich
 Version 1.1, August 11, 2023
-Find updates to this code: https://github.com/TimHanewich/MicroPython-Collection/blob/master/AHT21/AHT21.py
+Find updates to this code: https://github.com/TimHanewich/MicroPython-Collection/tree/master/AHT
 
 AHT21 Datasheet (but all AHT sensors match should match this I2C communication specification):
 http://www.aosong.com/userfiles/files/media/AHT21%20%E8%8B%B1%E6%96%87%E7%89%88%E8%AF%B4%E6%98%8E%E4%B9%A6%20A0%202020-12-8.pdf
