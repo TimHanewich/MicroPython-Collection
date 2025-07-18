@@ -14,7 +14,7 @@ Thanks to their shared protocol and register map, these sensors are interchangea
 | **AHT21** | -40 to +120      | 0 to 100               | ±0.3 °C        | ±2% RH             | 0.8 mm         | 2.0–5.5V      | Medical devices, harsh environments, smart agriculture |
 | **AHT25** | -40 to +125      | 0 to 100               | ±0.1 °C        | ±1.8% RH           | ~0.8 mm        | 2.0–5.5V      | High-precision industrial and scientific use |
 
-If you are looking to purchase sensors, I purchased [these](https://a.co/d/9wQiXdT) and had success with them. As one of the reviews noted, I noticed the temperature reading is a tad higher than a DHT-22 I had sitting in close proximity to it. The difference in my tests was only about ~0.6 degrees Fahrenheit.
+If you are looking to purchase sensors, I purchased [these](https://a.co/d/9wQiXdT) and had success with them. As one of the reviews noted, I noticed the temperature reading is a tad higher than a DHT-22 I had sitting in close proximity to it. The difference in my tests was ranged from ~0.6-0.8 degrees Fahrenheit.
 
 ## Example Usage
 The driver provided ([aht.py](./aht.py)) should work with any AHT sensor in the entire series because all sensors follow the identical I2C communication protocol (same address, registers, commands, etc).
