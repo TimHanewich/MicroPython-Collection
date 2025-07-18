@@ -1,10 +1,10 @@
 """
-AHT21.py MicroPython driver for the AHT21 Integrated Temperature and Humidity Sensor manufactured by Guangzhou Aosong Electronic Co., Ltd. - http://www.aosong.com/en/products-60.html
+AHTXX sensor MicroPython driver for the AHT series of Integrated Temperature and Humidity Sensor manufactured by Guangzhou Aosong Electronic Co., Ltd. - http://www.aosong.com/en/products-60.html
 Author Tim Hanewich, github.com/TimHanewich
 Version 1.1, August 11, 2023
 Find updates to this code: https://github.com/TimHanewich/MicroPython-Collection/blob/master/AHT21/AHT21.py
 
-AHT21 Datasheet:
+AHT21 Datasheet (but all AHT sensors match should match this I2C communication specification):
 http://www.aosong.com/userfiles/files/media/AHT21%20%E8%8B%B1%E6%96%87%E7%89%88%E8%AF%B4%E6%98%8E%E4%B9%A6%20A0%202020-12-8.pdf
 
 Code inspired by:
@@ -21,27 +21,27 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 import machine
 import time
 
-class AHT21:
-    """Lightweight class for communicating with an AHT21 temperature and humidity sensor via I2C."""
+class AHTXX:
+    """Lightweight class for communicating with an AHTXX temperature and humidity sensor via I2C."""
     
     def __init__(self, i2c:machine.I2C, address = 0x38):
         """
-        Creates a new instance of the AHT21 class
+        Creates a new instance of the AHTXX class
         :param i2c: Setup machine.I2C interface
-        :param address: The I2C address of the AHT21 slave device
+        :param address: The I2C address of the AHTXX slave device
         """
         self.i2c = i2c
         self.address = address
         self.initialize()
         
     def initialize(self) -> None:
-        """Initializes (calibrates) the AHT21 sensor"""
+        """Initializes (calibrates) the AHTXX sensor"""
         self.i2c.writeto(self.address, bytes([0xbe, 0x08, 0x00]))
         time.sleep(0.1)
         self.i2c.writeto(self.address, bytes([0x71]))
         init_check = self.i2c.readfrom(self.address, 1)
         if not init_check[0] & 0x68 == 0x08:
-            raise Exception ("Initialization of AHT21 failed!")
+            raise Exception ("Initialization of AHT sensor failed!")
     
     def read(self) -> tuple[float, float]:
         """Reads the relative humidity (as a percentage) and temperature (in degrees celsius) as a tuple, in that order."""
