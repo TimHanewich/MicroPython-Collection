@@ -20,17 +20,23 @@ class QMC5883L:
         self._address = 0x0D
         self.initialize()
 
-    def initialize(self, mode:int = 1, rate:int = 10, range:int = 8, oversampling:int = 64) -> None:
-        """Initializes the QMC5883L."""
+    def initialize(self, mode:int = 1, rate:int = 10, range:int = 2, oversampling:int = 64) -> None:
+        """
+        Initializes the QMC5883L.
+        
+        Args:
+            mode (int): 0 = standby, not reading. 1 = continuous reading and updating of data registers.
+            rate (int): Determines how frequently the sensor performs a measurement, in Hz. Can be 10, 50, 100, or 200.
+            range (int): defines max magnetic field strength the sensor can measure. 8 = 8-Gauss, full range, low sensitivity. 2 = 2-Gauss, high sensitivity, high resolution but can overflow.
+            oversampling (int): defines how many internal measurements are taken and averaged before returning. Can be 64, 128, 256, or 512.
+        
+        Returns:
+            None
+        """
 
         # Options for Measurement mode
         # 0 = standby, sensor is idle and not actively measuring
         # 1 = continuous, sensor is constantly measuring and updating its data registers
-
-        # Options for Range
-        # defines the maxiumum magnetic field strength the sensor can measure.
-        # 2 = +- 2 Gauss, high sensitivty and better resolution for weak magnetic fields (00 as bits)
-        # 8 = +- 8 Gauss, lower sensitivity, but can handle strong magnetic fields without overflow, the default (01 as bits)
 
         # Options for Rate
         # Determines how frequently the sensor performs a measurement
@@ -39,6 +45,11 @@ class QMC5883L:
         # 100 = 100 times per second, faster updates, better for motion tracking (10 as bits)
         # 200 = 200 times per second, highest rate, ideal for fast-moving platforms like drones (11 as bits)
 
+        # Options for Range
+        # defines the maxiumum magnetic field strength the sensor can measure.
+        # 2 = +- 2 Gauss, high sensitivty and better resolution for weak magnetic fields (00 as bits)
+        # 8 = +- 8 Gauss, lower sensitivity, but can handle strong magnetic fields without overflow (01 as bits)
+        
         # Options for Oversampling
         # refers to how many internal measurements it takes and averages before returning
         # 64 = 64x, fastest, lowest precision (00 as bits)
@@ -133,3 +144,9 @@ class QMC5883L:
 i2c = machine.I2C(0, sda=machine.Pin(16), scl=machine.Pin(17))
 print(i2c.scan()) # [13]
 qmc = QMC5883L(i2c)
+qmc.initialize(1, 10, 2, 64)
+import time
+
+while True:
+    print(qmc.read())
+    time.sleep(0.1)

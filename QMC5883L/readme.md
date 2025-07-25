@@ -114,3 +114,36 @@ while True:
     print("Heading: " + str(qmc.heading) + " degrees")
     time.sleep(0.1)
 ```
+
+## Advanced Configuration
+In some scenarios, the QMC5883L will need to be further configured to give the best possible performance. This driver allows you to change four additional settings on the QMC5883L:
+
+### Measurement Mode
+Defines how the sensor operates during sampling:
+- `0` = Standby: sensor inactive, conserves power (does not update readings! Do not use unless you are turning it off to save power intentionally)
+- `1` = Continuous – Constant sampling for live readings
+
+### Output Data Rate
+Specifies how often the sensor updates its measurement data:
+- `10` = 10 Hz – Lowest power, slowest refresh
+- `50` = 50 Hz – Good for general-purpose sensing
+- `100` = 100 Hz – Suitable for moderately fast motion
+- `200` = 200 Hz – Ideal for fast-moving environments
+
+### Range
+Controls the magnetic field strength the sensor can detect:
+- `2`- = ±2 Gauss – High sensitivity for weak magnetic fields
+- `8` = ±8 Gauss – Lower sensitivity, can handle stronger fields
+
+### Oversampling
+This determines how many internal samples the sensor averages to reduce noise:
+- `64` = 64x: Fastest response, least smoothing
+- `128` = 128x: Balanced speed and signal clarity
+- `256` = 256x: Good noise reduction, moderate speed
+- `512` = 512x: Maximum precision, slowest response
+
+You can set up configure the QMC5883L with the parameters you desire like so:
+
+```
+qmc.initialize(1, 10, 2, 64) # reading mode, 10 Hz, 2-Gauss, 64x oversampling, for example
+```
