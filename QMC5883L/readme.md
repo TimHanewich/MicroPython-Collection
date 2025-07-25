@@ -1,6 +1,29 @@
-# QMC5883L Magnetometer
+# MicroPython Driver for the QMC5883L Magnetometer
+This repository contains a custom Python driver for the **QMC5883L** three-axis digital magnetometer, designed for seamless integration with microcontrollers, drones, robotics platforms, and embedded systems. The driver supports I²C communication and automatic offset calibration.
 
-Basic use demonstration, providing the raw X, Y, and Z magnetometer values:
+Built with clarity and extendability in mind, the code provides low-level access to raw magnetic field readings along with high-level calibration routines. Whether you're building a drone, a mobile robot, or an educational compass project, this driver gives you full control over your sensor pipeline without relying on bulky external libraries.
+
+## What is the QMC5883L?
+The **QMC5883L** is a compact, high-performance digital magnetometer capable of measuring magnetic fields across three axes. It's widely used in navigation systems to determine orientation based on the Earth's magnetic field.
+
+Internally, it uses **anisotropic magneto-resistive (AMR) sensors** and features:
+- A 16-bit ADC for high resolution
+- Built-in temperature compensation
+- Automatic magnetic offset cancellation
+- I²C communication interface
+
+Its low power consumption and small footprint make it ideal for embedded applications such as drones, robotic rovers, and electronic compasses.
+
+## Wiring
+|QMC5883L Pin|MicroController Pin|
+|-|-|
+|VCC|+ 3.3V|
+|GND|GND|
+|SDA|Any I2C SDA pin (i.e. GP16 on the Raspberry Pi Pico)|
+|SCL|Any I2C SCL pin (i.e. GP17 on the Raspberry Pi Pico)|
+
+## Basic Use Demo
+Basic use demonstration, reading the raw X, Y, and Z magnetometer values:
 ```
 import machine
 import time
