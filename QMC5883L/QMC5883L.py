@@ -139,14 +139,3 @@ class QMC5883L:
         if heading_deg < 0:
             heading_deg += 360
         return heading_deg
-    
-
-i2c = machine.I2C(0, sda=machine.Pin(16), scl=machine.Pin(17))
-print(i2c.scan()) # [13]
-qmc = QMC5883L(i2c)
-qmc.initialize(1, 10, 2, 64)
-import time
-
-while True:
-    print(qmc.read())
-    time.sleep(0.1)
