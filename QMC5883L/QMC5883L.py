@@ -20,10 +20,85 @@ class QMC5883L:
         self._address = 0x0D
         self.initialize()
 
-    def initialize(self) -> None:
+    def initialize(self, mode:int = 1, rate:int = 10, range:int = 8, oversampling:int = 64) -> None:
         """Initializes the QMC5883L."""
-        self._i2c.writeto_mem(self._address, 0x09, bytes([0x1D])) # 0x1D = 0b00011101: 10Hz output, continuous mode, oversampling x64, full scale
-        self._i2c.writeto_mem(self._address, 0x0A, bytes([0x00])) # no interrupts
+
+        # Options for Measurement mode
+        # 0 = standby, sensor is idle and not actively measuring
+        # 1 = continuous, sensor is constantly measuring and updating its data registers
+
+        # Options for Range
+        # defines the maxiumum magnetic field strength the sensor can measure.
+        # 2 = +- 2 Gauss, high sensitivty and better resolution for weak magnetic fields (00 as bits)
+        # 8 = +- 8 Gauss, lower sensitivity, but can handle strong magnetic fields without overflow, the default (01 as bits)
+
+        # Options for Rate
+        # Determines how frequently the sensor performs a measurement
+        # 10 = 10 times per second, low update rate, low power (00 as bits)
+        # 50 = 50 times per second, moderate rate, good for general use (01 as bits)
+        # 100 = 100 times per second, faster updates, better for motion tracking (10 as bits)
+        # 200 = 200 times per second, highest rate, ideal for fast-moving platforms like drones (11 as bits)
+
+        # Options for Oversampling
+        # refers to how many internal measurements it takes and averages before returning
+        # 64 = 64x, fastest, lowest precision (00 as bits)
+        # 128 = 128x, balanced speed and accuracy (01 as bits)
+        # 256 = 256x, good noise reduction (10 as bits)
+        # 512 = 512x, Best precision, slowest rate (11 as bits)
+
+        # construct what we will send to register 0x09 on the QMC5883L
+
+        # construct oversampling ratio
+        bits_oversampling:str = ""
+        if oversampling == 64:
+            bits_oversampling = "00"
+        elif oversampling == 128:
+            bits_oversampling = "01"
+        elif oversampling == 256:
+            bits_oversampling = "10"
+        elif oversampling == 512:
+            bits_oversampling = "11"
+        else:
+            raise Exception("Oversampling value of '" + str(oversampling) + "' invalid. Must be 64, 128, 256, or 512.")
+        
+        # construct range bits
+        bits_range:str = ""
+        if range == 2: # 2 Gauss
+            bits_range = "00"
+        elif range == 8: # 8 Gauss
+            bits_range = "01"
+        else:
+            raise Exception("Value '" + str(range) + "' invalid for range. Must be 2 or 8.")
+    
+        # construct output data rate bits
+        bits_rate:str = ""
+        if rate == 10:
+            bits_rate = "00"
+        elif rate == 50:
+            bits_rate = "01"
+        elif rate == 100:
+            bits_rate = "10"
+        elif rate == 200:
+            bits_rate = "11"
+        else:
+            raise Exception("Output data rate of '" + str(rate) + "' invalid. Must be 10, 50, 100, or 200.")
+        
+        # construct mode bits
+        bits_mode: str = ""
+        if mode == 0: # standby
+            bits_mode = "00"
+        elif mode == 1:
+            bits_mode = "01"
+        else:
+            raise Exception("Value '" + str(mode) + "' invalid for mode. Must be 0 or 1.")
+        
+        # construct and send the bit-masked byte we will send with all of those
+        ControlByteStr:str = bits_oversampling + bits_range + bits_rate + bits_mode # i.e. "00010001"
+        ControlByte:int = int(ControlByteStr, 2) # convert "00010001" or whatever it is to a byte (int)
+        self._i2c.writeto_mem(self._address, 0x09, bytes([ControlByte]))
+        
+        # put control register 2 in default state
+        self._i2c.writeto_mem(self._address, 0x0A, bytes([0x00])) # no interrupts, no resets.
 
     def read(self) -> tuple[int, int, int]:
         """Read the magnetometer values in X,Y,Z format."""
@@ -53,3 +128,8 @@ class QMC5883L:
         if heading_deg < 0:
             heading_deg += 360
         return heading_deg
+    
+
+i2c = machine.I2C(0, sda=machine.Pin(16), scl=machine.Pin(17))
+print(i2c.scan()) # [13]
+qmc = QMC5883L(i2c)
