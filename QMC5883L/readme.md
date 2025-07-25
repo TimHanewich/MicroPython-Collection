@@ -147,3 +147,8 @@ You can set up configure the QMC5883L with the parameters you desire like so:
 ```
 qmc.initialize(1, 10, 2, 512) # reading mode, 10 Hz, 2-Gauss, 512x oversampling, for example
 ```
+
+Configure your settings to best work with your particular application of the QMC5883L. For example, in a drone application where quick reads are necessary, the following may be best:
+- Data Rate = `200` Hz
+- Range = `8 `(help to not overflow when suffering interference from motors, power lines, etc.)
+- Oversampling = `128` (the default of 512 is too slow, this makes reading faster)
