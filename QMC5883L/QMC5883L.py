@@ -34,8 +34,8 @@ class QMC5883L:
     def heading(self) -> float:
         """Determines the magnetometer's current heading using the X and Y values (assuming it is laying flat)."""
         x,y,z = self.read()
-        x_cal:float = x - (self._x_min + self._x_max) / 2
-        y_cal:float = y - (self._y_min + self._y_max) / 2
+        x_cal:float = x - (self._x_min + self._x_max) / 2 # subtract the average (midpoint) X value out, so the reading is "centered" at 0
+        y_cal:float = y - (self._y_min + self._y_max) / 2 # subtract the average (midpoint) Y value out, so the reading is "centered" at 0
         heading_rad = math.atan2(y_cal, x_cal) # heading, in radians
         heading_deg = math.degrees(heading_rad) # heading, in degrees
         if heading_deg < 0:

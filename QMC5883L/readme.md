@@ -21,7 +21,7 @@ Note that the script above will only output the raw X, Y, and Z values from the 
 The most common use of the QMC5883L is as a compass. The raw magnetometer values from the QMC5883L can be transformed into an approximate heading (in degrees), between 0 and 360. But, to do that, there are a few steps we have to take.
 
 ### Step 1: Calibration
-The first step is *calibration*. But don't let this scare you! This is nothing more than flipping the QMC5883L around and observing the **minimum** and **maximum** observed values on all three axes. After observing these, we can provide these to the `QMC5883L` class for them to be used for proper scaling and normalization.
+The first step is *calibration*. But don't let this scare you! This is nothing more than flipping the QMC5883L around and observing the **minimum** and **maximum** observed values on all three axes. After observing these, we can provide these to the `QMC5883L` class for them to be used to "center" (offset correction) the incoming raw magnetometer values.
 
 The following is a simple calibration script that you can run on your MicroController to get the min and max values:
 
