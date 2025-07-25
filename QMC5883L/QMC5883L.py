@@ -20,7 +20,7 @@ class QMC5883L:
         self._address = 0x0D
         self.initialize()
 
-    def initialize(self, mode:int = 1, rate:int = 10, range:int = 2, oversampling:int = 64) -> None:
+    def initialize(self, mode:int = 1, rate:int = 10, range:int = 2, oversampling:int = 512) -> None:
         """
         Initializes the QMC5883L.
         
