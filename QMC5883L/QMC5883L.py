@@ -1,6 +1,6 @@
 """
 QMC5883L.py - lightweight MicroPython driver for interfacing with the QMC5883L magnetometer (compass).
-For any updates and instructions on how to use this, visit: 
+For any updates and instructions on how to use this, visit: https://github.com/TimHanewich/MicroPython-Collection/tree/master/QMC5883L
 Author Tim Hanewich, github.com/TimHanewich
 
 MIT License
