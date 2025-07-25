@@ -145,5 +145,5 @@ This determines how many internal samples the sensor averages to reduce noise:
 You can set up configure the QMC5883L with the parameters you desire like so:
 
 ```
-qmc.initialize(1, 10, 2, 64) # reading mode, 10 Hz, 2-Gauss, 64x oversampling, for example
+qmc.initialize(1, 10, 2, 512) # reading mode, 10 Hz, 2-Gauss, 512x oversampling, for example
 ```
