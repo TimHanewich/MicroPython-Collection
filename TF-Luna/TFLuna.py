@@ -52,6 +52,7 @@ class TFLuna:
         data:bytes = value.to_bytes(2, "little") # convert to 2 bytes, so the low byte comes before the high byte, which is what the TF luna uses
         self._i2c.writeto_mem(self._addr, 0x26, data) # write the two bytes to register 0x26 and 0x27
 
+    @property
     def signature(self) -> bool:
         """Confirms if the TF Luna is connected via I2C by checking its 'signature' registers."""
         data:bytes = self._i2c.readfrom_mem(self._addr, 0x3C, 4) # read 4 bytes, 0x3C, 0x3D, 0x3E, 0x3F
@@ -59,4 +60,8 @@ class TFLuna:
     
     def reboot(self) -> None:
         """Reboot the TF-Luna."""
-        self._i2c.writeto_mem(self._addr, 0x21, 0x02) # reboot command
+        self._i2c.writeto_mem(self._addr, 0x21, bytes([0x02])) # reboot command
+
+    def reset(self) -> None:
+        """Restore TF-Luna to factory defaults."""
+        self._i2c.writeto_mem(self._addr, 0x29, bytes([0x01]))
