@@ -14,6 +14,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 import machine
 
 class TFLuna:
+    """Lightweight class for interfacing with the TF-Luna LiDAR range sensor."""
 
     def __init__(self, i2c:machine.I2C, address:int = 0x10):
         self._i2c = i2c
