@@ -1,4 +1,6 @@
 # MicroPython Driver for the TF Luna (I2C Mode)
+![luna](https://i.imgur.com/8kkEe3k.png)
+
 The TF-Luna is a compact, low-cost single-point LiDAR range sensor developed by Benewake. It's designed for accurate distance measurement using the Time-of-Flight (ToF) principle, which calculates distance by measuring the time it takes for infrared light to bounce off a target and return to the sensor.
 
 The TF Luna can operate (provide data) via UART or by I2C. The driver I provide here is designed for I2C mode.
