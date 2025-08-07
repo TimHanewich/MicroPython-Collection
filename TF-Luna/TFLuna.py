@@ -56,3 +56,7 @@ class TFLuna:
         """Confirms if the TF Luna is connected via I2C by checking its 'signature' registers."""
         data:bytes = self._i2c.readfrom_mem(self._addr, 0x3C, 4) # read 4 bytes, 0x3C, 0x3D, 0x3E, 0x3F
         return data == "LUNA".encode() # the expected result is "LUNA" encoded as bytes
+    
+    def reboot(self) -> None:
+        """Reboot the TF-Luna."""
+        self._i2c.writeto_mem(self._addr, 0x21, 0x02) # reboot command
