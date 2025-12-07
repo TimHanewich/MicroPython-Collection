@@ -34,17 +34,18 @@ class HC12:
         bytes_available:int = self._uart.any()
         if bytes_available > 0: # if there is data to receive
             new_data:bytes = self._uart.read(bytes_available)
-            self._rx_buffer = self._rx_buffer + new_data
-            return len(new_data)
-        else:
-            return 0
+            self._rx_buffer.extend(new_data)
+        return bytes_available # return the number of new bytes we read and collected (or didn't - it could be 0 as well!)
 
     def receive(self) -> bytes:
         """Returns any bytes that have been received (intentionally excludes any AT command responses)."""
         self._flush_rx() # read anything else awaiting on the UART RX buffer
-        ToReturn:bytes = bytes(self._rx_buffer) # prepare to return
-        self._rx_buffer = bytearray() # clear the internal RX buffer
-        return ToReturn
+        if len(self._rx_buffer) > 0:
+            ToReturn:bytes = bytes(self._rx_buffer) # prepare to return
+            self._rx_buffer = bytearray() # clear the internal RX buffer
+            return ToReturn
+        else:
+            return None
     
     def send(self, data:bytes) -> None:
         """Sends data via the HC-12."""
