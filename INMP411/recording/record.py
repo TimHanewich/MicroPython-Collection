@@ -1,12 +1,16 @@
 from machine import I2S, Pin
 
+# Set up I2S
 audio_in = I2S(0, sck=Pin(16), ws=Pin(17), sd=Pin(18), mode=I2S.RX, bits=32, format=I2S.MONO, rate=8_000, ibuf=2048)
-read_buffer = bytearray(128_000)
+
+# Set up buffer for how many bytes to read
+# At a rate of 8,000 Hz = 32,0000 bytes per second = 128,000 bytes needed to capture 4 seconds worth of audio
+audio_data = bytearray(128_000)
 
 # read
-print("Reading...")
-bytes_read:int = audio_in.readinto(read_buffer)
-print("Read " + str(bytes_read) + " bytes.")
+print("Recording...")
+bytes_read:int = audio_in.readinto(audio_data)
+print("Recorded " + str(bytes_read) + " bytes.")
 
 # deinit (this is super important! If you don't deinit, it won't be able to init again w/o a full power reset)
 print()
@@ -14,14 +18,8 @@ print("De-init...")
 audio_in.deinit()
 print("De-init complete.")
 
-# Save it
-f = open("raw", "wb")
-print("Writing to file...")
-f.write(read_buffer)
-print("Written!")
-f.close()
 
-
+# Function for creating the header
 def create_wave_header(data_length:int, sample_rate:int) -> bytes:
     """
     Function for creating the 44-byte header of a .wav file.
@@ -84,13 +82,15 @@ def create_wave_header(data_length:int, sample_rate:int) -> bytes:
 
     return bytes(ToReturn)
 
-f = open("raw", "rb")
-data:bytes = f.read()
-f.close()
+# Create the header
+print("Creating header...")
+header = create_wave_header(len(audio_data), 8_000)
+print("Header of length " + str(len(header)) + " created.")
 
-header = create_wave_header(len(data), 8_000)
-
+# Save to file
+print("Saving to file...")
 f = open("recording.wav", "wb")
 f.write(header)
-f.write(data)
+f.write(audio_data)
 f.close()
+print("Saved!")
