@@ -19,7 +19,7 @@ print("De-init complete.")
 
 
 # Function for creating the header
-def create_wave_header(data_length:int, sample_rate:int) -> bytes:
+def create_wave_header(sample_rate:int, bits_per_sample:int, data_length:int) -> bytes:
     """
     Function for creating the 44-byte header of a .wav file.
 
@@ -55,23 +55,26 @@ def create_wave_header(data_length:int, sample_rate:int) -> bytes:
     ToReturn.extend(FormatType.to_bytes(2, "little"))
 
     # Add number of channels
-    NumChannels = 1
+    NumChannels = 1 # assuming 1! This is the only parameter I do NOT expose as a param in the function. But can later if needed.
     ToReturn.extend(NumChannels.to_bytes(2, "little"))
 
-    # Add sample rate
+    # Add sample rate (i.e. 8,000, 16,000, etc.)
     ToReturn.extend(sample_rate.to_bytes(4, "little"))
 
     # Add byte rate (number of bytes per second)
-    ByteRate:int = 32_000
+    # In other words, the number of bytes recorded per second
+    # This can be calculated with A) the sample rate and B) the bits per sample. 
+    # For example, at a sample rate of 8,000 per second and 4 bytes per sample, that would be 32,000 bytes per second!
+    BytesPerSample:int = bits_per_sample // 8
+    ByteRate:int = sample_rate * BytesPerSample * NumChannels
     ToReturn.extend(ByteRate.to_bytes(4, "little"))
 
-    # Add Block Align (number of bytes per sample?)
-    BlockAlign:int = 4
+    # Add Block Align: how many bytes a single sample ("block") is, but also if dual channels
+    BlockAlign:int = BytesPerSample * NumChannels
     ToReturn.extend(BlockAlign.to_bytes(2, "little"))
 
     # Add bits per sample
-    BitsPerSample = 32
-    ToReturn.extend(BitsPerSample.to_bytes(2, "little"))
+    ToReturn.extend(bits_per_sample.to_bytes(2, "little"))
 
     # Add "data" splitter
     ToReturn.extend("data".encode("ascii"))
