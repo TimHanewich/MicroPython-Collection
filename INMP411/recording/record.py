@@ -13,7 +13,6 @@ bytes_read:int = audio_in.readinto(audio_data)
 print("Recorded " + str(bytes_read) + " bytes.")
 
 # deinit (this is super important! If you don't deinit, it won't be able to init again w/o a full power reset)
-print()
 print("De-init...")
 audio_in.deinit()
 print("De-init complete.")
