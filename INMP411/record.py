@@ -86,7 +86,7 @@ def create_wave_header(sample_rate:int, bits_per_sample:int, data_length:int) ->
 
 # Create the header
 print("Creating header...")
-header = create_wave_header(len(audio_data), 8_000)
+header = create_wave_header(8_000, 32, len(audio_data))
 print("Header of length " + str(len(header)) + " created.")
 
 # Save to file
