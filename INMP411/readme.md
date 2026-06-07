@@ -15,7 +15,10 @@ Each individual sample is really **24 bits** of data (**3 bytes**), but it is *a
 
 So, at a sample rate of 8,000 Hz, that is 8,000 samples of 4 bytes, which would be 32,000 bytes per second (8,000 * 4)... so a lot! Thus, for example, 0.25 seconds of capture time at that 8,000 Hz would be 8,000 bytes.
 
-## Example
+## Example Timing
 The way you capture data via I2S is you set up a `bytearray` with a certain amount of bytes that you want to capture, and then you use `I2S.readinto()` to read into it; this will be a blocking call, meaning it will sit and wait there until it fills that buffer.
 
 So, given that, that means you can set up the size of the buffer based on *for how long* (duration) you want it to capture for. If i wanted to capture 250 ms worth of data for example, and had a sample rate of 8,000 Hz, that means I would set up a 8,000 byte buffer and then capture... it would block for exactly 250 ms! (this is because we know a rate of 8,000 Hz is 32,000 bytes per second, so quarter it for a quarter of a second)
+
+## What is this data?
+As mentioned above, 32 bits of data are received, representing a 4-byte integer (`int32`). The range of this integer is thus -2,147,483,648 to 2,147,483,647. You can then transform this as a floating point value between -1.0 to 1.0 that represents that audio wave at that particular point (think of a sine wave).

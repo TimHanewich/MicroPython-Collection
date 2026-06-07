@@ -21,19 +21,20 @@ for i in range(0, 20):
     # How many actual samples did we just get (each sample is 4 bytes)
     num_samples:int = bytes_read // 4
 
-    # calc loudness across this sample
+    # Calculate RMS ("root mean square") as an indication of avg. loudness across this sample
     all_squares:float = 0.0
     for s in range(num_samples):
 
         # convert to int
-        byte1_index:int = s * 4      # the index of the first byte of the 4-byte integer
-        rawint:int = int.from_bytes(read_buffer[byte1_index:byte1_index+4], "little")
+        byte1_index:int = s * 4                                                            # the index of the first byte of the 4-byte integer
+        rawint:int = int.from_bytes(read_buffer[byte1_index:byte1_index+4], "little")      # by default, this converts it to an UNSIGNED int32 (min of 0, max of 4,294,967,295)
 
-        # manually convert from unsigned to signed
-        if rawint >= 0x80000000:
-            rawint = rawint - 0x100000000
+        # The I2S protocol though is an int32, not uint32! So we must manually convert it to a int32
+        # (MicroPython doesn't support this natively in int.from_bytes())
+        if rawint >= 0x80000000:                          # if > 2,147,483,648 (max value of int32)
+            rawint = rawint - 0x100000000                 # Subtract 4,294,967,296 to convert back to uint32 (if it exceeds int32 value, immediately starts at int32 lower bound)
 
-        # Convert to -1.0 to 1.0
+        # Convert to -1.0 to 1.0 (think of a sine wave in audacity)
         asfloat:float = rawint / 2_147_483_647
 
         # square and add to tally
@@ -42,9 +43,8 @@ for i in range(0, 20):
     all_squares_avg:float = all_squares / num_samples
     vol:float = math.sqrt(all_squares_avg)
     print("Volume: " + str(vol))
-    
 
-# deinit
+# deinit (this is super important! If you don't deinit, it won't be able to init again w/o a full power reset)
 print()
 print("De-init...")
 audio_in.deinit()
