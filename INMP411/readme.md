@@ -22,3 +22,8 @@ So, given that, that means you can set up the size of the buffer based on *for h
 
 ## What is this data?
 As mentioned above, 32 bits of data are received, representing a 4-byte integer (`int32`). The range of this integer is thus -2,147,483,648 to 2,147,483,647. You can then transform this as a floating point value between -1.0 to 1.0 that represents that audio wave at that particular point (think of a sine wave).
+
+## Warning: Writing to Flash Storage Doesn't Work
+Through testing, I found that writing to flash storage (onboard Pico storage) after the `I2S` has been initialized doesn't work. Likely because there is some overlap or inteferance of the background process of capturing via the internal `I2S` buffer, but for whatever reason it would *always* hang for me when I mixed together both I2S and flash storage!
+
+However, this is **NOT** the case when interfacing with other peripherals via GPIO: for example, [this script](https://github.com/TimHanewich/MicroPython-Collection/blob/e8e332220c23af6268730fb8040b13ec9b2de3c3/INMP411/example_HC12.py) tested and proved its ability to send small data packets via HC-12, it worked well! Perhaps an external SD card breakout board would work well too.
