@@ -9,7 +9,7 @@ audio_in = I2S(0, sck=Pin(16), ws=Pin(17), sd=Pin(18), mode=I2S.RX, bits=32, for
 # Set the length to what you calculate is the length needed given the duration you want and sample rate being used
 read_buffer = bytearray(8_000)
 
-for i in range(0, 20):
+for i in range(0, 50):
 
     # read
     #print("Reading sample # " + str(i) + "... ")
