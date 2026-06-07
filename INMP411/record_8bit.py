@@ -17,31 +17,6 @@ print("De-init...")
 audio_in.deinit()
 print("De-init complete.")
 
-# reduce from 32-bit to 8-bit
-num_samples:int = len(audio_data) // 4
-audio_data2:bytearray = bytearray(num_samples)
-for i in range(num_samples):
-    original_offset:int = i * 4
-
-    # construct original int32
-    asint = int.from_bytes(audio_data[original_offset:original_offset+4], "little") # unpacks as uint32
-    if asint >= 2_147_483_648: 
-        asint = asint - 4_294_967_296 # convert to int32 if needed
-
-    # Scale
-    asint = asint * 20
-
-    # Determine uint8
-    por:float = (asint + 2_147_483_648) / 4_294_967_296
-    asuint8 = int(por * 255)
-
-    # constrain!
-    if asuint8 > 255:
-        asuint8 = 255
-
-    # populate new audio data
-    audio_data2[i] = asuint8
-
 # Function for creating the header
 def create_wave_header(sample_rate:int, bits_per_sample:int, data_length:int) -> bytes:
     """
@@ -107,6 +82,12 @@ def create_wave_header(sample_rate:int, bits_per_sample:int, data_length:int) ->
     ToReturn.extend(data_length.to_bytes(4, "little"))
 
     return bytes(ToReturn)
+
+# convert to 8bit
+print("Converting to 8bit...")
+import tools
+audio_data2:bytes = tools.convert_32bit_to_8bit(audio_data, 20)
+print("Done")
 
 # Create the header
 print("Creating header...")
