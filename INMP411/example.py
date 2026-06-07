@@ -32,7 +32,7 @@ for i in range(0, 20):
         # The I2S protocol though is an int32, not uint32! So we must manually convert it to a int32
         # (MicroPython doesn't support this natively in int.from_bytes())
         if rawint >= 0x80000000:                          # if > 2,147,483,648 (max value of int32)
-            rawint = rawint - 0x100000000                 # Subtract 4,294,967,296 to convert back to uint32 (if it exceeds int32 value, immediately starts at int32 lower bound)
+            rawint = rawint - 0x100000000                 # Subtract 4,294,967,296 to convert to int32 (if it exceeds int32 value, immediately starts at int32 lower bound)
 
         # Convert to -1.0 to 1.0 (think of a sine wave in audacity)
         asfloat:float = rawint / 2_147_483_647
