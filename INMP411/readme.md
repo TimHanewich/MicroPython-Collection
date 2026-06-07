@@ -5,7 +5,7 @@ I purchased [these INMP441](https://github.com/TimHanewich/MicroPython-Collectio
 I2S is a continuous flow of audio data (binary data) to the Raspberry Pi Pico, at a particularly high rate!
 
 The INMP441 has an adjustable sample rate, which is the numebr of times per second it will "take a snapshot" of the audio wave:
-- 8,000 Hz
+- 8,000 Hz (**recommended for RPi Pico**)
 - 16,000 Hz
 - 32,000 Hz
 - 44,100 Hz
