@@ -9,9 +9,9 @@ audio_in = I2S(0, sck=Pin(16), ws=Pin(17), sd=Pin(18), mode=I2S.RX, bits=32, for
 # Set the length to what you calculate is the length needed given the duration you want and sample rate being used
 # Example: at a rate of 8,000 samples per second and each sample being 4 bytes, that is 32,000 bytes per second
 # So if we want to capture in increments of 0.1 seconds, capture 3,200 bytes (it will wait for 3,200 bytes to "fill up")
-read_buffer = bytearray(3_200)
+read_buffer = bytearray(1_600)
 
-for i in range(0, 50):
+for i in range(0, 500):
 
     # read
     bytes_read = audio_in.readinto(read_buffer)
