@@ -1,4 +1,6 @@
 # INMP441
+![pic](https://i.imgur.com/UhxRJ4B.png)
+
 I purchased [these INMP441](https://github.com/TimHanewich/MicroPython-Collection) from Amazon in June 2026. The following describes how to work with these modules via MicroPyton's [I2S class](https://docs.micropython.org/en/latest/library/machine.I2S.html).
 
 Check out two examples on how to use the INMP441:
