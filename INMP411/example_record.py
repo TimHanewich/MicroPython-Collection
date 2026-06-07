@@ -4,7 +4,7 @@ import math
 import os
 
 # Set up I2S
-audio_in = I2S(0, sck=Pin(16), ws=Pin(17), sd=Pin(18), mode=I2S.RX, bits=32, format=I2S.MONO, rate=8_000, ibuf=16_000)
+audio_in = I2S(0, sck=Pin(16), ws=Pin(17), sd=Pin(18), mode=I2S.RX, bits=32, format=I2S.MONO, rate=8_000, ibuf=2_048)
 
 # temp file for writing bytes to
 file_buf = open("temp", "wb") # "wb" starts clean every time (new file) while "ab" appends to whatever exists
@@ -26,7 +26,8 @@ try:
 
         # write it to file (append)
         print("Writing to file buffer...")
-        file_buf.write(buf)
+        #file_buf.write(buf)
+        print("FAKE WRITE")
         print("Dumped to file buffer.")
 
         # increment write counter
