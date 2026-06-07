@@ -86,6 +86,8 @@ def convert_32bit_to_8bit(audio_data:bytes, amplification:int = 20) -> bytes:
         # constrain!
         if asuint8 > 255:
             asuint8 = 255
+        elif asuint8 < 0:
+            asuint8 = 0
 
         # populate new audio data
         audio_data2[i] = asuint8
