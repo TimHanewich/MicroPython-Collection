@@ -1,13 +1,15 @@
 from machine import I2S, Pin
-import time
 import math
 
 # Set up I2S
+# the "ibuf" is the internal buffer - how many bytes it can hold while you do something (similar to UART RX)
 audio_in = I2S(0, sck=Pin(16), ws=Pin(17), sd=Pin(18), mode=I2S.RX, bits=32, format=I2S.MONO, rate=8_000, ibuf=2048)
 
 # Set up bytearray we will read into
 # Set the length to what you calculate is the length needed given the duration you want and sample rate being used
-read_buffer = bytearray(8_000)
+# Example: at a rate of 8,000 samples per second and each sample being 4 bytes, that is 32,000 bytes per second
+# So if we want to capture in increments of 0.1 seconds, capture 3,200 bytes (it will wait for 3,200 bytes to "fill up")
+read_buffer = bytearray(3_200)
 
 for i in range(0, 50):
 
@@ -57,8 +59,6 @@ for i in range(0, 50):
 
     # print
     print("RMS: " + str(round(rms * 100, 3)) + "%" + ", Decibels: " + str(int(round(dBSPL, 0))))
-
-    
 
 # deinit (this is super important! If you don't deinit, it won't be able to init again w/o a full power reset)
 print()
