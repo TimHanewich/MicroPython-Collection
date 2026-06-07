@@ -1,6 +1,10 @@
 # INMP441
 I purchased [these INMP441](https://github.com/TimHanewich/MicroPython-Collection) from Amazon in June 2026. The following describes how to work with these modules via MicroPyton's [I2S class](https://docs.micropython.org/en/latest/library/machine.I2S.html).
 
+Check out two examples on how to use the INMP441:
+- Example live monitoring the decibels: [monitor.py](./monitor.py)
+- Example recording into a `.wav` file: [record](./record/)
+
 ## Understanding Data Flow
 I2S is a continuous flow of audio data (binary data) to the Raspberry Pi Pico, at a particularly high rate!
 
