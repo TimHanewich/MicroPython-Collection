@@ -22,15 +22,24 @@ for i in range(0, 20):
     num_samples:int = bytes_read // 4
 
     # calc loudness across this sample
-    all_squares:int = 0
+    all_squares:float = 0.0
     for s in range(num_samples):
+
         # convert to int
         byte1_index:int = s * 4      # the index of the first byte of the 4-byte integer
         rawint:int = int.from_bytes(read_buffer[byte1_index:byte1_index+4], "little")
+
+        # manually convert from unsigned to signed
         if rawint >= 0x80000000:
             rawint = rawint - 0x100000000
-        all_squares = all_squares + rawint**2
-    all_squares_avg = all_squares / num_samples
+
+        # Convert to -1.0 to 1.0
+        asfloat:float = rawint / 2_147_483_647
+
+        # square and add to tally
+        all_squares = all_squares + asfloat**2
+
+    all_squares_avg:float = all_squares / num_samples
     vol:float = math.sqrt(all_squares_avg)
     print("Volume: " + str(vol))
     
