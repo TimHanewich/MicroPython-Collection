@@ -105,6 +105,18 @@ class ENS160:
             return {"value": val, "text": "(unknown)"}
 
     @property
+    def raw_resistance(self) -> tuple:
+        """Reads the sensor raw resistance values in Ohm. Only sensor 1 and 4 are officially supported"""
+        data = self.i2c.readfrom_mem(self.address, 0x48, 8)
+
+        r1 = 2 ** ((data[0] | (data[1] << 8)) / 2048.0)
+        r2 = 2 ** ((data[2] | (data[3] << 8)) / 2048.0)
+        r3 = 2 ** ((data[4] | (data[5] << 8)) / 2048.0)
+        r4 = 2 ** ((data[6] | (data[7] << 8)) / 2048.0)
+
+        return r1, r2, r3, r4
+
+    @property
     def status(self) -> dict:
         """Reads the DATA_STATUS register and translates this single byte into each field's value."""
         statusb:int = self.i2c.readfrom_mem(self.address, 0x20, 1)[0]
