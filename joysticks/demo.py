@@ -6,7 +6,7 @@ adc1 = machine.ADC(26)
 adc2 = machine.ADC(27)
 
 
-def transform(value:float, offset:float = 0.0, deadzone:float = 0.2, ceiling:float = 0.8) -> float:
+def transform(value:float, offset:float = 0.0, deadzone:float = 0.05, ceiling:float = 0.8) -> float:
     """
     Provide the input value from -1.0 to 1.0.
     
@@ -51,8 +51,11 @@ while True:
     #print("FR Percents: " + str(val1_fr) + ", " + str(val2_fr))
 
     # transform
-    transformed1:float = transform(val1_fr, -0.10, 0.15, 0.85)
-    transformed2:float = transform(val2_fr, -0.09, 0.15, 0.85)
+    #transformed1:float = transform(val1_fr, -0.10, 0.15, 0.85)
+    #transformed2:float = transform(val2_fr, -0.09, 0.15, 0.85)
+
+    transformed1:float = transform(val1_fr, -0.10, 0.05, 0.85)
+    transformed2:float = transform(val2_fr, -0.09, 0.05, 0.85)
 
     # print the transformation
     print(str(int(round(transformed1*100,0))) + "%, " + str(int(round(transformed2*100,0))) + "%")
