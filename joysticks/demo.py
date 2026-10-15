@@ -34,12 +34,19 @@ def transform(ival:float, deadzone:float = 0.2, ceiling:float = 0.8) -> float:
 while True:
     val1 = adc1.read_u16()
     val2 = adc2.read_u16()
-    
+
+    #print("Val1: " + str(val1) + ", Val2: " + str(val2))
+
+    # value as a percentage from 0.0 to 1.0
     val1p = val1 / 65535
-    val2p = val2 / 65535   # value as a percentage
-    
-    transformed:float = transform(val2p)
-    print(str(int(round(transformed*100,0))) + "%")
+    val2p = val2 / 65535
+
+    transformed1:float = transform(val1p)
+    transformed2:float = transform(val2p)
+    #print("Transformed 1: " + str(transformed1))
+    print(str(int(round(transformed1*100,0))) + "%, " + str(int(round(transformed2*100,0))) + "%")
+
+    # wait
     time.sleep(0.1)
     
 
