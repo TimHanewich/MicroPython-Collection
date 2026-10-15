@@ -1,6 +1,10 @@
 # Joysticks
 I purchased [these joysticks](https://a.co/d/068GS4Vr) on Amazon. They have a lot of problems! A bias, constantly moving input value when not touched, quickly reaching their fully saturated values with only a small bit of movement, and also not even "saturation" on each axis two directions.
 
+Code in this repo:
+- [joysticks.py](./joysticks.py) - contains the core `transform` function to software-correct joysticks.
+- [demo.py](./demo.py) - simple demo of `transform` being used, on the Raspberry Pi Pico.
+
 ## Solution
 By this combination of hardware + software tricks, I managed to get them into a somewhat workable state.
 
