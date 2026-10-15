@@ -158,3 +158,8 @@ And now, run it again! You should now have a calibrated, working joystick.
 ```
 
 Again, note that you may still be surprised with how quickly it reaches saturation in either direction out of the box. That is a symptom of the cheap hardware and cannot be fixed with software. Any user using the sticks will have to be quite gentle and only move in small increments to get fine-grained input!
+
+## Measurements
+These are my measurements with a calibre, but would want to corrorborate somewhere else online: 
+
+![measurements](https://i.imgur.com/KB6Xgjt.png)
