@@ -7,6 +7,8 @@ adc1 = machine.ADC(26)
 adc2 = machine.ADC(27)
 
 while True:
+
+    # Get the raw uint16 reading (0 to 65,535)
     val1 = adc1.read_u16()
     val2 = adc2.read_u16()
 
