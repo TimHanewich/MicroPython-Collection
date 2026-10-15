@@ -2,9 +2,9 @@ import machine
 import time
 import joysticks
 
+# Set up ADCs for two axes of the joystick
 adc1 = machine.ADC(26)
 adc2 = machine.ADC(27)
-
 
 while True:
     val1 = adc1.read_u16()
