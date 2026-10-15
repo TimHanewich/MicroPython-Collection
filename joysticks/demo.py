@@ -27,9 +27,6 @@ while True:
     #print("FR Percents: " + str(val1_fr) + ", " + str(val2_fr))
 
     # transform
-    #transformed1:float = transform(val1_fr, -0.10, 0.15, 0.85)
-    #transformed2:float = transform(val2_fr, -0.09, 0.15, 0.85)
-
     transformed1:float = joysticks.transform(val1_fr, -0.10, 0.05, 0.85)
     transformed2:float = joysticks.transform(val2_fr, -0.09, 0.05, 0.85)
 
